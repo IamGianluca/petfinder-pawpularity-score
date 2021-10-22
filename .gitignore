@@ -1,0 +1,16 @@
+# python cache and build
+__pycache__/
+ml.egg-info
+
+# notebook cache
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+
+# kaggle auth
+kaggle.json
+
+# logs
+lightning_logs/
+logs/
