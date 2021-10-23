@@ -3,3 +3,13 @@ stages:
     cmd: kaggle competitions download -c petfinder-pawpularity-score -p data/
     outs:
     - data/petfinder-pawpularity-score.zip
+  unzip_data:
+    cmd: unzip data/petfinder-pawpularity-score.zip -d data/
+    deps:
+    - data/petfinder-pawpularity-score.zip
+    outs:
+    - data/sample_submission.csv
+    - data/test
+    - data/test.csv
+    - data/train
+    - data/train.csv

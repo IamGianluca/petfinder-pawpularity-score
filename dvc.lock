@@ -6,3 +6,27 @@ stages:
     - path: data/petfinder-pawpularity-score.zip
       md5: 35dd50bacd33ebba746738508e20e276
       size: 1030728211
+  unzip_data:
+    cmd: unzip data/petfinder-pawpularity-score.zip -d data/
+    deps:
+    - path: data/petfinder-pawpularity-score.zip
+      md5: 35dd50bacd33ebba746738508e20e276
+      size: 1030728211
+    outs:
+    - path: data/sample_submission.csv
+      md5: eed5ebc04c54d5e5130a85a4d81dfc6e
+      size: 326
+    - path: data/test
+      md5: e945e75c5c4c977b08ad644851755e27.dir
+      size: 83775
+      nfiles: 8
+    - path: data/test.csv
+      md5: 4e4d1b962044457c29f636cc02716e46
+      size: 545
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
+    - path: data/train.csv
+      md5: a7812f42b71d57e77dfc6e05f5cdd865
+      size: 594740
