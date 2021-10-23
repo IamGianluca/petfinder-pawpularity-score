@@ -1,0 +1,5 @@
+stages:
+  download_data:
+    cmd: kaggle competitions download -c petfinder-pawpularity-score -p data/
+    outs:
+    - data/petfinder-pawpularity-score.zip

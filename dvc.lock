@@ -1,0 +1,8 @@
+schema: '2.0'
+stages:
+  download_data:
+    cmd: kaggle competitions download -c petfinder-pawpularity-score -p data/
+    outs:
+    - path: data/petfinder-pawpularity-score.zip
+      md5: 35dd50bacd33ebba746738508e20e276
+      size: 1030728211
