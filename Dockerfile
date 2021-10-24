@@ -1,7 +1,10 @@
 FROM nvcr.io/nvidia/pytorch:21.09-py3
 
+# set environment variables
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PYTHONBREAKPOINT=ipdb.set_trace
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
