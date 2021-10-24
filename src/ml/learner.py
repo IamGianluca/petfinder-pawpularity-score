@@ -42,7 +42,9 @@ class ImageClassifier(pl.LightningModule):
         self.train_metric(preds, target)
 
         self.log("train_loss", loss, on_step=True, on_epoch=False)
-        self.log("train_metric", self.train_metric, on_step=False, on_epoch=True)
+        self.log(
+            "train_metric", self.train_metric, on_step=False, on_epoch=True
+        )
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -83,7 +85,9 @@ class ImageClassifier(pl.LightningModule):
                 yield outs.detach().cpu().numpy()
 
     def configure_optimizers(self):
-        optimizer = optimizer_factory(params=self.parameters(), hparams=self.hparams)
+        optimizer = optimizer_factory(
+            params=self.parameters(), hparams=self.hparams
+        )
 
         scheduler = lr_scheduler_factory(
             optimizer=optimizer,
@@ -121,7 +125,10 @@ class ImageClassifier(pl.LightningModule):
         try:
             train_metric = self.trainer.callback_metrics["train_metric"]
             val_metric = self.trainer.callback_metrics["val_metric"]
-            if self.best_val_metric is None or val_metric > self.best_val_metric:
+            if (
+                self.best_val_metric is None
+                or val_metric > self.best_val_metric
+            ):
                 self.best_val_metric = val_metric
                 self.best_train_metric = train_metric
         except (KeyError, AttributeError):

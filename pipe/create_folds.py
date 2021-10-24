@@ -1,8 +1,8 @@
+import constants
 import pandas as pd
-from ml.params import load_cfg
 from sklearn.model_selection import StratifiedKFold
 
-import constants
+from ml.params import load_cfg
 
 
 def split():

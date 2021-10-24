@@ -6,10 +6,11 @@ import numpy as np
 import torch
 import torchvision.utils as utils
 from loguru import logger
-from ml.vision.boxes import _boxes_coco2pascalvoc
 from PIL.ImageDraw import Draw
 from torch.utils.data import DataLoader
 from torchvision import transforms
+
+from ml.vision.boxes import _boxes_coco2pascalvoc
 
 
 def plot_batches(dl: DataLoader, n_batches: int = 1):
