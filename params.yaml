@@ -1,0 +1,3 @@
+create_folds:
+  k: 5
+  seed: 6822

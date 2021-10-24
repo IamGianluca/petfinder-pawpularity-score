@@ -13,3 +13,10 @@ stages:
     - data/test.csv
     - data/train
     - data/train.csv
+  create_folds:
+    cmd: python pipe/create_folds.py
+    deps:
+    - data/train.csv
+    - pipe/create_folds.py
+    outs:
+    - data/train_folds.csv

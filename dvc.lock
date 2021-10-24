@@ -30,3 +30,16 @@ stages:
     - path: data/train.csv
       md5: a7812f42b71d57e77dfc6e05f5cdd865
       size: 594740
+  create_folds:
+    cmd: python pipe/create_folds.py
+    deps:
+    - path: data/train.csv
+      md5: a7812f42b71d57e77dfc6e05f5cdd865
+      size: 594740
+    - path: pipe/create_folds.py
+      md5: 984e075026ba9ae0968678b9aa99dfdd
+      size: 733
+    outs:
+    - path: data/train_folds.csv
+      md5: 7df9fcc5a48663969e1ebe9598809a9d
+      size: 614570
