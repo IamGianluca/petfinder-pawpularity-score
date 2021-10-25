@@ -37,9 +37,38 @@ stages:
       md5: a7812f42b71d57e77dfc6e05f5cdd865
       size: 594740
     - path: pipe/create_folds.py
-      md5: 828151d173c3fc25e4ae65901ce2f6ee
-      size: 815
+      md5: e11c1727b424d3d2955fd127052f7027
+      size: 814
     outs:
     - path: data/train_folds.csv
-      md5: ca5ecbe3d7462f185196559e4194ef8c
-      size: 1120088
+      md5: ab60389c4822f57583be4cc5f0295df3
+      size: 1110176
+  train_one:
+    cmd: python pipe/train.py
+    deps:
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
+    - path: data/train_folds.csv
+      md5: ab60389c4822f57583be4cc5f0295df3
+      size: 1110176
+    - path: pipe/train.py
+      md5: 5c63aa1db5a359d75481b191f5e949b7
+      size: 4920
+    outs:
+    - path: ckpts/arch=resnet18_sz=224_fold=0.ckpt
+      md5: 8cf7b9a83d0dac862f3e73ae4133d41c
+      size: 134247059
+    - path: ckpts/arch=resnet18_sz=224_fold=1.ckpt
+      md5: a7274ae8f8c8dcc926fc796bdedab926
+      size: 134247059
+    - path: ckpts/arch=resnet18_sz=224_fold=2.ckpt
+      md5: bcf2b2b3c69b9a777d3c2a7bb342d3d1
+      size: 134247059
+    - path: ckpts/arch=resnet18_sz=224_fold=3.ckpt
+      md5: 5918ef4630d3b3bb7effcedacb3b8aec
+      size: 134247123
+    - path: ckpts/arch=resnet18_sz=224_fold=4.ckpt
+      md5: 34d51cff886dcd8fd546af25db47dead
+      size: 134247059

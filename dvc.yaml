@@ -20,3 +20,15 @@ stages:
     - pipe/create_folds.py
     outs:
     - data/train_folds.csv
+  train_one:
+    cmd: python pipe/train.py
+    deps:
+    - data/train
+    - pipe/train.py
+    - data/train_folds.csv
+    outs:
+    - ckpts/arch=resnet18_sz=224_fold=0.ckpt
+    - ckpts/arch=resnet18_sz=224_fold=1.ckpt
+    - ckpts/arch=resnet18_sz=224_fold=2.ckpt
+    - ckpts/arch=resnet18_sz=224_fold=3.ckpt
+    - ckpts/arch=resnet18_sz=224_fold=4.ckpt

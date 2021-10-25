@@ -1,3 +1,27 @@
 create_folds:
-  k: 5
   seed: 6822
+  k: 5
+
+train_one:
+  seed: 46
+  fold: -1 
+  train_data: "data/train"
+  epochs: 5
+  arch: "resnet18"
+  dropout: 0.0
+  metric: "mse"
+  metric_mode: "min"
+  opt: "adamw"
+  sched: "plateau"
+  aug: "none"
+  loss: "bce_with_logits"
+  precision: 32
+  sz: 224
+  auto_batch_size: False
+  bs: 128
+  accumulate_grad_batches: 1
+  auto_lr: False
+  lr: 0.001
+  wd: 0.0
+  label_smoothing: 0.0
+  mom: 0.9

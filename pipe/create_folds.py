@@ -1,8 +1,8 @@
-import constants
 import pandas as pd
+from ml.params import load_cfg
 from sklearn.model_selection import StratifiedKFold
 
-from ml.params import load_cfg
+import constants
 
 
 def split():
@@ -10,7 +10,7 @@ def split():
     df = pd.read_csv(constants.train_labels_fpath)
 
     # add image fpaths
-    df["fpath"] = "../data/train/" + df.Id + ".jpg"
+    df["fpath"] = "./data/train/" + df.Id + ".jpg"
 
     # split training data into 5 folds
     df["kfold"] = -1
