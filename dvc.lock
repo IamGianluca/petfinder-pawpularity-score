@@ -39,6 +39,11 @@ stages:
     - path: pipe/create_folds.py
       md5: e11c1727b424d3d2955fd127052f7027
       size: 814
+    params:
+      params.yaml:
+        create_folds:
+          seed: 6822
+          k: 5
     outs:
     - path: data/train_folds.csv
       md5: ab60389c4822f57583be4cc5f0295df3
@@ -54,21 +59,49 @@ stages:
       md5: ab60389c4822f57583be4cc5f0295df3
       size: 1110176
     - path: pipe/train.py
-      md5: 5c63aa1db5a359d75481b191f5e949b7
-      size: 4920
+      md5: fb77adbb17efde050794d23844f42896
+      size: 4952
+    params:
+      params.yaml:
+        train_one:
+          seed: 46
+          fold: -1
+          train_data: data/train
+          epochs: 5
+          arch: resnet18
+          dropout: 0.0
+          metric: mse
+          metric_mode: min
+          opt: adamw
+          sched: plateau
+          aug: none
+          loss: bce_with_logits
+          precision: 32
+          sz: 224
+          auto_batch_size: false
+          bs: 128
+          accumulate_grad_batches: 1
+          auto_lr: false
+          lr: 0.001
+          wd: 0.0
+          label_smoothing: 0.0
+          mom: 0.9
     outs:
     - path: ckpts/arch=resnet18_sz=224_fold=0.ckpt
-      md5: 8cf7b9a83d0dac862f3e73ae4133d41c
+      md5: 10ec2f4fd3868923bf772fada946942c
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=1.ckpt
-      md5: a7274ae8f8c8dcc926fc796bdedab926
+      md5: 4046f589e7655ce76b1f0a769b1e5a32
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=2.ckpt
-      md5: bcf2b2b3c69b9a777d3c2a7bb342d3d1
+      md5: 2e15e20ad6a11056685cf3e7bb37f074
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=3.ckpt
-      md5: 5918ef4630d3b3bb7effcedacb3b8aec
-      size: 134247123
-    - path: ckpts/arch=resnet18_sz=224_fold=4.ckpt
-      md5: 34d51cff886dcd8fd546af25db47dead
+      md5: 6743533e67741ba9d2036318454c53c7
       size: 134247059
+    - path: ckpts/arch=resnet18_sz=224_fold=4.ckpt
+      md5: 81d2029a465f9a9e8285916322e0fe19
+      size: 134247123
+    - path: metrics/model_one.json
+      md5: 6472916fb6596158d9b9abdd23f103db
+      size: 35

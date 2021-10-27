@@ -15,6 +15,8 @@ stages:
     - data/train.csv
   create_folds:
     cmd: python pipe/create_folds.py
+    params:
+    - create_folds
     deps:
     - data/train.csv
     - pipe/create_folds.py
@@ -22,6 +24,8 @@ stages:
     - data/train_folds.csv
   train_one:
     cmd: python pipe/train.py
+    params:
+    - train_one
     deps:
     - data/train
     - pipe/train.py
@@ -32,3 +36,7 @@ stages:
     - ckpts/arch=resnet18_sz=224_fold=2.ckpt
     - ckpts/arch=resnet18_sz=224_fold=3.ckpt
     - ckpts/arch=resnet18_sz=224_fold=4.ckpt
+    metrics:
+    - metrics/model_one.json:
+        cache: False
+

@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 from typing import Tuple
@@ -56,7 +57,7 @@ def main():
         )
 
     if is_crossvalidation:
-        fpath = constants.metrics_path / f"arch={cfg.arch}_sz={cfg.sz}.metric"
+        fpath = constants.metrics_path / f"model_one.json"
         write_metrics(
             fpath=fpath,
             metric=cfg.metric,
@@ -148,8 +149,11 @@ def print_metrics(metric: str, train_metric: float, valid_metric: float):
 def write_metrics(
     fpath: Path, metric: str, train_metric: float, cv_metric: float
 ):
+    data = {}
+    data['train'] = f"{train_metric:.4f}"
+    data['cv'] = f"{cv_metric:.4f}"
     with open(fpath, "w") as f:
-        f.write(f"{metric} // Train: {train_metric:.4f}, CV: {cv_metric:.4f}")
+        json.dump(data, f)
 
 
 def get_augmentations(cfg: OmegaConf):
