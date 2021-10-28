@@ -150,8 +150,8 @@ def write_metrics(
     fpath: Path, metric: str, train_metric: float, cv_metric: float
 ):
     data = {}
-    data['train'] = f"{train_metric:.4f}"
-    data['cv'] = f"{cv_metric:.4f}"
+    data[f"train {metric}"] = f"{train_metric:.4f}"
+    data[f"cv {metric}"] = f"{cv_metric:.4f}"
     with open(fpath, "w") as f:
         json.dump(data, f)
 

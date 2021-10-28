@@ -9,7 +9,7 @@ train_one:
   epochs: 5
   arch: "resnet18"
   dropout: 0.0
-  metric: "mse"
+  metric: "rmse"
   metric_mode: "min"
   opt: "adamw"
   sched: "plateau"

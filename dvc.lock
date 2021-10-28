@@ -59,8 +59,8 @@ stages:
       md5: ab60389c4822f57583be4cc5f0295df3
       size: 1110176
     - path: pipe/train.py
-      md5: fb77adbb17efde050794d23844f42896
-      size: 4952
+      md5: aed103555cc6f1d37062a808c352ae2b
+      size: 4972
     params:
       params.yaml:
         train_one:
@@ -70,7 +70,7 @@ stages:
           epochs: 5
           arch: resnet18
           dropout: 0.0
-          metric: mse
+          metric: rmse
           metric_mode: min
           opt: adamw
           sched: plateau
@@ -88,20 +88,20 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/arch=resnet18_sz=224_fold=0.ckpt
-      md5: 10ec2f4fd3868923bf772fada946942c
+      md5: 045e9ea0779086c2623e453bb282b8ae
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=1.ckpt
-      md5: 4046f589e7655ce76b1f0a769b1e5a32
+      md5: ce31e40df2a20eaf7f6420a1c19d6ab8
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=2.ckpt
-      md5: 2e15e20ad6a11056685cf3e7bb37f074
+      md5: f3879ebf5f40a478ebdae45a5be01817
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=3.ckpt
-      md5: 6743533e67741ba9d2036318454c53c7
+      md5: da47edb14953eb218179ccc0b0df00e1
       size: 134247059
     - path: ckpts/arch=resnet18_sz=224_fold=4.ckpt
-      md5: 81d2029a465f9a9e8285916322e0fe19
+      md5: c678f1f670f3e949725e629c2049e575
       size: 134247123
     - path: metrics/model_one.json
-      md5: 6472916fb6596158d9b9abdd23f103db
-      size: 35
+      md5: 33ea5b0f0072d3cbfa3394b0f5d79412
+      size: 45
