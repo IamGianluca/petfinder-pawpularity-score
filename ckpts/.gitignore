@@ -1,10 +1,5 @@
-/arch=resnet18_sz=192_fold=0.ckpt
-/arch=resnet18_sz=192_fold=1.ckpt
-/arch=resnet18_sz=192_fold=2.ckpt
-/arch=resnet18_sz=192_fold=3.ckpt
-/arch=resnet18_sz=192_fold=4.ckpt
-/arch=resnet18_sz=224_fold=0.ckpt
-/arch=resnet18_sz=224_fold=1.ckpt
-/arch=resnet18_sz=224_fold=2.ckpt
-/arch=resnet18_sz=224_fold=3.ckpt
-/arch=resnet18_sz=224_fold=4.ckpt
+/model_one_fold0.ckpt
+/model_one_fold1.ckpt
+/model_one_fold2.ckpt
+/model_one_fold3.ckpt
+/model_one_fold4.ckpt

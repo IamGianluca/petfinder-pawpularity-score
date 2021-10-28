@@ -4,7 +4,7 @@ create_folds:
 
 train_one:
   seed: 46
-  fold: -1 
+  fold: -1
   train_data: "data/train"
   epochs: 5
   arch: "resnet18"

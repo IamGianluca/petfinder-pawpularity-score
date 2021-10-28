@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List, Optional
 
 import pytorch_lightning as pl
 import torch
@@ -36,10 +36,15 @@ class ImageClassifier(pl.LightningModule):
         self.best_val_metric = None
 
     def forward(self, x):
+        """Contain only tensor operations with your model."""
+        x = x.float()
         x = self.model(x)
         return x
 
     def training_step(self, batch, batch_idx):
+        """Encapsulate forward() logic with logging, metrics, and loss
+        computation.
+        """
         loss, target, preds = self.step(batch)
         self.log("train_loss", loss, on_step=True, on_epoch=False)
         self.log(
@@ -72,9 +77,8 @@ class ImageClassifier(pl.LightningModule):
 
         # TODO: this should be done outside of the LightningModule
         target = target.float()
-        x = x.float()
 
-        preds = self.model(x)
+        preds = self.forward(x)
         # TODO: handle logit vs. no logit case for both loss and preds
         loss = self.compute_loss(preds=preds, target=target)
         return loss, target, preds.sigmoid()
@@ -144,25 +148,25 @@ class ImageClassifier(pl.LightningModule):
             # these errors occurs when in "tuning" mode (find optimal lr)
             pass
 
-    def predict(self, dl):
-        self.eval()
-        self.to("cuda")
+    def predict_step(
+        self, batch: Any, batch_idx: int, dataloader_idx: Optional[int] = None
+    ) -> Any:
+        """Encapsulate forward() with any necessary preprocess or postprocess
+        functions.
+        """
+        preds = self.forward(batch)
+        # TODO: we don't always need a sigmoid. Handle that case.
+        outs = preds.sigmoid()
+        return outs.detach().cpu().numpy()
 
-        for batch in dl():
-            x = batch.float()
-            x = x.to("cuda")
-            with torch.no_grad():
-                preds = self.model(x)
-                yield preds.detach().cpu().numpy()
+    # def predict_proba(self, dl):
+    #     self.eval()
+    #     self.to("cuda")
 
-    def predict_proba(self, dl):
-        self.eval()
-        self.to("cuda")
-
-        for batch in dl():
-            x = batch.float()
-            x = x.to("cuda")
-            with torch.no_grad():
-                preds = self.model(x)
-                outs = preds.sigmoid()
-                yield outs.detach().cpu().numpy()
+    #     for batch in dl():
+    #         x = batch.float()
+    #         x = x.to("cuda")
+    #         with torch.no_grad():
+    #             preds = self.model(x)
+    #             outs = preds.sigmoid()
+    #             yield outs.detach().cpu().numpy()

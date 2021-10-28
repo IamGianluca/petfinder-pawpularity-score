@@ -98,6 +98,9 @@ def train_one_fold(
         val_image_paths=val_image_paths,
         val_targets=val_targets,
         val_augmentations=val_aug,
+        # test
+        test_image_paths=val_image_paths,
+        test_augmentations=test_aug,
     )
 
     model = learner.ImageClassifier(
@@ -111,7 +114,7 @@ def train_one_fold(
         monitor="val_metric",
         mode=cfg.metric_mode,
         dirpath=constants.ckpts_path,
-        filename=f"arch={cfg.arch}_sz={cfg.sz}_fold={cfg.fold}",
+        filename=f"model_one_fold{cfg.fold}",
     )
 
     trainer = pl.Trainer(
@@ -132,6 +135,12 @@ def train_one_fold(
         trainer.tune(model, dm)
 
     trainer.fit(model, dm)
+    preds = trainer.predict(model, dm.test_dataloader())
+
+    preds = np.vstack([i for sl in preds for i in sl])
+
+    with open(f"preds/model_one_fold{cfg.fold}.npy", "wb") as f:
+        np.save(f, preds)
 
     print_metrics(cfg.metric, model.best_train_metric, model.best_val_metric)
     return (
