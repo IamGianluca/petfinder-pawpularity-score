@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Tuple
+from typing import List, Tuple
 
 import albumentations
 import numpy as np
@@ -58,7 +58,7 @@ def main():
 
     if is_crossvalidation:
         fpath = constants.metrics_path / f"model_one.json"
-        write_metrics(
+        save_metrics(
             fpath=fpath,
             metric=cfg.metric,
             train_metric=train_metric,
@@ -137,10 +137,7 @@ def train_one_fold(
     trainer.fit(model, dm)
     preds = trainer.predict(model, dm.test_dataloader())
 
-    preds = np.vstack([i for sl in preds for i in sl])
-
-    with open(f"preds/model_one_fold{cfg.fold}.npy", "wb") as f:
-        np.save(f, preds)
+    save_predictions(cfg, preds)
 
     print_metrics(cfg.metric, model.best_train_metric, model.best_val_metric)
     return (
@@ -149,13 +146,19 @@ def train_one_fold(
     )
 
 
+def save_predictions(cfg: OmegaConf, preds: List[List]):
+    preds = np.vstack([i for sl in preds for i in sl])
+    with open(f"preds/model_one_fold{cfg.fold}.npy", "wb") as f:
+        np.save(f, preds)
+
+
 def print_metrics(metric: str, train_metric: float, valid_metric: float):
     logger.info(
         f"\nBest {metric}: Train {train_metric:.4f}, Valid: {valid_metric:.4f}"
     )
 
 
-def write_metrics(
+def save_metrics(
     fpath: Path, metric: str, train_metric: float, cv_metric: float
 ):
     data = {}

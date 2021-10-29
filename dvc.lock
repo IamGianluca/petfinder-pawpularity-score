@@ -59,8 +59,8 @@ stages:
       md5: ab60389c4822f57583be4cc5f0295df3
       size: 1110176
     - path: pipe/train.py
-      md5: be2b0acfe108bdca8ebf65450c9d9025
-      size: 5252
+      md5: 55e7d7b4befce1d328a04a5b7f8d1b75
+      size: 5347
     params:
       params.yaml:
         train_one:
@@ -88,35 +88,35 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: 462e8c5ee4b984e0151027e75b33de61
+      md5: 2301f3eafcac440ccbafc3d88515d5be
       size: 134247059
     - path: ckpts/model_one_fold1.ckpt
-      md5: 9b40c429fffb74e5f014b4d30e29960c
-      size: 134247123
+      md5: 0ed47080304ea8f16862158592d8392d
+      size: 134247059
     - path: ckpts/model_one_fold2.ckpt
-      md5: 170bf7e204339952f22481b8533acb2a
+      md5: 36dfb060abcb75f6b34ae8db7757b0e3
       size: 134247059
     - path: ckpts/model_one_fold3.ckpt
-      md5: 3196f4e6ef1ef1f16e593ad3798d726f
+      md5: f91544824d6229faa1bb26cce4299317
       size: 134247059
     - path: ckpts/model_one_fold4.ckpt
-      md5: 176fbf51a4cb3e3adea9670b9bbf1a45
-      size: 134247059
+      md5: f9481b7ea62b920c75e3b85ecaa4bd7b
+      size: 134247123
     - path: metrics/model_one.json
-      md5: 9eb9e53c7c91c6ebfcc79a521afb3143
+      md5: 2da968949c3bff8f031455163aedf3df
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: c2fa234561cb0f325bf3624d447ae24e
+      md5: 1fb5d641e17fc68c6fffb5f4ce4ffe50
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: c9b09c86dadd97e80efe4e8669e29976
+      md5: 95d0e615c3c92b867058d48eb1533691
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: dc0207160edbd7f0f272e3d8f93efd31
+      md5: 9a14585941f8329df8a066bd0c2f2e4a
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: 5116a7de316f797cc65c24abd6139d3a
+      md5: e51cfc9e661981108d3ed7b7e72a99bb
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: 893573c9b311f581e582989a915730d7
+      md5: 7baf59a4be1808130f26d6c72d9e2398
       size: 8056

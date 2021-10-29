@@ -36,9 +36,9 @@ class ImageClassificationDataset(Dataset):
             image = image[None, ...]
 
         if self.targets is not None:  # train/val dataset
-            return image, torch.tensor(self.targets[index])
+            return image.float(), torch.tensor(self.targets[index])
         else:  # test dataset
-            return image
+            return image.float()
 
 
 class Image3DClassificationDataset(Dataset):

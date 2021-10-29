@@ -1,10 +1,8 @@
 from typing import Any, List, Optional
 
 import pytorch_lightning as pl
-import torch
 from omegaconf import OmegaConf
 from timm.models import create_model
-from torch._C import Value
 
 from .loss import loss_factory
 from .metrics import metric_factory
@@ -37,9 +35,7 @@ class ImageClassifier(pl.LightningModule):
 
     def forward(self, x):
         """Contain only tensor operations with your model."""
-        x = x.float()
-        x = self.model(x)
-        return x
+        return self.model(x)
 
     def training_step(self, batch, batch_idx):
         """Encapsulate forward() logic with logging, metrics, and loss
@@ -74,10 +70,6 @@ class ImageClassifier(pl.LightningModule):
 
     def step(self, batch):
         x, target = batch
-
-        # TODO: this should be done outside of the LightningModule
-        target = target.float()
-
         preds = self.forward(x)
         # TODO: handle logit vs. no logit case for both loss and preds
         loss = self.compute_loss(preds=preds, target=target)
@@ -102,13 +94,13 @@ class ImageClassifier(pl.LightningModule):
     def compute_loss(self, preds, target):
         # apply label smoothing
         # TODO: extract function
-        y_ = (
-            target * (1 - self.hparams.label_smoothing)
-            + 0.5 * self.hparams.label_smoothing
-        )
+        # target = (
+        #     target * (1 - self.hparams.label_smoothing)
+        #     + 0.5 * self.hparams.label_smoothing
+        # )
 
         loss_fn = loss_factory(name=self.hparams.loss)
-        loss = loss_fn(preds, target.float())
+        loss = loss_fn(preds, target)
         return loss
 
     def compute_metric(self, preds, target):
@@ -158,15 +150,3 @@ class ImageClassifier(pl.LightningModule):
         # TODO: we don't always need a sigmoid. Handle that case.
         outs = preds.sigmoid()
         return outs.detach().cpu().numpy()
-
-    # def predict_proba(self, dl):
-    #     self.eval()
-    #     self.to("cuda")
-
-    #     for batch in dl():
-    #         x = batch.float()
-    #         x = x.to("cuda")
-    #         with torch.no_grad():
-    #             preds = self.model(x)
-    #             outs = preds.sigmoid()
-    #             yield outs.detach().cpu().numpy()
