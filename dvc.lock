@@ -88,35 +88,35 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: 2301f3eafcac440ccbafc3d88515d5be
-      size: 134247059
+      md5: 4876a948fdc78bf54c91b2b7003840b8
+      size: 134246995
     - path: ckpts/model_one_fold1.ckpt
-      md5: 0ed47080304ea8f16862158592d8392d
+      md5: a66facdde515bb0128c4cf95073171a7
       size: 134247059
     - path: ckpts/model_one_fold2.ckpt
-      md5: 36dfb060abcb75f6b34ae8db7757b0e3
+      md5: fb86d3a49115ac528658b287579c434c
       size: 134247059
     - path: ckpts/model_one_fold3.ckpt
-      md5: f91544824d6229faa1bb26cce4299317
+      md5: 6a42380c18bd03e55bbe4ec4c1f8ac0e
       size: 134247059
     - path: ckpts/model_one_fold4.ckpt
-      md5: f9481b7ea62b920c75e3b85ecaa4bd7b
-      size: 134247123
+      md5: 5e90153aabccbe9273bf74f140d8f091
+      size: 134247059
     - path: metrics/model_one.json
-      md5: 2da968949c3bff8f031455163aedf3df
+      md5: 78988e193bd19a0064db79cca9892533
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: 1fb5d641e17fc68c6fffb5f4ce4ffe50
+      md5: c741e2032d9dbfc9085242d687ca2f75
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: 95d0e615c3c92b867058d48eb1533691
+      md5: 37f3ef6e5a7b75fdc7f1bd68d8f51831
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: 9a14585941f8329df8a066bd0c2f2e4a
+      md5: de69a68c159a70963c4a49d722caea6e
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: e51cfc9e661981108d3ed7b7e72a99bb
+      md5: 960423aa04ab37655bc18cb37e31666c
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: 7baf59a4be1808130f26d6c72d9e2398
+      md5: c5b5e35ceca0d7148b2e2cc75162a61d
       size: 8056
