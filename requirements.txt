@@ -8,6 +8,7 @@ loguru
 joblib
 jupyterlab
 kaggle
+kornia==0.6.1
 matplotlib
 neptune-client
 omegaconf

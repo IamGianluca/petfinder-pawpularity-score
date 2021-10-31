@@ -26,6 +26,7 @@ import utils
 
 def main():
     cfg = load_cfg(fpath=str(constants.cfg_fpath), cfg_name="train_one")
+    print(OmegaConf.to_yaml(cfg))
 
     seed.seed_everything(seed=cfg.seed, workers=False)
 
@@ -73,7 +74,11 @@ def main():
 def train_one_fold(
     cfg: omegaconf.DictConfig, logger
 ) -> Tuple[ArrayLike, ArrayLike]:
-    print(OmegaConf.to_yaml(cfg))
+
+    print()
+    print(f"#####################")
+    print(f"# FOLD {cfg.fold}")
+    print(f"#####################")
 
     # get image paths and targets
     df = pd.read_csv(constants.train_folds_fpath)

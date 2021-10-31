@@ -5,23 +5,31 @@ create_folds:
 train_one:
   seed: 46
   fold: -1
-  train_data: "data/train"
-  epochs: 5
-  arch: "resnet18"
-  dropout: 0.0
+  # problem
   metric: "rmse"
   metric_mode: "min"
-  opt: "adamw"
-  sched: "plateau"
-  aug: "none"
-  loss: "bce_with_logits"
-  precision: 32
+  # imput images
+  train_data: "data/train"
   sz: 224
-  auto_batch_size: False
+  # model
+  arch: "resnet50d"
+  epochs: 5
   bs: 128
+  auto_batch_size: False
   accumulate_grad_batches: 1
-  auto_lr: False
-  lr: 0.001
+  precision: 32
+  # augmentations
+  n_tfms: 0
+  magn: 0
+  aug: "none"
+  # regularization
+  dropout: 0.0
   wd: 0.0
   label_smoothing: 0.0
+  # optimizer
+  loss: "bce_with_logits"
+  opt: "adam"
+  sched: "onecycle"
+  lr: 0.01
+  auto_lr: False
   mom: 0.9

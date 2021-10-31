@@ -7,6 +7,11 @@ from timm.models import create_model
 from .loss import loss_factory
 from .metrics import metric_factory
 from .optim import lr_scheduler_factory, optimizer_factory
+from .vision.augmentations import BatchRandAugment, kornia_list
+
+# ImageNet-1k dataset mean and std
+mean = [0.485, 0.456, 0.406]
+std = [0.229, 0.224, 0.225]
 
 
 class ImageClassifier(pl.LightningModule):
@@ -20,12 +25,21 @@ class ImageClassifier(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters(cfg)
 
-        self.model = create_model(
+        self.backbone = create_model(
             model_name=self.hparams.arch,
             pretrained=pretrained,
             num_classes=num_classes,
             in_chans=in_channels,
             drop_rate=self.hparams.dropout,
+        )
+
+        self.augmentations = BatchRandAugment(
+            cfg.n_tfms,
+            cfg.magn,
+            mean=mean,
+            std=std,
+            # use_resize=0,
+            # image_size=(cfg.sz, cfg.sz),
         )
 
         self.train_metric = metric_factory(name=cfg.metric)
@@ -35,13 +49,19 @@ class ImageClassifier(pl.LightningModule):
 
     def forward(self, x):
         """Contain only tensor operations with your model."""
-        return self.model(x)
+        return self.backbone(x)
 
     def training_step(self, batch, batch_idx):
         """Encapsulate forward() logic with logging, metrics, and loss
         computation.
         """
-        loss, target, preds = self.step(batch)
+        x, target = batch
+
+        # apply data augmentation
+        self.augmentations.setup()
+        x = self.augmentations(x)
+
+        loss, target, preds = self.step(x, target)
         self.log("train_loss", loss, on_step=True, on_epoch=False)
         self.log(
             "train_metric",
@@ -52,7 +72,8 @@ class ImageClassifier(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        loss, target, preds = self.step(batch)
+        x, target = batch
+        loss, target, preds = self.step(x, target)
         self.log("val_loss", loss, on_step=True, on_epoch=False)
         self.log(
             "val_metric",
@@ -68,8 +89,7 @@ class ImageClassifier(pl.LightningModule):
         # but are nonetheless logged in neptune
         self.print_metrics_to_console()
 
-    def step(self, batch):
-        x, target = batch
+    def step(self, x, target):
         preds = self.forward(x)
         # TODO: handle logit vs. no logit case for both loss and preds
         loss = self.compute_loss(preds=preds, target=target)
