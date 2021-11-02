@@ -50,15 +50,16 @@ class BatchRandAugment(nn.Module):
     Image augmentation pipeline that applies a composition of `N_TFMS` transforms
     each of magnitude `MAGN` sampled uniformly at random from `transform_list` with
     optional batch resizing and label mixing transforms.
+
     Args:
         N_TFMS (int): Number of transformations sampled for each composition,
-                      excluding resize or label mixing transforms.      <N in paper>
+            excluding resize or label mixing transforms. N in paper.
         MAGN (int): Magnitude of augmentation applied. Ranges from [0, 10] with
-                    10 being the max magnitude.                         <M in paper>
+            10 being the max magnitude. M in paper.
         mean (tuple, torch.Tensor): Mean of images after normalized in range [0,1]
         std (tuple, torch.Tensor): Mean of images after normalized in range [0,1]
         transform_list (list): List of transforms to sample from. Default list
-                               provided if not specified.
+            provided if not specified.
         use_resize (int): Batch-wise resize transform to apply. Options:
             None: Don't use.
             0: RandomResizedCrop
@@ -70,7 +71,7 @@ class BatchRandAugment(nn.Module):
             None: No label mixing transforms.
             1: MixUp
         mix_p (float): probability of applying the mix transform on a batch
-                       given `use_mix` is not None.
+            given `use_mix` is not None.
     """
 
     def __init__(

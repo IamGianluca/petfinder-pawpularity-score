@@ -12,9 +12,9 @@ train_one:
   train_data: "data/train"
   sz: 224
   # model
-  arch: "resnet50d"
+  arch: "swin_large_patch4_window7_224"
   epochs: 5
-  bs: 128
+  bs: 32
   auto_batch_size: False
   accumulate_grad_batches: 1
   precision: 32
@@ -30,6 +30,6 @@ train_one:
   loss: "bce_with_logits"
   opt: "adam"
   sched: "onecycle"
-  lr: 0.01
+  lr: 0.001
   auto_lr: False
   mom: 0.9

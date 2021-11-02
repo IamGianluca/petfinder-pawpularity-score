@@ -70,9 +70,9 @@ stages:
           metric_mode: min
           train_data: data/train
           sz: 224
-          arch: resnet50d
+          arch: swin_large_patch4_window7_224
           epochs: 5
-          bs: 128
+          bs: 32
           auto_batch_size: false
           accumulate_grad_batches: 1
           precision: 32
@@ -85,40 +85,40 @@ stages:
           loss: bce_with_logits
           opt: adam
           sched: onecycle
-          lr: 0.01
+          lr: 0.001
           auto_lr: false
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: f88872d337b29918de9e1199c56dd58e
-      size: 282806475
+      md5: 78b98b57eb34341466ca517b038d84f0
+      size: 2341920858
     - path: ckpts/model_one_fold1.ckpt
-      md5: 0f2893416336c68cd41a64c0662256cb
-      size: 282806475
+      md5: 9aac30253f316cb2d2a9a868c6d56182
+      size: 2341920858
     - path: ckpts/model_one_fold2.ckpt
-      md5: a8ffbf8297d20bccdab266aebacc8cb0
-      size: 282806475
+      md5: 5457a18ecc0e377063926059abb83a00
+      size: 2341920858
     - path: ckpts/model_one_fold3.ckpt
-      md5: e81b0b234c448eaab723b92ca585d64c
-      size: 282806667
+      md5: 3c7840af4d46cc60dee96e70c430e5a9
+      size: 2341920858
     - path: ckpts/model_one_fold4.ckpt
-      md5: d46953ea7d30d70570c18631dc284c6c
-      size: 282806475
+      md5: 4d1a3f454335a40f6a1a1b2d36b0b266
+      size: 2341920858
     - path: metrics/model_one.json
-      md5: 2724cc9d972d5a825ac5fd3e3535e56f
+      md5: c0259182405ea03563018341efa5ba4a
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: 4b032d2ef4d27317f04c26108091d19d
+      md5: 69b330f13733bde5c9a4a3d47adcc080
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: ab9cc0cf13a1f281e1a009be4763af31
+      md5: a428dc66cf8e0f631e77f1f65b630a5e
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: 7a1edc5b582d9d48e09944657e284969
+      md5: 91e03660ce1756b1b1f457dbb09db68e
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: b87a3e4a5a99e9fbea62fb2c39f3870b
+      md5: dcff1bd287fc5d6b52733617345663c8
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: 738d7e2861d4ccd7edefb442c2f3cb48
+      md5: ca057876841a387d93106524872737bf
       size: 8056
