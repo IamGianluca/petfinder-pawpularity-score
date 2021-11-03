@@ -9,9 +9,6 @@ def split():
     cfg = load_cfg(fpath=str(constants.cfg_fpath), cfg_name="create_folds")
     df = pd.read_csv(constants.train_labels_fpath)
 
-    # add image fpaths
-    df["fpath"] = "./data/train/" + df.Id + ".jpg"
-
     # split training data into 5 folds
     df["kfold"] = -1
     skf = StratifiedKFold(

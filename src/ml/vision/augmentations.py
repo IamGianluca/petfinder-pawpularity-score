@@ -28,12 +28,12 @@ def kornia_list(MAGN: int = 4):
             degrees=MAGN * 5.0, shear=MAGN / 5, translate=MAGN / 20, p=1
         ),
         K.RandomPerspective(distortion_scale=MAGN / 25, p=1),
-        # pixel-level
-        K.ColorJitter(brightness=MAGN / 30, p=1),  # brightness
-        K.ColorJitter(saturation=MAGN / 30, p=1),  # saturation
-        K.ColorJitter(contrast=MAGN / 30, p=1),  # contrast
-        K.ColorJitter(hue=MAGN / 30, p=1),  # hue
-        K.ColorJitter(p=0),  # identity
+        # # pixel-level
+        # K.ColorJitter(brightness=MAGN / 30, p=1),  # brightness
+        # K.ColorJitter(saturation=MAGN / 30, p=1),  # saturation
+        # K.ColorJitter(contrast=MAGN / 30, p=1),  # contrast
+        # K.ColorJitter(hue=MAGN / 30, p=1),  # hue
+        # K.ColorJitter(p=0),  # identity
         # TODO: fix RandomMotionBlur
         # K.RandomMotionBlur(
         #     kernel_size=2 * (MAGN // 3) + 1, angle=MAGN, direction=1.0, p=1

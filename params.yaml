@@ -2,34 +2,36 @@ create_folds:
   seed: 6822
   k: 5
 
+resize:
+  sz: [224]
+
 train_one:
   seed: 46
   fold: -1
   # problem
-  metric: "rmse"
-  metric_mode: "min"
+  metric: rmse
+  metric_mode: min
   # imput images
-  train_data: "data/train"
+  train_data: data/train_224
   sz: 224
   # model
-  arch: "swin_large_patch4_window7_224"
-  epochs: 5
+  arch: swin_large_patch4_window7_224
+  epochs: 6
   bs: 32
-  auto_batch_size: False
+  auto_batch_size: false
   accumulate_grad_batches: 1
   precision: 32
   # augmentations
-  n_tfms: 0
-  magn: 0
-  aug: "none"
+  n_tfms: 2
+  magn: 2
   # regularization
   dropout: 0.0
   wd: 0.0
   label_smoothing: 0.0
   # optimizer
-  loss: "bce_with_logits"
-  opt: "adam"
-  sched: "onecycle"
-  lr: 0.001
-  auto_lr: False
+  loss: bce_with_logits
+  opt: adam
+  sched: onecycle
+  lr: 0.0001
+  auto_lr: false
   mom: 0.9
