@@ -3,12 +3,10 @@ import os
 from pathlib import Path
 from typing import List, Tuple
 
-import albumentations
 import numpy as np
 import omegaconf
 import pandas as pd
 import pytorch_lightning as pl
-from albumentations.pytorch import transforms
 from loguru import logger
 from ml import learner
 from ml.params import load_cfg
@@ -134,7 +132,6 @@ def train_one_fold(
     )
 
     if cfg.auto_lr or cfg.auto_batch_size:
-        logger.info("\nTuning...")
         trainer.tune(model, dm)
 
     trainer.fit(model, dm)

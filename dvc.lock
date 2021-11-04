@@ -59,8 +59,8 @@ stages:
       md5: c2cb6a0cb24be6031baee25b65302691
       size: 614570
     - path: pipe/train.py
-      md5: 8fe41c9c54740db81c040e6f6cfaf6fd
-      size: 4916
+      md5: faa654058a819c6b5ed538d2a59a81ee
+      size: 4813
     params:
       params.yaml:
         train_one:
