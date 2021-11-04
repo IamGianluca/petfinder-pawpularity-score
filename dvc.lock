@@ -72,7 +72,7 @@ stages:
           sz: 224
           arch: swin_large_patch4_window7_224
           epochs: 6
-          bs: 32
+          bs: 40
           auto_batch_size: false
           accumulate_grad_batches: 1
           precision: 32
@@ -84,42 +84,42 @@ stages:
           loss: bce_with_logits
           opt: adam
           sched: onecycle
-          lr: 0.0001
+          lr: 0.000125
           auto_lr: false
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: 5680781371699db5e9a962c3c36854c4
+      md5: 66c8700451f112bba601e1a8439932b7
       size: 2341921498
     - path: ckpts/model_one_fold1.ckpt
-      md5: 758e1631cb14e7c00c3dd1ab4a7d64c9
+      md5: 20154e197a65419e91641239ae674c2f
       size: 2341921498
     - path: ckpts/model_one_fold2.ckpt
-      md5: 480caee60c71a201bf7e799af51ef72f
+      md5: 57639986bc57ec5a8d1fa5669ad92e64
       size: 2341921498
     - path: ckpts/model_one_fold3.ckpt
-      md5: 89ee6749896c142d16f92f434d46a24c
+      md5: 14682f8b753db0ccce3482fe3da58016
       size: 2341921498
     - path: ckpts/model_one_fold4.ckpt
-      md5: b31e1df594243c509afc200ebc2afac5
+      md5: 5c18b7a553d7cdca9f5783b6216bce65
       size: 2341921498
     - path: metrics/model_one.json
-      md5: 2e57ec051f388c50470a2b998468ec1d
+      md5: b2fd70637e222e8a0f35bfdbba7dc22a
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: 89b8352d2cb8dbc0878f15862ba93746
+      md5: 183ab5f5b2fea4f1d986c3c037f70628
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: 81003fa2fe5e4a6582d6bdc4feda8efe
+      md5: 144adca706236626e1f60aab4f240a22
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: 68d2a0743472547fc697ce2f3cdc04c1
+      md5: 38fc9c1c29188da4a7d23a87cd882a0b
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: 26681d13aa7a9bd6c6bfdd18645b43be
+      md5: 16b90b757ed58aaab20860fde5d067cc
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: c42a0fc40fc9b09f0ad588dc6434bf69
+      md5: 70290a0e18fe63afd8d67b0b751d833a
       size: 8056
   resize_images:
     cmd: python pipe/resize_images.py
