@@ -54,6 +54,11 @@ def lr_scheduler_factory(optimizer, hparams, data_loader):
             steps_per_epoch=len(data_loader),
             epochs=hparams.epochs,
         )
+    if hparams.sched == "cosine":
+        return lr_scheduler.CosineAnnealingLR(
+            optimizer=optimizer,
+            T_max=5,
+        )
     else:
         raise ValueError("Learning rate scheduler not supported yet.")
 

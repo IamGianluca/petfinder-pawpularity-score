@@ -28,17 +28,23 @@ class ImageClassificationDataset(Dataset):
         return self.length
 
     def __getitem__(self, index):
-        image = np.array(Image.open(self.image_paths[index]))
+        image = Image.open(self.image_paths[index])
+        image = np.array(image)
+        image = image / 255.0
 
-        if self.augmentations:
-            image = self.augmentations(image=image)["image"]
-        if image.ndim == 2:  # add channel axis to grayscale images
-            image = image[None, ...]
+        # if self.augmentations:
+        #     image = self.augmentations(image=image)["image"]
+        # if image.ndim == 2:  # add channel axis to grayscale images
+        #     image = image[None, ...]
+        #     image = torch.tensor(image)
+
+        # reshape from [H, W, C] to [C, H, W]
+        image = np.transpose(image, (2, 0, 1)).astype(np.float32)
 
         if self.targets is not None:  # train/val dataset
-            return image.float(), torch.tensor(self.targets[index])
+            return image, torch.tensor(self.targets[index])
         else:  # test dataset
-            return image.float()
+            return image
 
 
 class Image3DClassificationDataset(Dataset):

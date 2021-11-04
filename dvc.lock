@@ -37,8 +37,8 @@ stages:
       md5: a7812f42b71d57e77dfc6e05f5cdd865
       size: 594740
     - path: pipe/create_folds.py
-      md5: e11c1727b424d3d2955fd127052f7027
-      size: 814
+      md5: 46d73ee2ebf612b573a916fd679d96f8
+      size: 739
     params:
       params.yaml:
         create_folds:
@@ -46,21 +46,21 @@ stages:
           k: 5
     outs:
     - path: data/train_folds.csv
-      md5: ab60389c4822f57583be4cc5f0295df3
-      size: 1110176
+      md5: c2cb6a0cb24be6031baee25b65302691
+      size: 614570
   train_one:
     cmd: python pipe/train.py
     deps:
-    - path: data/train
-      md5: 065c7f4be0d67e5175f532982b56cb52.dir
-      size: 1039930050
+    - path: data/train_224
+      md5: 4d3f19867a6f896eb31f001615b86a24.dir
+      size: 96860688
       nfiles: 9912
     - path: data/train_folds.csv
-      md5: ab60389c4822f57583be4cc5f0295df3
-      size: 1110176
+      md5: c2cb6a0cb24be6031baee25b65302691
+      size: 614570
     - path: pipe/train.py
-      md5: cfa98f24dea708eedc16019aa9357f66
-      size: 5464
+      md5: 8fe41c9c54740db81c040e6f6cfaf6fd
+      size: 4916
     params:
       params.yaml:
         train_one:
@@ -68,57 +68,84 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train
+          train_data: data/train_224
           sz: 224
           arch: swin_large_patch4_window7_224
-          epochs: 5
+          epochs: 6
           bs: 32
           auto_batch_size: false
           accumulate_grad_batches: 1
           precision: 32
-          n_tfms: 0
-          magn: 0
-          aug: none
+          n_tfms: 2
+          magn: 2
           dropout: 0.0
           wd: 0.0
           label_smoothing: 0.0
           loss: bce_with_logits
           opt: adam
           sched: onecycle
-          lr: 0.001
+          lr: 0.0001
           auto_lr: false
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: 78b98b57eb34341466ca517b038d84f0
-      size: 2341920858
+      md5: 5680781371699db5e9a962c3c36854c4
+      size: 2341921498
     - path: ckpts/model_one_fold1.ckpt
-      md5: 9aac30253f316cb2d2a9a868c6d56182
-      size: 2341920858
+      md5: 758e1631cb14e7c00c3dd1ab4a7d64c9
+      size: 2341921498
     - path: ckpts/model_one_fold2.ckpt
-      md5: 5457a18ecc0e377063926059abb83a00
-      size: 2341920858
+      md5: 480caee60c71a201bf7e799af51ef72f
+      size: 2341921498
     - path: ckpts/model_one_fold3.ckpt
-      md5: 3c7840af4d46cc60dee96e70c430e5a9
-      size: 2341920858
+      md5: 89ee6749896c142d16f92f434d46a24c
+      size: 2341921498
     - path: ckpts/model_one_fold4.ckpt
-      md5: 4d1a3f454335a40f6a1a1b2d36b0b266
-      size: 2341920858
+      md5: b31e1df594243c509afc200ebc2afac5
+      size: 2341921498
     - path: metrics/model_one.json
-      md5: c0259182405ea03563018341efa5ba4a
+      md5: 2e57ec051f388c50470a2b998468ec1d
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: 69b330f13733bde5c9a4a3d47adcc080
+      md5: 89b8352d2cb8dbc0878f15862ba93746
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: a428dc66cf8e0f631e77f1f65b630a5e
+      md5: 81003fa2fe5e4a6582d6bdc4feda8efe
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: 91e03660ce1756b1b1f457dbb09db68e
+      md5: 68d2a0743472547fc697ce2f3cdc04c1
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: dcff1bd287fc5d6b52733617345663c8
+      md5: 26681d13aa7a9bd6c6bfdd18645b43be
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: ca057876841a387d93106524872737bf
+      md5: c42a0fc40fc9b09f0ad588dc6434bf69
       size: 8056
+  resize_images:
+    cmd: python pipe/resize_images.py
+    deps:
+    - path: data/test
+      md5: e945e75c5c4c977b08ad644851755e27.dir
+      size: 83775
+      nfiles: 8
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
+    - path: pipe/resize_images.py
+      md5: 22b4e2500eb69a98b5f32cd73384fa8e
+      size: 854
+    params:
+      params.yaml:
+        resize:
+          sz:
+          - 224
+    outs:
+    - path: data/test_224/
+      md5: a7ba3be9ceced4ebcaa901c8ece5d971.dir
+      size: 11288
+      nfiles: 8
+    - path: data/train_224/
+      md5: 4d3f19867a6f896eb31f001615b86a24.dir
+      size: 96860688
+      nfiles: 9912

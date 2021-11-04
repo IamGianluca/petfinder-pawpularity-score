@@ -7,7 +7,7 @@ from timm.models import create_model
 from .loss import loss_factory
 from .metrics import metric_factory
 from .optim import lr_scheduler_factory, optimizer_factory
-from .vision.augmentations import BatchRandAugment, kornia_list
+from .vision.augmentations import BatchRandAugment
 
 # ImageNet-1k dataset mean and std
 mean = [0.485, 0.456, 0.406]
@@ -33,13 +33,19 @@ class ImageClassifier(pl.LightningModule):
             drop_rate=self.hparams.dropout,
         )
 
-        self.augmentations = BatchRandAugment(
+        self.train_aug = BatchRandAugment(
             cfg.n_tfms,
             cfg.magn,
             mean=mean,
             std=std,
             # use_resize=0,
             # image_size=(cfg.sz, cfg.sz),
+        )
+        self.val_aug = BatchRandAugment(
+            N_TFMS=0,
+            MAGN=0,
+            mean=mean,
+            std=std,
         )
 
         self.train_metric = metric_factory(name=cfg.metric)
@@ -57,9 +63,9 @@ class ImageClassifier(pl.LightningModule):
         """
         x, target = batch
 
-        # apply data augmentation
-        self.augmentations.setup()
-        x = self.augmentations(x)
+        # apply data augmentations
+        self.train_aug.setup()
+        x = self.train_aug(x)
 
         loss, target, preds = self.step(x, target)
         self.log("train_loss", loss, on_step=True, on_epoch=False)
@@ -73,6 +79,11 @@ class ImageClassifier(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, target = batch
+
+        # apply data augmentations
+        self.val_aug.setup()
+        x = self.val_aug(x)
+
         loss, target, preds = self.step(x, target)
         self.log("val_loss", loss, on_step=True, on_epoch=False)
         self.log(

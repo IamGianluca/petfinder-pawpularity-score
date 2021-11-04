@@ -6,8 +6,8 @@ ckpts_path = path / "ckpts"
 data_path = path / "data"
 metrics_path = path / "metrics"
 
-orig_train_images_path = data_path / "train"
-orig_test_images_path = data_path / "test"
+train_images_path = data_path / "train"
+test_images_path = data_path / "test"
 
 # full paths
 train_labels_fpath = data_path / "train.csv"

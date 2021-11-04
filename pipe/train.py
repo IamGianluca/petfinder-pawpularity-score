@@ -86,10 +86,11 @@ def train_one_fold(
     df_val = df[df.kfold == cfg.fold].reset_index()
 
     train_image_paths, train_targets = utils.get_image_paths_and_targets(
-        df=df_train
+        df=df_train, cfg=cfg
     )
-    val_image_paths, val_targets = utils.get_image_paths_and_targets(df=df_val)
-    train_aug, val_aug, test_aug = get_augmentations(cfg=cfg)
+    val_image_paths, val_targets = utils.get_image_paths_and_targets(
+        df=df_val, cfg=cfg
+    )
 
     # create datamodule
     dm = data.ImageDataModule(
@@ -98,14 +99,11 @@ def train_one_fold(
         # train
         train_image_paths=train_image_paths,
         train_targets=train_targets,
-        train_augmentations=train_aug,
         # valid
         val_image_paths=val_image_paths,
         val_targets=val_targets,
-        val_augmentations=val_aug,
         # test
         test_image_paths=val_image_paths,
-        test_augmentations=test_aug,
     )
 
     model = learner.ImageClassifier(
@@ -171,21 +169,6 @@ def save_metrics(
     data[f"cv {metric}"] = f"{cv_metric:.4f}"
     with open(fpath, "w") as f:
         json.dump(data, f)
-
-
-def get_augmentations(cfg: OmegaConf):
-    mean = [0.485, 0.456, 0.406]
-    std = [0.229, 0.224, 0.225]
-    if cfg.aug == "none":
-        train_aug = albumentations.Compose(
-            [
-                albumentations.Resize(cfg.sz, cfg.sz),
-                transforms.ToTensorV2(),
-            ]
-        )
-        val_aug = train_aug
-        test_aug = train_aug
-    return train_aug, val_aug, test_aug
 
 
 if __name__ == "__main__":

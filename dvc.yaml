@@ -27,8 +27,8 @@ stages:
     params:
     - train_one
     deps:
-    - data/train
     - pipe/train.py
+    - data/train_224
     - data/train_folds.csv
     outs:
     - ckpts/model_one_fold0.ckpt
@@ -43,5 +43,16 @@ stages:
     - preds/model_one_fold4.npy
     metrics:
     - metrics/model_one.json:
-        cache: False
+        cache: false
 
+  resize_images:
+    cmd: python pipe/resize_images.py
+    deps:
+    - data/test
+    - data/train
+    - pipe/resize_images.py
+    params:
+    - resize
+    outs:
+    - data/test_224/
+    - data/train_224/
