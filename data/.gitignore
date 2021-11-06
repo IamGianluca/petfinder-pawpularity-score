@@ -7,3 +7,5 @@
 /train_folds.csv
 /train_224
 /test_224
+/test_384
+/train_384
