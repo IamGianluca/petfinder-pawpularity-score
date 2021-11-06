@@ -34,16 +34,16 @@ class ImageClassifier(pl.LightningModule):
         )
 
         self.train_aug = BatchRandAugment(
-            cfg.n_tfms,
-            cfg.magn,
+            n_tfms=cfg.n_tfms,
+            magn=cfg.magn,
             mean=mean,
             std=std,
             # use_resize=0,
             # image_size=(cfg.sz, cfg.sz),
         )
         self.val_aug = BatchRandAugment(
-            N_TFMS=0,
-            MAGN=0,
+            n_tfms=0,
+            magn=0,
             mean=mean,
             std=std,
         )

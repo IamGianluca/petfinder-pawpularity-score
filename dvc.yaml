@@ -57,3 +57,25 @@ stages:
     metrics:
     - metrics/model_one.json:
         cache: false
+  train_two:
+    cmd: python pipe/train_two.py
+    params:
+    - train_two
+    deps:
+    - pipe/train_two.py
+    - data/train_224
+    - data/train_folds.csv
+    outs:
+    - ckpts/model_two_fold0.ckpt
+    - ckpts/model_two_fold1.ckpt
+    - ckpts/model_two_fold2.ckpt
+    - ckpts/model_two_fold3.ckpt
+    - ckpts/model_two_fold4.ckpt
+    - preds/model_two_fold0.npy
+    - preds/model_two_fold1.npy
+    - preds/model_two_fold2.npy
+    - preds/model_two_fold3.npy
+    - preds/model_two_fold4.npy
+    metrics:
+    - metrics/model_two.json:
+        cache: false
