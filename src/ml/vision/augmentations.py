@@ -13,33 +13,33 @@ import torch
 from torch import nn
 
 
-def kornia_list(MAGN: int = 4):
+def kornia_list(magn: int = 4):
     """
-    Returns standard list of kornia transforms, each with magnitude `MAGN`.
+    Returns standard list of kornia transforms, each with magnitude `magn`.
 
     Args:
-        MAGN (int): Magnitude of each transform in the returned list.
+        magn (int): Magnitude of each transform in the returned list.
     """
     transform_list = [
         # spatial
         K.RandomHorizontalFlip(p=1),
         K.RandomRotation(degrees=90.0, p=1),
         K.RandomAffine(
-            degrees=MAGN * 5.0, shear=MAGN / 5, translate=MAGN / 20, p=1
+            degrees=magn * 5.0, shear=magn / 5, translate=magn / 20, p=1
         ),
-        K.RandomPerspective(distortion_scale=MAGN / 25, p=1),
+        K.RandomPerspective(distortion_scale=magn / 25, p=1),
         # # pixel-level
-        # K.ColorJitter(brightness=MAGN / 30, p=1),  # brightness
-        # K.ColorJitter(saturation=MAGN / 30, p=1),  # saturation
-        # K.ColorJitter(contrast=MAGN / 30, p=1),  # contrast
-        # K.ColorJitter(hue=MAGN / 30, p=1),  # hue
-        # K.ColorJitter(p=0),  # identity
+        K.ColorJitter(brightness=magn / 30, p=1),  # brightness
+        K.ColorJitter(saturation=magn / 30, p=1),  # saturation
+        K.ColorJitter(contrast=magn / 30, p=1),  # contrast
+        K.ColorJitter(hue=magn / 30, p=1),  # hue
+        K.ColorJitter(p=0),  # identity
         # TODO: fix RandomMotionBlur
-        # K.RandomMotionBlur(
-        #     kernel_size=2 * (MAGN // 3) + 1, angle=MAGN, direction=1.0, p=1
-        # ),
+        K.RandomMotionBlur(
+            kernel_size=2 * (magn // 3) + 1, angle=magn, direction=1.0, p=1
+        ),
         K.RandomErasing(
-            scale=(MAGN / 100, MAGN / 50), ratio=(MAGN / 20, MAGN), p=1
+            scale=(magn / 100, magn / 50), ratio=(magn / 20, magn), p=1
         ),
     ]
     return transform_list
@@ -47,14 +47,14 @@ def kornia_list(MAGN: int = 4):
 
 class BatchRandAugment(nn.Module):
     """
-    Image augmentation pipeline that applies a composition of `N_TFMS` transforms
-    each of magnitude `MAGN` sampled uniformly at random from `transform_list` with
+    Image augmentation pipeline that applies a composition of `n_tfms` transforms
+    each of magnitude `magn` sampled uniformly at random from `transform_list` with
     optional batch resizing and label mixing transforms.
 
     Args:
-        N_TFMS (int): Number of transformations sampled for each composition,
+        n_tfms (int): Number of transformations sampled for each composition,
             excluding resize or label mixing transforms. N in paper.
-        MAGN (int): Magnitude of augmentation applied. Ranges from [0, 10] with
+        magn (int): Magnitude of augmentation applied. Ranges from [0, 10] with
             10 being the max magnitude. M in paper.
         mean (tuple, torch.Tensor): Mean of images after normalized in range [0,1]
         std (tuple, torch.Tensor): Mean of images after normalized in range [0,1]
@@ -76,8 +76,8 @@ class BatchRandAugment(nn.Module):
 
     def __init__(
         self,
-        N_TFMS: int,
-        MAGN: int,
+        n_tfms: int,
+        magn: int,
         mean: Union[tuple, list, torch.tensor],
         std: Union[tuple, list, torch.tensor],
         transform_list: list = None,
@@ -88,7 +88,7 @@ class BatchRandAugment(nn.Module):
     ):
         super().__init__()
 
-        self.N_TFMS, self.MAGN = N_TFMS, MAGN
+        self.n_tfms, self.magn = n_tfms, magn
         self.use_mix, self.mix_p = use_mix, mix_p
         self.image_size = image_size
 
@@ -120,7 +120,7 @@ class BatchRandAugment(nn.Module):
 
         self.transform_list = transform_list
         if transform_list is None:
-            self.transform_list = kornia_list(MAGN)
+            self.transform_list = kornia_list(magn)
 
     def setup(self):
         if self.use_resize == 3:
@@ -132,7 +132,7 @@ class BatchRandAugment(nn.Module):
             self.mix = None
 
         sampled_tfms = list(
-            np.random.choice(self.transform_list, self.N_TFMS, replace=False)
+            np.random.choice(self.transform_list, self.n_tfms, replace=False)
         ) + [self.normalize]
         self.transform = nn.Sequential(*sampled_tfms)
 
