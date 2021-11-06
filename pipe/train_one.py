@@ -107,7 +107,7 @@ def train_one_fold(
     model = learner.ImageClassifier(
         in_channels=3,
         num_classes=1,
-        pretrained=True,
+        pretrained=cfg.pretrained,
         cfg=cfg,
     )
 

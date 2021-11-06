@@ -3,7 +3,7 @@ create_folds:
   k: 5
 
 resize:
-  sz: [224]
+  sz: [224, 384]
 
 train_one:
   seed: 46
@@ -12,18 +12,19 @@ train_one:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
-  sz: 224
+  train_data: data/train_384
   # model
-  arch: swin_large_patch4_window7_224
+  arch: swin_large_patch4_window12_384
+  pretrained: true
   epochs: 6
-  bs: 40
+  bs: 8
   auto_batch_size: false
   accumulate_grad_batches: 1
   precision: 32
   # augmentations
   n_tfms: 2
   magn: 2
+  sz: 384
   # regularization
   dropout: 0.0
   wd: 0.0
@@ -32,6 +33,6 @@ train_one:
   loss: bce_with_logits
   opt: adam
   sched: onecycle
-  lr: 0.000125
+  lr: 0.000025
   auto_lr: false
   mom: 0.9
