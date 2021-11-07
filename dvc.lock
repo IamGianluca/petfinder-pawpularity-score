@@ -90,37 +90,37 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: c07433dc8accf205d2423f2788e61405
-      size: 2356390618
+      md5: 61a9db90d900c71cab402ed19315d4e3
+      size: 2358837006
     - path: ckpts/model_one_fold1.ckpt
-      md5: b54d32ffd67d899650e3832000086a47
-      size: 2356390618
+      md5: 7fa4c76920788c8656a47bea3799ab2f
+      size: 2358837006
     - path: ckpts/model_one_fold2.ckpt
-      md5: c533706cf5ead5b5541d05e3526cc76d
-      size: 2356390618
+      md5: 454047f2010d6114c0bd22fb28878d7c
+      size: 2358837006
     - path: ckpts/model_one_fold3.ckpt
-      md5: 202313a80c9d4dfe5e7cfb4f374e45a8
-      size: 2356390618
+      md5: acad27b15200254fafdb620bb6d805f8
+      size: 2358837006
     - path: ckpts/model_one_fold4.ckpt
-      md5: ff7f97c39ed611a72b260b0dfaa05059
-      size: 2356390618
+      md5: edf4ea8346c652e8f172400c14d94c3c
+      size: 2358837006
     - path: metrics/model_one.json
-      md5: 2daaebd0653b1a543fcbcafd4998fa0f
+      md5: 865734c3c18cadaadf42fcc5b1b62eaa
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: 87e96c45d5a6ad014bc63954e6dd5761
+      md5: 412c15cdb65b71fdb085109dd8f8f062
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: af8b18be094796e5213c03440ee063b9
+      md5: 40cc0e706448920e7c602d188c8b8d4a
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: 8b7e9fb439463065d166ece6023e07d4
+      md5: 04697ba5cdb9e60d282d4547103ab88f
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: dddc3c879e0e08704cb5dd1b8c65a50f
+      md5: 359154807ad49618bae984ab87f8b977
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: f4c612598e6eb248db95756c26464055
+      md5: dd660f668bbdf1715aa993db6b944236
       size: 8056
   resize_images:
     cmd: python pipe/resize_images.py
@@ -201,35 +201,35 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: 1184c7cc65272c93d6d013ae7f7e2e21
-      size: 2341925914
+      md5: da0c6e5cef092dd36e0ce59087962524
+      size: 2344372302
     - path: ckpts/model_two_fold1.ckpt
-      md5: 5e3d8f70868ab4381293d2a8842bcd3f
-      size: 2341925914
+      md5: e4184060602430bfa58ac29a11951ed7
+      size: 2344372302
     - path: ckpts/model_two_fold2.ckpt
-      md5: 1da9ada9db5718598a7aab17eac9eff4
-      size: 2341925914
+      md5: dd24d9726db529419818f0c0aaef0268
+      size: 2344372302
     - path: ckpts/model_two_fold3.ckpt
-      md5: 706ab4ce17eaa642de4ea906e2cfcd40
-      size: 2341925914
+      md5: b5c5e5a822fac3d101131993c5395b08
+      size: 2344372302
     - path: ckpts/model_two_fold4.ckpt
-      md5: 982b89dc70b2385c8482fb2ff619e167
-      size: 2341925914
+      md5: 75096f88b4fcf465b242da2486ff6b02
+      size: 2344372302
     - path: metrics/model_two.json
-      md5: 673ffde57ab7c8ebe2c97c134c9ab31c
+      md5: 91182e3f1f854f4af969035002ff88e6
       size: 45
     - path: preds/model_two_fold0.npy
-      md5: a7b736989a2dae05e94bd4aea1c2730b
+      md5: 1681a5ae01c32b2fc1da465a7149dbb5
       size: 8060
     - path: preds/model_two_fold1.npy
-      md5: a303d66ec5d5d4590e758381de2e6204
+      md5: 8b5a3fc8ce0ee07bf7997482d917224b
       size: 8060
     - path: preds/model_two_fold2.npy
-      md5: eda9b8406b62bdc7d333d7008d54c8f2
+      md5: 5bbfbae5da0a564854d5146b3976a10e
       size: 8056
     - path: preds/model_two_fold3.npy
-      md5: 236bad20cf869c80b1839b9af3053077
+      md5: 6ba9d792c6fdf3fc0ab0069336b022f3
       size: 8056
     - path: preds/model_two_fold4.npy
-      md5: 9cd10208d6b2e125b3edca09abbdbaab
+      md5: bbb358f27dec982a7beb6cb65ab5556c
       size: 8056

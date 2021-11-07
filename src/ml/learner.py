@@ -3,6 +3,8 @@ from typing import Any, List, Optional
 import pytorch_lightning as pl
 from omegaconf import OmegaConf
 from timm.models import create_model
+from torch import nn
+from torch.nn.modules.linear import Linear
 
 from .loss import loss_factory
 from .metrics import metric_factory
@@ -28,9 +30,15 @@ class ImageClassifier(pl.LightningModule):
         self.backbone = create_model(
             model_name=self.hparams.arch,
             pretrained=pretrained,
-            num_classes=num_classes,
+            num_classes=1024,
             in_chans=in_channels,
             drop_rate=self.hparams.dropout,
+        )
+        self.backbone.head = nn.Linear(self.backbone.head.in_features, 128)
+        self.head = nn.Sequential(
+            nn.Dropout(0.1),
+            nn.Linear(128, 64),
+            nn.Linear(64, 1),
         )
 
         self.train_aug = BatchRandAugment(
@@ -38,8 +46,6 @@ class ImageClassifier(pl.LightningModule):
             magn=cfg.magn,
             mean=mean,
             std=std,
-            # use_resize=0,
-            # image_size=(cfg.sz, cfg.sz),
         )
         self.val_aug = BatchRandAugment(
             n_tfms=0,
@@ -55,7 +61,9 @@ class ImageClassifier(pl.LightningModule):
 
     def forward(self, x):
         """Contain only tensor operations with your model."""
-        return self.backbone(x)
+        x = self.backbone(x)
+        x = self.head(x)
+        return x
 
     def training_step(self, batch, batch_idx):
         """Encapsulate forward() logic with logging, metrics, and loss
