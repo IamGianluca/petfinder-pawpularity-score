@@ -16,7 +16,7 @@ train_one:
   # model
   arch: swin_large_patch4_window12_384
   pretrained: true
-  epochs: 6
+  epochs: 10
   bs: 8
   auto_batch_size: false
   accumulate_grad_batches: 1

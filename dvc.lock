@@ -71,7 +71,7 @@ stages:
           train_data: data/train_384
           arch: swin_large_patch4_window12_384
           pretrained: true
-          epochs: 6
+          epochs: 10
           bs: 8
           auto_batch_size: false
           accumulate_grad_batches: 1
@@ -90,37 +90,37 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: c0e1a66a2d04505645f539cc91e84790
+      md5: c07433dc8accf205d2423f2788e61405
       size: 2356390618
     - path: ckpts/model_one_fold1.ckpt
-      md5: b469a9a02aa1765cd07c982c18690642
+      md5: b54d32ffd67d899650e3832000086a47
       size: 2356390618
     - path: ckpts/model_one_fold2.ckpt
-      md5: e2b0d402fec5200c38d81670f38cbd3a
+      md5: c533706cf5ead5b5541d05e3526cc76d
       size: 2356390618
     - path: ckpts/model_one_fold3.ckpt
-      md5: ea49ae8421fb334170fceb3c6ef6b315
+      md5: 202313a80c9d4dfe5e7cfb4f374e45a8
       size: 2356390618
     - path: ckpts/model_one_fold4.ckpt
-      md5: d8503e9cd8c76a9438f664dd402a235b
+      md5: ff7f97c39ed611a72b260b0dfaa05059
       size: 2356390618
     - path: metrics/model_one.json
-      md5: 0bafcb9b2fed75cfe2283a0c96a0ed80
-      size: 46
+      md5: 2daaebd0653b1a543fcbcafd4998fa0f
+      size: 45
     - path: preds/model_one_fold0.npy
-      md5: a72e7fc220d6997c06e280892a732956
+      md5: 87e96c45d5a6ad014bc63954e6dd5761
       size: 8060
     - path: preds/model_one_fold1.npy
-      md5: b72458b1d6f98759a9d0d77dee4637b0
+      md5: af8b18be094796e5213c03440ee063b9
       size: 8060
     - path: preds/model_one_fold2.npy
-      md5: 3e64023ac807f64778425ead025aed6e
+      md5: 8b7e9fb439463065d166ece6023e07d4
       size: 8056
     - path: preds/model_one_fold3.npy
-      md5: 4ffe1f3c1a60c7f08cf3c2632bc0115f
+      md5: dddc3c879e0e08704cb5dd1b8c65a50f
       size: 8056
     - path: preds/model_one_fold4.npy
-      md5: 0a3d645781d6cd84f586a8a7275e8b53
+      md5: f4c612598e6eb248db95756c26464055
       size: 8056
   resize_images:
     cmd: python pipe/resize_images.py
