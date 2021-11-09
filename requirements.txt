@@ -1,6 +1,7 @@
 albumentations
 black
 flake8
+imagehash
 ipdb
 ipywidgets
 isort

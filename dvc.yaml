@@ -13,12 +13,19 @@ stages:
     - data/test.csv
     - data/train
     - data/train.csv
+  remove_duplicates:
+    cmd: python pipe/remove_duplicate_images.py
+    deps:
+    - data/train
+    - pipe/remove_duplicate_images.py
+    outs:
+    - data/train_deduped.csv
   create_folds:
     cmd: python pipe/create_folds.py
     params:
     - create_folds
     deps:
-    - data/train.csv
+    - data/train_deduped.csv
     - pipe/create_folds.py
     outs:
     - data/train_folds.csv

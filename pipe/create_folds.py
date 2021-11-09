@@ -7,7 +7,8 @@ import constants
 
 def split():
     cfg = load_cfg(fpath=str(constants.cfg_fpath), cfg_name="create_folds")
-    df = pd.read_csv(constants.train_labels_fpath)
+    df = pd.read_csv(constants.train_deduped_fpath)
+    df = df.drop("keep", axis=1)
 
     # split training data into 5 folds
     df["kfold"] = -1
