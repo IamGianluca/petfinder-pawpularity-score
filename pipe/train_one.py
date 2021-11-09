@@ -11,7 +11,6 @@ from loguru import logger
 from ml import learner
 from ml.params import load_cfg
 from ml.vision import data
-from numpy.typing import ArrayLike
 from omegaconf import OmegaConf
 from omegaconf.omegaconf import OmegaConf
 from pytorch_lightning import callbacks
@@ -69,9 +68,7 @@ def main():
     neptune_logger.experiment.stop()
 
 
-def train_one_fold(
-    cfg: omegaconf.DictConfig, logger
-) -> Tuple[ArrayLike, ArrayLike]:
+def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
 
     print()
     print(f"#####################")
