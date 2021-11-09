@@ -19,8 +19,11 @@ attach:
 stop:
 	docker kill paw
 
-submit:
-	kaggle competitions submit -c siim-covid19-detection -f outs/submission.csv -m "$(COMMENT)"
+upload_lib:
+	kaggle datasets version --dir-mode zip -p src/ -m "New version"
+
+upload_ckpts:
+	kaggle datasets version --dir-mode zip -p ckpts/ -m "New version"
 
 jupyter:
 	jupyter lab --ip 0.0.0.0 --port 8888
