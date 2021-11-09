@@ -1,0 +1,9 @@
+{
+  "title": "ml library for petfinder-pawpularity challenge",
+  "id": "gianlucarossi/kaggle-paw",
+  "licenses": [
+    {
+      "name": "CC0-1.0"
+    }
+  ]
+}
