@@ -27,7 +27,7 @@ jobs:
 
         with:
           id:  "gianlucarossi/kaggle-paw"
-          title: "ml library for petfinder-pawpularity-score challenge solution"
+          title: "library for petfinder pawpularity challenge"
           subtitle: "personal ml library"
           description: "Code repository for Pawpularity solution "
           files: |
