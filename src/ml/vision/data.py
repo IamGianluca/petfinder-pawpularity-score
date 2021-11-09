@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pytorch_lightning as pl
 import torch
-from numpy.typing import ArrayLike
 from PIL import Image, ImageFile
 from scipy.ndimage import zoom
 from torch.utils.data import DataLoader, Dataset
@@ -83,9 +82,7 @@ class Image3DClassificationDataset(Dataset):
             return image
 
 
-def spline_interpolated_zoom(
-    img: ArrayLike, desired_depth: int = 3
-) -> ArrayLike:
+def spline_interpolated_zoom(img, desired_depth: int = 3):
     """Spline Interpolated Zoom
     ref: https://github.com/hasibzunair/uniformizing-3D/blob/master/1_data_process_clef19.ipynb
     """

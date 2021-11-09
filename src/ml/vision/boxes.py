@@ -4,12 +4,11 @@ from typing import Any, Dict, List
 import numpy as np
 import pandas as pd
 import torch
-from numpy.typing import ArrayLike
 
 JsonDict = Dict[str, Any]
 
 
-def boxes_str2array(bboxes_str: List[str]) -> List[ArrayLike]:
+def boxes_str2array(bboxes_str: List[str]) -> List:
     boxes_json = _boxes_str2json(bboxes_str)
     boxes_array = _boxes_json2array(boxes_json)
     return boxes_array
@@ -25,7 +24,7 @@ def _boxes_str2json(bboxes_str: List[str]) -> List[JsonDict]:
 
 def _boxes_json2array(
     bboxes_json: List[JsonDict], fillna: List = [[0, 0, 1, 1]]
-) -> List[ArrayLike]:
+) -> List:
     result = []
     for target in bboxes_json:
         if target is not np.nan:
