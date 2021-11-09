@@ -30,5 +30,7 @@ jobs:
           title: "ml library for petfinder-pawpularity-score challenge solution"
           subtitle: "personal ml library"
           description: "Code repository for Pawpularity solution "
-          files: src/ml
+          files: |
+            src/ml/*.py
+            src/ml/vision/*.py
           is_public: False
