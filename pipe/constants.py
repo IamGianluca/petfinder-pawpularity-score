@@ -11,6 +11,7 @@ test_images_path = data_path / "test"
 
 # full paths
 train_labels_fpath = data_path / "train.csv"
+train_deduped_fpath = data_path / "train_deduped.csv"
 train_folds_fpath = data_path / "train_folds.csv"
 
 cfg_fpath = path / "params.yaml"
