@@ -2,13 +2,12 @@ from functools import partial
 from multiprocessing import Pool
 from pathlib import Path
 
-from loguru import logger
 from PIL import Image
 from tqdm import tqdm
 
 
 def resize_images_from_folder(in_path: Path, out_path: Path, sz: int):
-    logger.info(f"Resizing images in {in_path} to size {sz}x{sz}...")
+    print(f"Resizing images in {in_path} to size {sz}x{sz}...")
     fnames = [x.name for x in in_path.iterdir() if x.is_file()]
 
     pool = Pool()
@@ -25,7 +24,7 @@ def resize_image_from_folder(
     try:
         resized_img = resize(img=img, sz=sz)
     except ValueError as err:
-        logger.info(fname, img.size, err)
+        print(fname, img.size, err)
         raise err
     resized_img.save(out_path / fname)
 
