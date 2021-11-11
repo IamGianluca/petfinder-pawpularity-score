@@ -30,12 +30,12 @@ class ImageClassifier(pl.LightningModule):
         self.backbone = create_model(
             model_name=self.hparams.arch,
             pretrained=pretrained,
-            num_classes=1024,
+            num_classes=0,
             in_chans=in_channels,
             drop_rate=self.hparams.dropout,
         )
-        self.backbone.head = nn.Linear(self.backbone.head.in_features, 128)
         self.head = nn.Sequential(
+            nn.LazyLinear(128),
             nn.Dropout(0.1),
             nn.Linear(128, 64),
             nn.Linear(64, 1),
@@ -108,6 +108,21 @@ class ImageClassifier(pl.LightningModule):
         # but are nonetheless logged in neptune
         self.print_metrics_to_console()
 
+    def predict_step(
+        self, batch: Any, batch_idx: int, dataloader_idx: Optional[int] = None
+    ) -> Any:
+        """Encapsulate forward() with any necessary preprocess or postprocess
+        functions.
+        """
+        # apply data augmentations
+        self.val_aug.setup()
+        x = self.val_aug(batch)
+
+        preds = self.forward(x)
+        # TODO: we don't always need a sigmoid. Handle that case.
+        outs = preds.sigmoid()
+        return outs.detach().cpu().numpy()
+
     def step(self, x, target):
         preds = self.forward(x)
         # TODO: handle logit vs. no logit case for both loss and preds
@@ -177,14 +192,3 @@ class ImageClassifier(pl.LightningModule):
         except (KeyError, AttributeError):
             # these errors occurs when in "tuning" mode (find optimal lr)
             pass
-
-    def predict_step(
-        self, batch: Any, batch_idx: int, dataloader_idx: Optional[int] = None
-    ) -> Any:
-        """Encapsulate forward() with any necessary preprocess or postprocess
-        functions.
-        """
-        preds = self.forward(batch)
-        # TODO: we don't always need a sigmoid. Handle that case.
-        outs = preds.sigmoid()
-        return outs.detach().cpu().numpy()

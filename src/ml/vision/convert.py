@@ -2,7 +2,6 @@ from pathlib import Path
 
 import numpy as np
 import pydicom
-from loguru import logger
 from PIL import Image
 from pydicom.pixel_data_handlers.util import apply_voi_lut
 from tqdm import tqdm
@@ -10,7 +9,7 @@ from tqdm import tqdm
 
 def convert_dicom2jpg(in_path, out_path):
     # TODO: extend to support different input/output type
-    logger.info(f"Converting images in {in_path} to JPG...")
+    print(f"Converting images in {in_path} to JPG...")
 
     img_paths = in_path.rglob("*.dcm")
     for img_path in tqdm(list(img_paths)):

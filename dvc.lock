@@ -59,7 +59,7 @@ stages:
       md5: b9da27ec2c199975db0c599e64685d13
       size: 661559
     - path: pipe/train_one.py
-      md5: e88709d7d6febee0064d404fc8e46166
+      md5: e19ac6fd10d8213834116150e4ebbaac
       size: 4760
     params:
       params.yaml:
@@ -90,37 +90,37 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: 3bada8a7384d5c399c4dacb65c8410b3
-      size: 2358837006
+      md5: 59634dd7e0a76e5c255843d5513d789b
+      size: 795370913
     - path: ckpts/model_one_fold1.ckpt
-      md5: d11dc3c52e69237a3f95c588f8985353
-      size: 2358837006
+      md5: 8d7234aac78989e4a98d563d54bfe50d
+      size: 795370913
     - path: ckpts/model_one_fold2.ckpt
-      md5: 23b16f8c1bc012f98a58d16f77df0dd4
-      size: 2358837006
+      md5: 763b729f31c26dd3c157615710f5282d
+      size: 795370913
     - path: ckpts/model_one_fold3.ckpt
-      md5: c626162e9366ce7be528c4221917b0c4
-      size: 2358837006
+      md5: 64e258c5947fc60a5ae90854f5dc78c5
+      size: 795370913
     - path: ckpts/model_one_fold4.ckpt
-      md5: c837fafed2e1504157aaa0ae096b3572
-      size: 2358837006
+      md5: c5e54705358de0142339dae7bcadd06c
+      size: 795370913
     - path: metrics/model_one.json
-      md5: 77bea41f0ea05703b29790e5ccf3a776
+      md5: d1e244f0217e775a511a8547d046c6c3
       size: 45
     - path: preds/model_one_fold0.npy
-      md5: d8ab1a8d402a9af638e62ab54dc89a1f
+      md5: 28b887db4f16f5df6e27ec50344401b3
       size: 8040
     - path: preds/model_one_fold1.npy
-      md5: fce7837ba8c9b6008d442fb74687f878
+      md5: a3570b642481d782e7a30237c160a7a8
       size: 8040
     - path: preds/model_one_fold2.npy
-      md5: 06fb95ae1cc11080ea102712f05b349d
+      md5: 759c0a23fd5efa33a0f4196dfe7246ce
       size: 8040
     - path: preds/model_one_fold3.npy
-      md5: d916369f6a59cf8e392e64f87bff56c9
+      md5: 97f44237d005cf497559f8ea09f140d2
       size: 8040
     - path: preds/model_one_fold4.npy
-      md5: 91952c3c115df88f2a3df4ef66dbe010
+      md5: 48f317fe24fb17c3ed1fe2fb220ba191
       size: 8040
   resize_images:
     cmd: python pipe/resize_images.py
@@ -170,7 +170,7 @@ stages:
       md5: b9da27ec2c199975db0c599e64685d13
       size: 661559
     - path: pipe/train_two.py
-      md5: 8496e3fe07b864b661e850751c4e935b
+      md5: 93074d375462de01b1bae0c0968f1cab
       size: 4760
     params:
       params.yaml:
@@ -201,37 +201,37 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: a08417e66a056312dc1f2022b593ff99
-      size: 2344372302
+      md5: eda2c73d34de38fd90df6f8d00b363a4
+      size: 782530721
     - path: ckpts/model_two_fold1.ckpt
-      md5: b07a2a5436e70520a84030560fbc37f5
-      size: 2344372302
+      md5: 1dc13bd4f8d5446405cbfd1274f7d9ea
+      size: 782530721
     - path: ckpts/model_two_fold2.ckpt
-      md5: 8a60601d52684c1e80c3552421e1f001
-      size: 2344372302
+      md5: a7aeeda004dd62462a9e115cf058d86e
+      size: 782530721
     - path: ckpts/model_two_fold3.ckpt
-      md5: aa827c8d715612060572f2e62dfbad85
-      size: 2344372302
+      md5: 69d0a60a56b2f87644017ce766910080
+      size: 782530721
     - path: ckpts/model_two_fold4.ckpt
-      md5: d8a6553e10343890dbd881e92c97595f
-      size: 2344372302
+      md5: fe498c32f230245e13520c5944fa6e6a
+      size: 782530721
     - path: metrics/model_two.json
-      md5: 99c287ab9640ac67adb156cddcc043f8
+      md5: d73540b638af2714417eb2cb6cc7de4f
       size: 45
     - path: preds/model_two_fold0.npy
-      md5: 12e0b3204f424480649aa130501e34ea
+      md5: 22482c43b4195f092b2ddc743f88a726
       size: 8040
     - path: preds/model_two_fold1.npy
-      md5: 42f09959e170b05ccb17b235c213fd2b
+      md5: a929e5500db62fa7f85ac410028312d8
       size: 8040
     - path: preds/model_two_fold2.npy
-      md5: 72bec8053b3a9c966c22390cf1a8cd55
+      md5: c761af49733f5397500b2cd3cf1fbdb9
       size: 8040
     - path: preds/model_two_fold3.npy
-      md5: 3947bbffdb55708649399a3ea95f0029
+      md5: 940056422d4e0377cd749c7e1567659f
       size: 8040
     - path: preds/model_two_fold4.npy
-      md5: fa29f4ff22dced9bb7467617d69cec4f
+      md5: c5d22a02ae13bae4a0c9fbd8d209ad4d
       size: 8040
   remove_duplicates:
     cmd: python pipe/remove_duplicate_images.py

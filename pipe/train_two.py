@@ -7,7 +7,6 @@ import numpy as np
 import omegaconf
 import pandas as pd
 import pytorch_lightning as pl
-from loguru import logger
 from ml import learner
 from ml.params import load_cfg
 from ml.vision import data
@@ -113,6 +112,7 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         mode=cfg.metric_mode,
         dirpath=constants.ckpts_path,
         filename=f"model_two_fold{cfg.fold}",
+        save_weights_only=True,
     )
 
     trainer = pl.Trainer(
@@ -150,7 +150,7 @@ def save_predictions(cfg: OmegaConf, preds: List[List]):
 
 
 def print_metrics(metric: str, train_metric: float, valid_metric: float):
-    logger.info(
+    print(
         f"\nBest {metric}: Train {train_metric:.4f}, Valid: {valid_metric:.4f}"
     )
 

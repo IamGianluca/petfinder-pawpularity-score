@@ -5,12 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchvision.utils as utils
-from loguru import logger
 from PIL.ImageDraw import Draw
 from torch.utils.data import DataLoader
 from torchvision import transforms
-
-from ml.vision.boxes import _boxes_coco2pascalvoc
 
 
 def plot_batches(dl: DataLoader, n_batches: int = 1):
@@ -35,8 +32,8 @@ def _show_images_in_batch(batch: Tuple[List, List], verbose: bool = False):
         targets = None
 
     if verbose:
-        logger.info(images.shape)
-        logger.info(targets)
+        print(images.shape)
+        print(targets)
 
     grid = utils.make_grid(images)
     plt.imshow(grid.numpy().transpose((1, 2, 0)))
