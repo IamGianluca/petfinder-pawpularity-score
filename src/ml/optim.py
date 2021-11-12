@@ -1,6 +1,7 @@
 from typing import Iterable
 
 import torch
+import transformers
 from torch import optim
 from torch.optim import lr_scheduler
 from torch.optim._multi_tensor import SGD
@@ -14,13 +15,13 @@ def optimizer_factory(params, hparams):
             weight_decay=hparams.wd,
         )
     if hparams.opt == "adamw":
-        return optim.AdamW(
+        return transformers.AdamW(
             params,
             lr=hparams.lr,
             betas=(0.9, 0.999),
-            eps=1e-08,
+            eps=1e-06,
             weight_decay=hparams.wd,
-            amsgrad=False,
+            correct_bias=True,
         )
     if hparams.opt == "sam":
         return SAM(
@@ -55,9 +56,11 @@ def lr_scheduler_factory(optimizer, hparams, data_loader):
             epochs=hparams.epochs,
         )
     if hparams.sched == "cosine":
-        return lr_scheduler.CosineAnnealingLR(
+        train_steps = len(data_loader) * hparams.epochs
+        return transformers.get_cosine_schedule_with_warmup(
             optimizer=optimizer,
-            T_max=5,
+            num_warmup_steps=int(train_steps * 0.1),
+            num_training_steps=train_steps,
         )
     else:
         raise ValueError("Learning rate scheduler not supported yet.")
