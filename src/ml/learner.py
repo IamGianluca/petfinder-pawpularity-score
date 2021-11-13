@@ -4,7 +4,6 @@ import pytorch_lightning as pl
 from omegaconf import OmegaConf
 from timm.models import create_model
 from torch import nn
-from torch.nn.modules.linear import Linear
 
 from .loss import loss_factory
 from .metrics import metric_factory

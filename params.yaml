@@ -60,7 +60,7 @@ train_two:
   # regularization
   dropout: 0.0
   wd: 0.0
-  label_smoothing: 0.0
+  label_smoothing: 0.1
   # optimizer
   loss: bce_with_logits
   opt: adam
