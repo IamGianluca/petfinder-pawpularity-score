@@ -2,6 +2,7 @@ from functools import partial
 from multiprocessing import Pool
 from pathlib import Path
 
+from ml.vision.resize import resizeright
 from PIL import Image
 from tqdm import tqdm
 
@@ -22,7 +23,7 @@ def resize_image_from_folder(
 ):
     img = Image.open(in_path / fname)
     try:
-        resized_img = resize(img=img, sz=sz)
+        resized_img = resizeright(img=img, sz=sz)
     except ValueError as err:
         print(fname, img.size, err)
         raise err
