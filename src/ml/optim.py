@@ -44,24 +44,31 @@ def lr_scheduler_factory(optimizer, hparams, data_loader):
             factor=0.1,
             verbose=True,
         )
-    if hparams.sched == "onecycle":
+    elif hparams.sched == "onecycle":
         return lr_scheduler.OneCycleLR(
             optimizer=optimizer,
             max_lr=hparams.lr,
             cycle_momentum=True,
-            pct_start=0.25,
+            pct_start=hparams.warmup,
             div_factor=25.0,
             final_div_factor=100000.0,
             steps_per_epoch=len(data_loader),
             epochs=hparams.epochs,
         )
-    if hparams.sched == "cosine":
+    elif hparams.sched == "cosine":
         train_steps = len(data_loader) * hparams.epochs
         return transformers.get_cosine_schedule_with_warmup(
             optimizer=optimizer,
             num_warmup_steps=int(train_steps * 0.1),
             num_training_steps=train_steps,
         )
+    elif hparams.sched == "cosine_with_restart":
+        return lr_scheduler.CosineAnnealingWarmRestarts(
+            optimizer=optimizer,
+            T_0=20,
+            eta_min=1e-4,
+        )
+
     else:
         raise ValueError("Learning rate scheduler not supported yet.")
 
