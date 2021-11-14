@@ -163,9 +163,9 @@ stages:
     cmd: python pipe/train_two.py
     deps:
     - path: data/train_224
-      md5: f6be2df4c7c073db4ed060253d2d0209.dir
-      size: 97323389
-      nfiles: 9914
+      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
+      size: 97308155
+      nfiles: 9912
     - path: data/train_folds.csv
       md5: b9da27ec2c199975db0c599e64685d13
       size: 661559
@@ -201,37 +201,37 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: ac3d0cd6ef9db2bf573af4f4feed4a2a
+      md5: 4e06f445e3f5c7bbc0722f62fa90a76e
       size: 782530721
     - path: ckpts/model_two_fold1.ckpt
-      md5: bd4b6b58371f04f6e570ae135c51c011
+      md5: ba17c38804034820a7464e754ed9d3e9
       size: 782530721
     - path: ckpts/model_two_fold2.ckpt
-      md5: ad022a9bdd7f63daa2b662a63126efc3
+      md5: bbdeb939a313c6a800c79062d0a1f0f6
       size: 782530721
     - path: ckpts/model_two_fold3.ckpt
-      md5: b050e16c91f5143227eb5e47a463c4d4
+      md5: 019d411b1103d21056ec16f80acde6c3
       size: 782530721
     - path: ckpts/model_two_fold4.ckpt
-      md5: 2db8dcca5b4032634e80bdf92f0c0fb1
+      md5: c21658d07b0c788d5d4ddb999224afd3
       size: 782530721
     - path: metrics/model_two.json
-      md5: 157dbbc30bc651c9a2afef7382796d52
+      md5: b4784ba557e34d8ca1aab6a2536e1778
       size: 45
     - path: preds/model_two_fold0.npy
-      md5: 6a28b9c5dbf2ee497c6971d869152e51
+      md5: db0f2d6f37e2da188c0c65658a7fba2a
       size: 8040
     - path: preds/model_two_fold1.npy
-      md5: f6f07c22d3e8073acd8dc73f617504ee
+      md5: 02f6f78ad78fc1ede11411220b921f79
       size: 8040
     - path: preds/model_two_fold2.npy
-      md5: ff978fe397ffedaa7f378753d36199ab
+      md5: debc7e25e0b21d7cec825827832d1948
       size: 8040
     - path: preds/model_two_fold3.npy
-      md5: 5d1a78cb4adaa7a11e2c2a89cca35d60
+      md5: 95d0221c57f61b2e834fceae7eb2a015
       size: 8040
     - path: preds/model_two_fold4.npy
-      md5: e60c3cbc791033e784632d96a53a9d58
+      md5: 82577d3783e66967c72ef0d6df84310e
       size: 8040
   remove_duplicates:
     cmd: python pipe/remove_duplicate_images.py
