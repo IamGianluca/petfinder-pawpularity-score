@@ -34,7 +34,6 @@ def kornia_list(magn: int = 4):
         K.ColorJitter(contrast=magn / 30, p=1),  # contrast
         K.ColorJitter(hue=magn / 30, p=1),  # hue
         K.ColorJitter(p=0),  # identity
-        # TODO: fix RandomMotionBlur
         K.RandomMotionBlur(
             kernel_size=2 * (magn // 3) + 1, angle=magn, direction=1.0, p=1
         ),
@@ -81,6 +80,7 @@ class BatchRandAugment(nn.Module):
         mean: Union[tuple, list, torch.tensor],
         std: Union[tuple, list, torch.tensor],
         transform_list: list = None,
+        use_normalize: bool = True,
         use_resize: int = None,
         image_size: tuple = None,
         use_mix: int = None,
@@ -116,7 +116,9 @@ class BatchRandAugment(nn.Module):
             if self.use_resize < 3:
                 self.resize = self.resize_list[use_resize]
 
-        self.normalize = K.Normalize(mean, std)
+        self.use_normalize = use_normalize
+        if use_normalize:
+            self.normalize = K.Normalize(mean, std)
 
         self.transform_list = transform_list
         if transform_list is None:
@@ -133,7 +135,11 @@ class BatchRandAugment(nn.Module):
 
         sampled_tfms = list(
             np.random.choice(self.transform_list, self.n_tfms, replace=False)
-        ) + [self.normalize]
+        )
+
+        if self.use_normalize:
+            sampled_tfms += [self.normalize]
+
         self.transform = nn.Sequential(*sampled_tfms)
 
     @torch.no_grad()

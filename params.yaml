@@ -22,9 +22,13 @@ train_one:
   accumulate_grad_batches: 1
   precision: 32
   # augmentations
+  use_normalize: true
   n_tfms: 2
   magn: 3
   sz: 384
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
   # regularization
   dropout: 0.0
   wd: 0.0
@@ -34,6 +38,7 @@ train_one:
   opt: adam
   sched: onecycle
   lr: 0.000025
+  warmup: 0.25
   auto_lr: false
   mom: 0.9
 
@@ -54,17 +59,22 @@ train_two:
   accumulate_grad_batches: 1
   precision: 32
   # augmentations
+  use_normalize: true
   n_tfms: 2
   magn: 3
   sz: 224
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
   # regularization
   dropout: 0.0
   wd: 0.0
-  label_smoothing: 0.1
+  label_smoothing: 0.1 
   # optimizer
   loss: bce_with_logits
   opt: adam
   sched: onecycle
   lr: 0.000125
+  warmup: 0.25
   auto_lr: false
   mom: 0.9

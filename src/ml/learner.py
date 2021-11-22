@@ -45,12 +45,18 @@ class ImageClassifier(pl.LightningModule):
             magn=cfg.magn,
             mean=mean,
             std=std,
+            image_size=(cfg.sz, cfg.sz),
+            use_normalize=cfg.use_normalize,
+            use_resize=None if cfg.resize == -1 else cfg.resize,
+            use_mix=cfg.use_mix,
+            mix_p=cfg.mix_p,
         )
         self.val_aug = BatchRandAugment(
             n_tfms=0,
             magn=0,
             mean=mean,
             std=std,
+            use_normalize=cfg.use_normalize,
         )
 
         self.train_metric = metric_factory(name=cfg.metric)
@@ -72,9 +78,19 @@ class ImageClassifier(pl.LightningModule):
 
         # apply data augmentations
         self.train_aug.setup()
-        x = self.train_aug(x)
+        try:
+            x, target = self.train_aug(x, target)
+        except RuntimeError:  # required by RandAugment
+            x, target = self.train_aug(x, target.view(-1))
 
         loss, target, preds = self.step(x, target)
+
+        if target.shape[1] == 3:  # required by RandAugment
+            target = (1 - target[:, 2]) * target[:, 0] + target[:, 2] * target[
+                :, 1
+            ]
+            target = target.reshape(-1, 1)
+
         self.log("train_loss", loss, on_step=True, on_epoch=False)
         self.log(
             "train_metric",
