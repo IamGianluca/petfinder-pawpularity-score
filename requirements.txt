@@ -23,4 +23,4 @@ pytorch-lightning==1.4.9
 scikit-learn
 timm==0.4.12
 torchmetrics==0.5.1
-transformers=4.12.3
+transformers==4.12.3

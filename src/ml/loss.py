@@ -33,21 +33,20 @@ class MixUpBCEWithLogitsLoss:
             logits (torch.Tensor): Output of the model.
             y (torch.LongTensor): Targets of shape (batch_size, 1) or (batch_size, 3).
         """
-        assert (
-            y.shape[1] == 1 or y.shape[1] == 3
-        ), f"Invalid shape for targets {y.shape}."
-
-        if y.shape[1] == 1:
+        if y.shape[1] == 1:  # no mixup
             loss = self.criterion(logits, y)
+        elif y.shape[1] == 3:  # mixup
+            lam = y[:, 2]
+            loss_a = self.criterion(logits, y[:, 0].view(-1, 1))
+            loss_b = self.criterion(logits, y[:, 1].view(-1, 1))
+            loss = (1 - lam) * loss_a + lam * loss_b
+        else:
+            raise ValueError(
+                f"y tensor should be of shape (batch_size, 1), found {y.shape}"
+            )
 
-        elif y.shape[1] == 3:
-            loss_a = self.criterion(logits, y[:, 0].reshape(-1, 1))
-            loss_b = self.criterion(logits, y[:, 1].reshape(-1, 1))
-            loss = (1 - y[:, 2]) * loss_a + y[:, 2] * loss_b
-
-        if self.reduction == "mean":
+        if self.reduction:
             return loss.mean()
-        return loss
 
 
 class MixUpCrossEntropy:
