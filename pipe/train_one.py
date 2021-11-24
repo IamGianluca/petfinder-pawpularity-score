@@ -159,8 +159,8 @@ def save_metrics(
     fpath: Path, metric: str, train_metric: float, cv_metric: float
 ):
     data = {}
-    data[f"train {metric}"] = f"{train_metric:.4f}"
-    data[f"cv {metric}"] = f"{cv_metric:.4f}"
+    data[f"train {metric}"] = round(float(train_metric), 4)
+    data[f"cv {metric}"] = round(float(cv_metric), 4)
     with open(fpath, "w") as f:
         json.dump(data, f)
 

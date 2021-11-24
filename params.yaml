@@ -69,12 +69,12 @@ train_two:
   # regularization
   dropout: 0.0
   wd: 0.0
-  label_smoothing: 0.1 
+  label_smoothing: 0.1
   # optimizer
   loss: bce_with_logits
-  opt: adam
+  opt: adamw
   sched: onecycle
-  lr: 0.000125
+  lr: 0.0002
   warmup: 0.25
   auto_lr: false
   mom: 0.9
