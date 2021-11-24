@@ -48,7 +48,7 @@ class ImageClassifier(pl.LightningModule):
             image_size=(cfg.sz, cfg.sz),
             use_normalize=cfg.use_normalize,
             use_resize=None if cfg.resize == -1 else cfg.resize,
-            use_mix=cfg.use_mix,
+            use_mix=None if cfg.use_mix == -1 else cfg.use_mix,
             mix_p=cfg.mix_p,
         )
         self.val_aug = BatchRandAugment(
@@ -75,20 +75,20 @@ class ImageClassifier(pl.LightningModule):
         computation.
         """
         x, target = batch
+        self._check_input(x, target)
 
         # apply data augmentations
         self.train_aug.setup()
         try:
             x, target = self.train_aug(x, target)
-        except RuntimeError:  # required by RandAugment
+        except RuntimeError:  # mixup requires target tensor to be (batch_size, 1)
             x, target = self.train_aug(x, target.view(-1))
 
-        loss, target, preds = self.step(x, target)
+        loss, target, preds = self._step(x, target)
 
-        if target.shape[1] == 3:  # required by RandAugment
-            target = (1 - target[:, 2]) * target[:, 0] + target[:, 2] * target[
-                :, 1
-            ]
+        if target.shape[1] == 3:  # if using MixUp, compute target
+            lam = target[:, 2]
+            target = (1 - lam) * target[:, 0] + lam * target[:, 1]
             target = target.reshape(-1, 1)
 
         self.log("train_loss", loss, on_step=True, on_epoch=False)
@@ -102,12 +102,13 @@ class ImageClassifier(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, target = batch
+        self._check_input(x, target)
 
         # apply data augmentations
         self.val_aug.setup()
         x = self.val_aug(x)
 
-        loss, target, preds = self.step(x, target)
+        loss, target, preds = self._step(x, target)
         self.log("val_loss", loss, on_step=True, on_epoch=False)
         self.log(
             "val_metric",
@@ -118,10 +119,10 @@ class ImageClassifier(pl.LightningModule):
         return loss
 
     def validation_epoch_end(self, outputs: List):
-        self.register_best_train_and_val_metrics()
+        self._register_best_train_and_val_metrics()
         # BUG: the metrics for the very last epoch are not printed
         # but are nonetheless logged in neptune
-        self.print_metrics_to_console()
+        self._print_metrics_to_console()
 
     def predict_step(
         self, batch: Any, batch_idx: int, dataloader_idx: Optional[int] = None
@@ -138,10 +139,10 @@ class ImageClassifier(pl.LightningModule):
         outs = preds.sigmoid()
         return outs.detach().cpu().numpy()
 
-    def step(self, x, target):
+    def _step(self, x, target):
         preds = self.forward(x)
         # TODO: handle logit vs. no logit case for both loss and preds
-        loss = self.compute_loss(preds=preds, target=target)
+        loss = self._compute_loss(preds=preds, target=target)
         return loss, target, preds.sigmoid()
 
     def configure_optimizers(self):
@@ -160,7 +161,11 @@ class ImageClassifier(pl.LightningModule):
             "monitor": "val_metric",
         }
 
-    def compute_loss(self, preds, target):
+    def _check_input(self, x, target):
+        if x.min() < 0 or x.max() > 1:
+            raise ValueError("images shoudl have values between 0 and 1")
+
+    def _compute_loss(self, preds, target):
         if self.hparams.label_smoothing > 0.0:
             target = (
                 target * (1 - self.hparams.label_smoothing)
@@ -171,15 +176,11 @@ class ImageClassifier(pl.LightningModule):
         loss = loss_fn(preds, target)
         return loss
 
-    def compute_metric(self, preds, target):
-        metric_fn = metric_factory(name=self.hparams.metric)
-        return metric_fn(preds, target)
-
-    def register_best_train_and_val_metrics(self):
+    def _register_best_train_and_val_metrics(self):
         try:
             train_metric = self.trainer.callback_metrics["train_metric"]
             val_metric = self.trainer.callback_metrics["val_metric"]
-            if self.best_val_metric is None or self.is_metric_better(
+            if self.best_val_metric is None or self._is_metric_better(
                 val_metric
             ):
                 self.best_val_metric = val_metric
@@ -188,7 +189,7 @@ class ImageClassifier(pl.LightningModule):
             # these errors occurs when in "tuning" mode (find optimal lr)
             pass
 
-    def is_metric_better(self, new_metric):
+    def _is_metric_better(self, new_metric):
         if self.hparams.metric_mode == "max":
             return new_metric > self.best_val_metric
         elif self.hparams.metric_mode == "min":
@@ -196,7 +197,7 @@ class ImageClassifier(pl.LightningModule):
         else:
             raise ValueError("metric_mode can only be min or max")
 
-    def print_metrics_to_console(self):
+    def _print_metrics_to_console(self):
         try:
             train_metric = self.trainer.callback_metrics["train_metric"]
             val_metric = self.trainer.callback_metrics["val_metric"]
