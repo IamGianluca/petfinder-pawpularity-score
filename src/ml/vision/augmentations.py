@@ -164,8 +164,7 @@ class BatchRandAugment(nn.Module):
         if self.mix is not None:
             x, y = self.mix(x, y)
             return self.transform(x), y
-
         elif y is None:
             return self.transform(x)
-
-        return self.transform(x), y
+        else:
+            return self.transform(x), y
