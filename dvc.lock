@@ -34,37 +34,47 @@ stages:
     cmd: python pipe/create_folds.py
     deps:
     - path: data/train_deduped.csv
-      md5: f81d9c4c779ac671c8cbe4db1434f950
-      size: 661548
+      md5: a19b722d94bf2f664c9770c4c2e12575
+      size: 640790
     - path: pipe/create_folds.py
-      md5: 03c7c7dbb5a1d6e3a0b1af47941c0e87
-      size: 773
+      md5: 0e2e4da36693df31bd0dafb196f60e77
+      size: 1125
     params:
       params.yaml:
         create_folds:
-          seed: 6822
-          k: 5
+          seed: 42
+          k:
+          - 5
+          - 10
     outs:
-    - path: data/train_folds.csv
-      md5: b9da27ec2c199975db0c599e64685d13
-      size: 661559
+    - path: data/train_10folds.csv
+      md5: 2e136ecbf70718f80898b57cbd7fe878
+      size: 660556
+    - path: data/train_5folds.csv
+      md5: df60fb7c97941742af389960321d6f97
+      size: 660556
   train_one:
     cmd: python pipe/train_one.py
     deps:
+    - path: data/train_10folds.csv
+      md5: 2e136ecbf70718f80898b57cbd7fe878
+      size: 660556
     - path: data/train_384
       md5: 3e12f820928b7b6770891beda13b8af2.dir
       size: 236133550
       nfiles: 9912
-    - path: data/train_folds.csv
-      md5: b9da27ec2c199975db0c599e64685d13
-      size: 661559
+    - path: data/train_5folds.csv
+      md5: df60fb7c97941742af389960321d6f97
+      size: 660556
     - path: pipe/train_one.py
-      md5: 4ef9c34290fb0b8f680f2019acd6a79a
-      size: 4776
+      md5: 2dcc6bfcc1685747f795462d1a0bb1dc
+      size: 4803
     params:
       params.yaml:
         train_one:
-          seed: 46
+          name: one
+          seed: 5899
+          n_folds: 5
           fold: -1
           metric: rmse
           metric_mode: min
@@ -85,48 +95,48 @@ stages:
           resize: -1
           dropout: 0.0
           wd: 0.0
-          label_smoothing: 0.0
+          label_smoothing: 0.1
           loss: bce_with_logits
-          opt: adam
+          opt: adamw
           sched: onecycle
-          lr: 2.5e-05
+          lr: 4e-05
           warmup: 0.25
           auto_lr: false
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: e63b5958c21a5fd61079ddd4ca29e7a7
-      size: 795372513
+      md5: 5a00358961d4d1d8b444ae89f2fa6d4b
+      size: 795373473
     - path: ckpts/model_one_fold1.ckpt
-      md5: 0d7c80244874521043498bb1e829011f
-      size: 795372513
+      md5: b846f403efb152bdddeca7ce2fd215c5
+      size: 795373473
     - path: ckpts/model_one_fold2.ckpt
-      md5: 8d6363f97024abcfe389a001bfc5991d
-      size: 795372513
+      md5: e7fadecff867796da718fe9d532db6d2
+      size: 795373473
     - path: ckpts/model_one_fold3.ckpt
-      md5: b9bfefedd1f216199a22415f91676774
-      size: 795372513
+      md5: 41f3c92b4ac185731c0ab672f594845f
+      size: 795373473
     - path: ckpts/model_one_fold4.ckpt
-      md5: 58da18b9eb007955239213454a88b959
-      size: 795372513
+      md5: 51e40357aedc4a7e5ad41a6e2c278664
+      size: 795373473
     - path: metrics/model_one.json
-      md5: 4e0ae59753a391586254147e358dbae1
-      size: 42
+      md5: c6fe492654d041f10a4873971076977e
+      size: 41
     - path: preds/model_one_fold0.npy
-      md5: 412dc53b456bf2d08466045528c598dc
-      size: 8040
+      md5: 76016798a5e77c90cc5e76612a6f5fb1
+      size: 8028
     - path: preds/model_one_fold1.npy
-      md5: 9caed47baa8bf9683d953343105a15f1
-      size: 8040
+      md5: f25bc0d1e7af5772afba377bad2cfff1
+      size: 8028
     - path: preds/model_one_fold2.npy
-      md5: 839bdb5120215708b70f443a0f59b696
-      size: 8040
+      md5: 43cd389b88ba5575cf2da5b9279de4ca
+      size: 8028
     - path: preds/model_one_fold3.npy
-      md5: c52ffcbfc63f68dfd6c7e777cf0b19e2
-      size: 8040
+      md5: f4ac1045362c5b529668e9d13bf911fc
+      size: 8028
     - path: preds/model_one_fold4.npy
-      md5: 2d222edd0b24270eef3ddef8d5c17a96
-      size: 8040
+      md5: cdbce14d1b6755ad8e586aae73c02d35
+      size: 8028
   resize_images:
     cmd: python pipe/resize_images.py
     deps:
@@ -167,20 +177,25 @@ stages:
   train_two:
     cmd: python pipe/train_two.py
     deps:
+    - path: data/train_10folds.csv
+      md5: 2e136ecbf70718f80898b57cbd7fe878
+      size: 660556
     - path: data/train_224
       md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
       size: 97308155
       nfiles: 9912
-    - path: data/train_folds.csv
-      md5: b9da27ec2c199975db0c599e64685d13
-      size: 661559
+    - path: data/train_5folds.csv
+      md5: df60fb7c97941742af389960321d6f97
+      size: 660556
     - path: pipe/train_two.py
-      md5: 31eb7c58f4252d813b1e81635256f6ce
-      size: 4776
+      md5: cf12afc1881dea68cb18659fd9793640
+      size: 4803
     params:
       params.yaml:
         train_two:
-          seed: 46
+          name: two
+          seed: 7591
+          n_folds: 5
           fold: -1
           metric: rmse
           metric_mode: min
@@ -211,38 +226,38 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: bef5aa2396115fb0f2d4802c962052d5
-      size: 782532321
+      md5: 2bb9f90bf7b01f28f23dd80df87063a8
+      size: 782533281
     - path: ckpts/model_two_fold1.ckpt
-      md5: 1a1ac9c009349128002ed9ce3bcf6e9b
-      size: 782532321
+      md5: 2162d558f26de34aa29a089e2b30c5b0
+      size: 782533281
     - path: ckpts/model_two_fold2.ckpt
-      md5: 8289f98e3b6427fedd3b9b49c523582c
-      size: 782532321
+      md5: b26f7a39117b9f1101faf4b31aae7b05
+      size: 782533281
     - path: ckpts/model_two_fold3.ckpt
-      md5: e7cbacd0f0a0c04e712449859cb80dd4
-      size: 782532321
+      md5: 4e7a6ad8cc5ce145dfd65bbec029af5d
+      size: 782533281
     - path: ckpts/model_two_fold4.ckpt
-      md5: d92fbf839472a632f367e6d5c6f5b7d3
-      size: 782532321
+      md5: d73628383c0c6569256e964c902615ae
+      size: 782533281
     - path: metrics/model_two.json
-      md5: 73bfebaeff594fb248c5b98da48aab37
+      md5: a1dc162224b301feceec61c1023e50c6
       size: 41
     - path: preds/model_two_fold0.npy
-      md5: 4429cdead2c44ccd9bf2542d568e562e
-      size: 8040
+      md5: 225c9810c11c0b5300f31a852c545f65
+      size: 8028
     - path: preds/model_two_fold1.npy
-      md5: f71814dfb66aecf6488b3d7c9f6323ee
-      size: 8040
+      md5: de188f523a667c335ea53779a101b57f
+      size: 8028
     - path: preds/model_two_fold2.npy
-      md5: 4f0f061584be1ab5ae44859991f6aa38
-      size: 8040
+      md5: dbbaffa0064ce13d2efa82e0297fa296
+      size: 8028
     - path: preds/model_two_fold3.npy
-      md5: d891d5b963ab2fbb2292178a1cba01ce
-      size: 8040
+      md5: 54bde38a121d4347ceb5c8f6323ecb9d
+      size: 8028
     - path: preds/model_two_fold4.npy
-      md5: fe131f2bf6c3ea5081945e5ec741b4bc
-      size: 8040
+      md5: 2a3aa9d785e68f7434f8a7e5bc4b8929
+      size: 8028
   remove_duplicates:
     cmd: python pipe/remove_duplicate_images.py
     deps:
@@ -251,9 +266,9 @@ stages:
       size: 1039930050
       nfiles: 9912
     - path: pipe/remove_duplicate_images.py
-      md5: 133332057839470a4ecaa327417561c6
-      size: 1727
+      md5: 6e6f526909266d3a1af7af13c985a3cd
+      size: 3931
     outs:
     - path: data/train_deduped.csv
-      md5: f81d9c4c779ac671c8cbe4db1434f950
-      size: 661548
+      md5: a19b722d94bf2f664c9770c4c2e12575
+      size: 640790

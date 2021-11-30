@@ -1,12 +1,14 @@
 create_folds:
-  seed: 6822
-  k: 5
+  seed: 42
+  k: [5, 10]
 
 resize:
   sz: [224, 384]
 
 train_one:
-  seed: 46
+  name: one
+  seed: 5899
+  n_folds: 5
   fold: -1
   # problem
   metric: rmse
@@ -32,18 +34,20 @@ train_one:
   # regularization
   dropout: 0.0
   wd: 0.0
-  label_smoothing: 0.0
+  label_smoothing: 0.1
   # optimizer
   loss: bce_with_logits
-  opt: adam
+  opt: adamw
   sched: onecycle
-  lr: 0.000025
+  lr: 0.00004
   warmup: 0.25
   auto_lr: false
   mom: 0.9
 
 train_two:
-  seed: 46
+  name: two
+  seed: 7591
+  n_folds: 5
   fold: -1
   # problem
   metric: rmse
