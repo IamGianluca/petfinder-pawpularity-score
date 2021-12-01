@@ -27,16 +27,16 @@ def kornia_list(magn: int = 4):
         K.RandomAffine(
             degrees=magn * 5.0, shear=magn / 5, translate=magn / 20, p=1
         ),
-        K.RandomPerspective(distortion_scale=magn / 25, p=1),
+        # K.RandomPerspective(distortion_scale=magn / 25, p=1),
         # # pixel-level
         K.ColorJitter(brightness=magn / 30, p=1),  # brightness
         K.ColorJitter(saturation=magn / 30, p=1),  # saturation
         K.ColorJitter(contrast=magn / 30, p=1),  # contrast
         K.ColorJitter(hue=magn / 30, p=1),  # hue
         K.ColorJitter(p=0),  # identity
-        K.RandomMotionBlur(
-            kernel_size=2 * (magn // 3) + 1, angle=magn, direction=1.0, p=1
-        ),
+        # K.RandomMotionBlur(
+        #     kernel_size=2 * (magn // 3) + 1, angle=magn, direction=1.0, p=1
+        # ),
         K.RandomErasing(
             scale=(magn / 100, magn / 50), ratio=(magn / 20, magn), p=1
         ),

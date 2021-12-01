@@ -33,10 +33,11 @@ class ImageClassificationDataset(Dataset):
         # set channel first --> from [H, W, C] to [C, H, W]
         image = np.transpose(image, (2, 0, 1)).astype(np.float32)
 
+        image_tensor = torch.tensor(image)
         if self.targets is not None:  # train/val dataset
-            return image, torch.tensor(self.targets[index])
+            return image_tensor, torch.tensor(self.targets[index])
         else:  # test dataset
-            return image
+            return image_tensor
 
 
 class Image3DClassificationDataset(Dataset):
