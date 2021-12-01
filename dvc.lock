@@ -206,7 +206,7 @@ stages:
           bs: 40
           auto_batch_size: false
           accumulate_grad_batches: 1
-          precision: 32
+          precision: 16
           use_normalize: true
           n_tfms: 2
           magn: 3
@@ -226,38 +226,38 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: 2bb9f90bf7b01f28f23dd80df87063a8
+      md5: 3ce098164aa17269e6db9148f5480ed9
       size: 782533281
     - path: ckpts/model_two_fold1.ckpt
-      md5: 2162d558f26de34aa29a089e2b30c5b0
+      md5: d2b1b69d056f8b491a85024a3ef73712
       size: 782533281
     - path: ckpts/model_two_fold2.ckpt
-      md5: b26f7a39117b9f1101faf4b31aae7b05
+      md5: 4ba23c834f5439d1f890ccfae80b7c53
       size: 782533281
     - path: ckpts/model_two_fold3.ckpt
-      md5: 4e7a6ad8cc5ce145dfd65bbec029af5d
+      md5: ad52c37bb890b6c7de5d80f62de85836
       size: 782533281
     - path: ckpts/model_two_fold4.ckpt
-      md5: d73628383c0c6569256e964c902615ae
+      md5: be9c7936875d59aca390ca465b8ac284
       size: 782533281
     - path: metrics/model_two.json
-      md5: a1dc162224b301feceec61c1023e50c6
-      size: 41
+      md5: 1837c6ac35eaeb5478b3da0f4ec2e34d
+      size: 40
     - path: preds/model_two_fold0.npy
-      md5: 225c9810c11c0b5300f31a852c545f65
-      size: 8028
+      md5: 0d4b5407a07fc3ba56f44283f2d9ec82
+      size: 4078
     - path: preds/model_two_fold1.npy
-      md5: de188f523a667c335ea53779a101b57f
-      size: 8028
+      md5: 625d24264a4dc7bcc668e1d635540528
+      size: 4078
     - path: preds/model_two_fold2.npy
-      md5: dbbaffa0064ce13d2efa82e0297fa296
-      size: 8028
+      md5: 5dc736b1a512da8449e1606540dc4eb8
+      size: 4078
     - path: preds/model_two_fold3.npy
-      md5: 54bde38a121d4347ceb5c8f6323ecb9d
-      size: 8028
+      md5: 2fe971724887a6e33e29b6e6e5e7f138
+      size: 4078
     - path: preds/model_two_fold4.npy
-      md5: 2a3aa9d785e68f7434f8a7e5bc4b8929
-      size: 8028
+      md5: 5d6c9ae975213fd4f679eb83b6d1902c
+      size: 4078
   remove_duplicates:
     cmd: python pipe/remove_duplicate_images.py
     deps:

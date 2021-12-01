@@ -61,7 +61,7 @@ train_two:
   bs: 40
   auto_batch_size: false
   accumulate_grad_batches: 1
-  precision: 32
+  precision: 16
   # augmentations
   use_normalize: true
   n_tfms: 2
