@@ -28,7 +28,8 @@ stages:
     - data/train_deduped.csv
     - pipe/create_folds.py
     outs:
-    - data/train_folds.csv
+    - data/train_5folds.csv
+    - data/train_10folds.csv
   resize_images:
     cmd: python pipe/resize_images.py
     deps:
@@ -49,7 +50,8 @@ stages:
     deps:
     - pipe/train_one.py
     - data/train_384
-    - data/train_folds.csv
+    - data/train_5folds.csv
+    - data/train_10folds.csv
     outs:
     - ckpts/model_one_fold0.ckpt
     - ckpts/model_one_fold1.ckpt
@@ -71,7 +73,8 @@ stages:
     deps:
     - pipe/train_two.py
     - data/train_224
-    - data/train_folds.csv
+    - data/train_5folds.csv
+    - data/train_10folds.csv
     outs:
     - ckpts/model_two_fold0.ckpt
     - ckpts/model_two_fold1.ckpt

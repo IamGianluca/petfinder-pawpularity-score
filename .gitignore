@@ -14,3 +14,6 @@ kaggle.json
 # logs
 lightning_logs/
 logs/
+
+# executable
+run.sh

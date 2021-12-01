@@ -10,3 +10,5 @@
 /test_384
 /train_384
 /train_deduped.csv
+/train_5folds.csv
+/train_10folds.csv

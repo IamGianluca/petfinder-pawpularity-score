@@ -20,8 +20,7 @@ import constants
 import utils
 
 
-def main():
-    cfg = load_cfg(fpath=str(constants.cfg_fpath), cfg_name="train_one")
+def train(cfg: OmegaConf):
     print(OmegaConf.to_yaml(cfg))
 
     seed.seed_everything(seed=cfg.seed, workers=False)
@@ -34,11 +33,11 @@ def main():
     )
 
     is_crossvalidation = True if cfg.fold == -1 else False
-    if is_crossvalidation:  # run 5-fold CV
+    if is_crossvalidation:
         valid_scores = []
         train_scores = []
 
-        for current_fold in range(5):
+        for current_fold in range(cfg.n_folds):
             cfg.fold = current_fold
             train_score, valid_score = train_one_fold(
                 cfg=cfg, logger=neptune_logger
@@ -48,13 +47,13 @@ def main():
 
         train_metric = np.mean(train_scores)
         val_metric = np.mean(valid_scores)
-    else:  # run one fold
+    else:
         train_metric, val_metric = train_one_fold(
             cfg=cfg, logger=neptune_logger
         )
 
     if is_crossvalidation:
-        fpath = constants.metrics_path / f"model_one.json"
+        fpath = constants.metrics_path / f"model_{cfg.name}.json"
         save_metrics(
             fpath=fpath,
             metric=cfg.metric,
@@ -75,7 +74,7 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     print(f"#####################")
 
     # get image paths and targets
-    df = pd.read_csv(constants.train_folds_fpath)
+    df = pd.read_csv(utils.train_folds_fpath[cfg.n_folds])
     df_train = df[df.kfold != cfg.fold].reset_index()
     df_val = df[df.kfold == cfg.fold].reset_index()
 
@@ -111,7 +110,7 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         monitor="val_metric",
         mode=cfg.metric_mode,
         dirpath=constants.ckpts_path,
-        filename=f"model_one_fold{cfg.fold}",
+        filename=f"model_{cfg.name}_fold{cfg.fold}",
         save_weights_only=True,
     )
 
@@ -145,7 +144,7 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
 
 def save_predictions(cfg: OmegaConf, preds: List[List]):
     preds = np.vstack([i for sl in preds for i in sl])
-    with open(f"preds/model_one_fold{cfg.fold}.npy", "wb") as f:
+    with open(f"preds/model_{cfg.name}_fold{cfg.fold}.npy", "wb") as f:
         np.save(f, preds)
 
 
@@ -166,4 +165,5 @@ def save_metrics(
 
 
 if __name__ == "__main__":
-    main()
+    cfg = load_cfg(fpath=str(constants.cfg_fpath), cfg_name=f"train_one")
+    train(cfg)
