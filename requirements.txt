@@ -19,7 +19,7 @@ pylibjpeg
 pylibjpeg-libjpeg
 pytest
 lightning-bolts==0.4.0
-pytorch-lightning==1.4.9
+pytorch-lightning==1.5.4
 scikit-learn
 timm==0.4.12
 torchmetrics==0.5.1

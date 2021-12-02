@@ -22,7 +22,7 @@ train_one:
   bs: 8
   auto_batch_size: false
   accumulate_grad_batches: 1
-  precision: 32
+  precision: 16
   # augmentations
   use_normalize: true
   n_tfms: 2
@@ -38,9 +38,9 @@ train_one:
   # optimizer
   loss: bce_with_logits
   opt: adamw
-  sched: onecycle
-  lr: 0.00004
-  warmup: 0.25
+  sched: cosine
+  lr: 0.000003
+  warmup: 0.1
   auto_lr: false
   mom: 0.9
 
@@ -61,7 +61,7 @@ train_two:
   bs: 40
   auto_batch_size: false
   accumulate_grad_batches: 1
-  precision: 16
+  precision: bf16
   # augmentations
   use_normalize: true
   n_tfms: 2
@@ -77,8 +77,8 @@ train_two:
   # optimizer
   loss: bce_with_logits
   opt: adamw
-  sched: onecycle
-  lr: 0.0002
-  warmup: 0.25
+  sched: cosine
+  lr: 0.00001
+  warmup: 0.1
   auto_lr: false
   mom: 0.9

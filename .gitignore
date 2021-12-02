@@ -14,6 +14,8 @@ kaggle.json
 # logs
 lightning_logs/
 logs/
+.neptune
+wandb/
 
 # executable
 run.sh

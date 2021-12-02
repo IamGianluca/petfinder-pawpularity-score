@@ -13,7 +13,8 @@ from ml.vision import data
 from omegaconf import OmegaConf
 from omegaconf.omegaconf import OmegaConf
 from pytorch_lightning import callbacks
-from pytorch_lightning.loggers import NeptuneLogger
+from pytorch_lightning.callbacks import lr_monitor
+from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.utilities import seed
 
 import constants
@@ -25,11 +26,8 @@ def train(cfg: OmegaConf):
 
     seed.seed_everything(seed=cfg.seed, workers=False)
 
-    neptune_logger = NeptuneLogger(
-        api_key=os.environ["NEPTUNE_API_TOKEN"],
-        project_name="gr.gianlucarossi/paw",
-        experiment_name="logs",
-        close_after_fit=False,
+    wandb_logger = WandbLogger(
+        project="paw",
     )
 
     is_crossvalidation = True if cfg.fold == -1 else False
@@ -40,7 +38,7 @@ def train(cfg: OmegaConf):
         for current_fold in range(cfg.n_folds):
             cfg.fold = current_fold
             train_score, valid_score = train_one_fold(
-                cfg=cfg, logger=neptune_logger
+                cfg=cfg, logger=wandb_logger
             )
             valid_scores.append(valid_score)
             train_scores.append(train_score)
@@ -48,9 +46,7 @@ def train(cfg: OmegaConf):
         train_metric = np.mean(train_scores)
         val_metric = np.mean(valid_scores)
     else:
-        train_metric, val_metric = train_one_fold(
-            cfg=cfg, logger=neptune_logger
-        )
+        train_metric, val_metric = train_one_fold(cfg=cfg, logger=wandb_logger)
 
     if is_crossvalidation:
         fpath = constants.metrics_path / f"model_{cfg.name}.json"
@@ -60,10 +56,8 @@ def train(cfg: OmegaConf):
             train_metric=train_metric,
             cv_metric=val_metric,
         )
-        neptune_logger.experiment.log_metric("cv_train_metric", train_metric)
-        neptune_logger.experiment.log_metric("cv_val_metric", val_metric)
-
-    neptune_logger.experiment.stop()
+        wandb_logger.log_metrics({"cv_train_metric": train_metric})
+        wandb_logger.log_metrics({"cv_val_metric": val_metric})
 
 
 def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
@@ -113,6 +107,9 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         filename=f"model_{cfg.name}_fold{cfg.fold}",
         save_weights_only=True,
     )
+    lr_callback = lr_monitor.LearningRateMonitor(
+        logging_interval="step", log_momentum=True
+    )
 
     trainer = pl.Trainer(
         gpus=1,
@@ -122,7 +119,7 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         auto_scale_batch_size=cfg.auto_batch_size,
         max_epochs=cfg.epochs,
         logger=logger,
-        callbacks=[checkpoint_callback],
+        callbacks=[checkpoint_callback, lr_callback],
         # limit_train_batches=1,
         # limit_val_batches=1,
     )
