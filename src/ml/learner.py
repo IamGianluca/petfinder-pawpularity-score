@@ -137,7 +137,7 @@ class ImageClassifier(pl.LightningModule):
         preds = self.forward(x)
         # TODO: we don't always need a sigmoid. Handle that case.
         outs = preds.sigmoid()
-        return outs.detach().cpu().numpy()
+        return outs.detach().cpu().float().numpy()
 
     def _step(self, x, target):
         preds = self.forward(x)
@@ -153,7 +153,7 @@ class ImageClassifier(pl.LightningModule):
         scheduler = lr_scheduler_factory(
             optimizer=optimizer,
             hparams=self.hparams,
-            data_loader=self.train_dataloader(),
+            data_loader=self.trainer.datamodule.train_dataloader(),
         )
         return {
             "optimizer": optimizer,
