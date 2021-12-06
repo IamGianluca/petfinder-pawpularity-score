@@ -43,8 +43,8 @@ def train(cfg: OmegaConf):
             train_score, valid_score, target, preds = train_one_fold(
                 cfg=cfg, logger=wandb_logger
             )
-            y_true.append(target)
-            y_pred.append(preds)
+            y_true.extend(target)
+            y_pred.extend(preds)
             valid_scores.append(valid_score)
             train_scores.append(train_score)
 
@@ -52,10 +52,8 @@ def train(cfg: OmegaConf):
         val_metric = np.mean(valid_scores)
 
         oof_rmse = MeanSquaredError(squared=False)
-        y_pred = (
-            torch.tensor(np.vstack([i for y in y_pred for i in y])) * 100.0
-        )
-        y_true = torch.tensor(np.hstack(y_true).reshape(-1, 1))
+        y_pred = torch.tensor(y_pred)
+        y_true = torch.tensor(y_true)
         oof_metric = oof_rmse(y_pred, y_true)
     else:
         train_metric, val_metric = train_one_fold(cfg=cfg, logger=wandb_logger)
@@ -142,8 +140,9 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         trainer.tune(model, dm)
 
     trainer.fit(model, dm)
-    targets = df_val.loc[:, "Pawpularity"].values
+    targets_list = df_val.loc[:, "Pawpularity"].values.tolist()
     preds = trainer.predict(model, dm.test_dataloader(), ckpt_path="best")
+    preds_list = [p[0] * 100 for b in preds for p in b]
 
     save_predictions(cfg, preds)
 
@@ -151,8 +150,8 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     return (
         model.best_train_metric.detach().cpu().numpy(),
         model.best_val_metric.detach().cpu().numpy(),
-        targets,
-        preds,
+        targets_list,
+        preds_list,
     )
 
 
