@@ -1,5 +1,4 @@
 import json
-import os
 from pathlib import Path
 from typing import List, Tuple
 
@@ -7,6 +6,7 @@ import numpy as np
 import omegaconf
 import pandas as pd
 import pytorch_lightning as pl
+import torch
 from ml import learner
 from ml.params import load_cfg
 from ml.vision import data
@@ -16,6 +16,7 @@ from pytorch_lightning import callbacks
 from pytorch_lightning.callbacks import lr_monitor
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.utilities import seed
+from torchmetrics import MeanSquaredError
 
 import constants
 import utils
@@ -32,19 +33,30 @@ def train(cfg: OmegaConf):
 
     is_crossvalidation = True if cfg.fold == -1 else False
     if is_crossvalidation:
+        y_true = []
+        y_pred = []
         valid_scores = []
         train_scores = []
 
         for current_fold in range(cfg.n_folds):
             cfg.fold = current_fold
-            train_score, valid_score = train_one_fold(
+            train_score, valid_score, target, preds = train_one_fold(
                 cfg=cfg, logger=wandb_logger
             )
+            y_true.append(target)
+            y_pred.append(preds)
             valid_scores.append(valid_score)
             train_scores.append(train_score)
 
         train_metric = np.mean(train_scores)
         val_metric = np.mean(valid_scores)
+
+        oof_rmse = MeanSquaredError(squared=False)
+        y_pred = (
+            torch.tensor(np.vstack([i for y in y_pred for i in y])) * 100.0
+        )
+        y_true = torch.tensor(np.hstack(y_true).reshape(-1, 1))
+        oof_metric = oof_rmse(y_pred, y_true)
     else:
         train_metric, val_metric = train_one_fold(cfg=cfg, logger=wandb_logger)
 
@@ -55,9 +67,11 @@ def train(cfg: OmegaConf):
             metric=cfg.metric,
             train_metric=train_metric,
             cv_metric=val_metric,
+            oof_metric=oof_metric,
         )
         wandb_logger.log_metrics({"cv_train_metric": train_metric})
         wandb_logger.log_metrics({"cv_val_metric": val_metric})
+        wandb_logger.log_metrics({"oof_val_metric": oof_metric})
 
 
 def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
@@ -128,7 +142,8 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         trainer.tune(model, dm)
 
     trainer.fit(model, dm)
-    preds = trainer.predict(model, dm.test_dataloader())
+    targets = df_val.loc[:, "Pawpularity"].values
+    preds = trainer.predict(model, dm.test_dataloader(), ckpt_path="best")
 
     save_predictions(cfg, preds)
 
@@ -136,6 +151,8 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     return (
         model.best_train_metric.detach().cpu().numpy(),
         model.best_val_metric.detach().cpu().numpy(),
+        targets,
+        preds,
     )
 
 
@@ -152,11 +169,16 @@ def print_metrics(metric: str, train_metric: float, valid_metric: float):
 
 
 def save_metrics(
-    fpath: Path, metric: str, train_metric: float, cv_metric: float
+    fpath: Path,
+    metric: str,
+    train_metric: float,
+    cv_metric: float,
+    oof_metric: float,
 ):
     data = {}
     data[f"train {metric}"] = round(float(train_metric), 4)
     data[f"cv {metric}"] = round(float(cv_metric), 4)
+    data[f"oof {metric}"] = round(float(oof_metric), 4)
     with open(fpath, "w") as f:
         json.dump(data, f)
 
