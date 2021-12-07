@@ -12,8 +12,36 @@ def loss_factory(name):
         return MixUpBCEWithLogitsLoss()
     elif name == "mixup_ce_with_logits":
         return MixUpCrossEntropy()
+    elif name == "focal_loss":
+        return BinaryFocalLossWithLogits()
     else:
         raise ValueError(f"{name} loss not supported yet.")
+
+
+class BinaryFocalLossWithLogits(nn.Module):
+    def __init__(
+        self, alpha: float = 0.25, gamma: float = 2, reduction: bool = True
+    ):
+        super(BinaryFocalLossWithLogits, self).__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.reduction = reduction
+        self.criterion = nn.BCEWithLogitsLoss()
+
+    def forward(self, inputs, targets):
+        # flatten label and prediction tensors
+        inputs = inputs.view(-1)
+        targets = targets.view(-1)
+
+        # first compute binary cross-entropy
+        bce = self.criterion(inputs, targets)
+        bce_exp = torch.exp(-bce)
+        focal_loss = self.alpha * (1 - bce_exp) ** self.gamma * bce
+
+        if self.reduction:
+            return focal_loss.mean()
+        else:
+            return focal_loss
 
 
 class MixUpBCEWithLogitsLoss:
