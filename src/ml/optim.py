@@ -58,7 +58,7 @@ def lr_scheduler_factory(optimizer, hparams, data_loader):
     elif hparams.sched == "cosine":
         return transformers.get_cosine_schedule_with_warmup(
             optimizer=optimizer,
-            num_warmup_steps=int(hparams.epochs * hparams.warmup),
+            num_warmup_steps=hparams.warmup_epochs,
             num_training_steps=hparams.epochs,
         )
     elif hparams.sched == "cosine_with_restart":

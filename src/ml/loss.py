@@ -22,7 +22,7 @@ class BinaryFocalLossWithLogits(nn.Module):
     def __init__(
         self, alpha: float = 0.25, gamma: float = 2, reduction: bool = True
     ):
-        super(BinaryFocalLossWithLogits, self).__init__()
+        super().__init__()
         self.alpha = alpha
         self.gamma = gamma
         self.reduction = reduction

@@ -220,43 +220,43 @@ stages:
           loss: bce_with_logits
           opt: adamw
           sched: cosine
-          lr: 1e-05
-          warmup: 0.1
+          warmup_epochs: 1
+          lr: 1.5e-05
           auto_lr: false
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: 629a1006583d210c5d5fc90e83d53a32
+      md5: 320c71285b3d4daba6ef72b1cac90541
       size: 782533281
     - path: ckpts/model_two_fold1.ckpt
-      md5: 6948448229b09be035a478d390626786
+      md5: 1ca0a9e104cfae7ee1adec7922bbc30b
       size: 782533281
     - path: ckpts/model_two_fold2.ckpt
-      md5: f9ae99d83cc243634d9cd0f97d66bbc5
+      md5: d3ae4751d82884f3f0730cede91462b3
       size: 782533281
     - path: ckpts/model_two_fold3.ckpt
-      md5: 45989d662180e1ce6cd6536811181fea
+      md5: 96aaaf6218dcf07e8a5ce971b3df4417
       size: 782533281
     - path: ckpts/model_two_fold4.ckpt
-      md5: ad3da09e270c4a9686f21a519629691e
+      md5: 0977d5acfb1418d5c547edc803278f78
       size: 782533281
     - path: metrics/model_two.json
-      md5: bdbaa1a192b6d1507422c02b58f5cf18
-      size: 60
+      md5: b57dd5e9c88803177666758331a3c214
+      size: 63
     - path: preds/model_two_fold0.npy
-      md5: b00c6167d5488d83fdd9a38de28e08a9
+      md5: 714c0ad4aaea5dfb61161a2e4f32ce95
       size: 8028
     - path: preds/model_two_fold1.npy
-      md5: 88438674754c37784d03e3e31ba34879
+      md5: 92caf6e967192ab1d7394ff7f1625837
       size: 8028
     - path: preds/model_two_fold2.npy
-      md5: bfb6ca91393a821f8b256570882dc353
+      md5: c03bcbdac37bd3411a3acdfb970bd5bb
       size: 8028
     - path: preds/model_two_fold3.npy
-      md5: 0dc6464cb9e90f0464e4f0c31edfc14f
+      md5: a2f04acdbcab66956e73c5ecc45f4c0e
       size: 8028
     - path: preds/model_two_fold4.npy
-      md5: c3ad3cae522abf335cae6968702949d2
+      md5: 84890028250f12981df1c16c462132a5
       size: 8028
   remove_duplicates:
     cmd: python pipe/remove_duplicate_images.py

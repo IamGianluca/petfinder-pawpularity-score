@@ -78,7 +78,7 @@ train_two:
   loss: bce_with_logits
   opt: adamw
   sched: cosine
-  lr: 0.00001
-  warmup: 0.1
+  warmup_epochs: 1
+  lr: 0.000015
   auto_lr: false
   mom: 0.9
