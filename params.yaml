@@ -18,8 +18,8 @@ train_one:
   # model
   arch: swin_large_patch4_window12_384
   pretrained: true
-  epochs: 10
-  bs: 8
+  epochs: 6
+  bs: 16
   auto_batch_size: false
   accumulate_grad_batches: 1
   precision: 16
@@ -39,8 +39,8 @@ train_one:
   loss: bce_with_logits
   opt: adamw
   sched: cosine
-  lr: 0.000003
-  warmup: 0.1
+  lr: 0.000006
+  warmup_epochs: 1
   auto_lr: false
   mom: 0.9
 
@@ -58,14 +58,14 @@ train_two:
   arch: swin_large_patch4_window7_224
   pretrained: true
   epochs: 6
-  bs: 40
+  bs: 64
   auto_batch_size: false
   accumulate_grad_batches: 1
   precision: bf16
   # augmentations
   use_normalize: true
-  n_tfms: 2
-  magn: 3
+  n_tfms: 1
+  magn: 5
   sz: 224
   use_mix: 0
   mix_p: 0.0
@@ -79,6 +79,6 @@ train_two:
   opt: adamw
   sched: cosine
   warmup_epochs: 1
-  lr: 0.000015
+  lr: 0.000024
   auto_lr: false
   mom: 0.9
