@@ -40,25 +40,6 @@ class ImageClassifier(pl.LightningModule):
             nn.Linear(64, num_classes),
         )
 
-        self.train_aug = BatchRandAugment(
-            n_tfms=cfg.n_tfms,
-            magn=cfg.magn,
-            mean=mean,
-            std=std,
-            image_size=(cfg.sz, cfg.sz),
-            use_normalize=cfg.use_normalize,
-            use_resize=None if cfg.resize == -1 else cfg.resize,
-            use_mix=None if cfg.use_mix == -1 else cfg.use_mix,
-            mix_p=cfg.mix_p,
-        )
-        self.val_aug = BatchRandAugment(
-            n_tfms=0,
-            magn=0,
-            mean=mean,
-            std=std,
-            use_normalize=cfg.use_normalize,
-        )
-
         self.train_metric = metric_factory(name=cfg.metric)
         self.val_metric = metric_factory(name=cfg.metric)
         self.best_train_metric = None
@@ -76,13 +57,6 @@ class ImageClassifier(pl.LightningModule):
         """
         x, target = batch
         self._check_input(x, target)
-
-        # apply data augmentations
-        self.train_aug.setup()
-        try:
-            x, target = self.train_aug(x, target)
-        except RuntimeError:  # mixup requires target tensor to be (batch_size, 1)
-            x, target = self.train_aug(x, target.view(-1))
 
         loss, target, preds = self._step(x, target)
 
@@ -102,10 +76,6 @@ class ImageClassifier(pl.LightningModule):
         x, target = batch
         self._check_input(x, target)
 
-        # apply data augmentations
-        self.val_aug.setup()
-        x = self.val_aug(x)
-
         loss, target, preds = self._step(x, target)
         self.log("val_loss", loss, on_step=True, on_epoch=False)
         self.val_metric.update(preds=preds, target=target)
@@ -124,9 +94,7 @@ class ImageClassifier(pl.LightningModule):
         """Encapsulate forward() with any necessary preprocess or postprocess
         functions.
         """
-        # apply data augmentations
-        self.val_aug.setup()
-        x = self.val_aug(batch)
+        x = batch
 
         preds = self.forward(x)
         # TODO: we don't always need a sigmoid. Handle that case.
@@ -162,8 +130,12 @@ class ImageClassifier(pl.LightningModule):
         }
 
     def _check_input(self, x, target):
-        if x.min() < 0 or x.max() > 1:
-            raise ValueError("images shoudl have values between 0 and 1")
+        pass
+        # if x.min() < 0 or x.max() > 1:
+        #     raise ValueError(
+        #         "images should have values between 0 and 1."
+        #         f" Found min={x.min()} and max={x.max()}"
+        #     )
 
     def _compute_loss(self, preds, target):
         if self.hparams.label_smoothing > 0.0:

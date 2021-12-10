@@ -16,6 +16,7 @@ from pytorch_lightning import callbacks
 from pytorch_lightning.callbacks import lr_monitor
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.utilities import seed
+from timm.data import transforms_factory
 from torchmetrics import MeanSquaredError
 
 import constants
@@ -91,6 +92,17 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         df=df_val, cfg=cfg
     )
 
+    # define augmentations
+    train_aug = transforms_factory.create_transform(
+        input_size=cfg.sz,
+        is_training=True,
+        auto_augment=f"rand-n{cfg.n_tfms}-m{cfg.magn}",
+    )
+    val_aug = transforms_factory.create_transform(
+        input_size=cfg.sz,
+        is_training=False,
+    )
+
     # create datamodule
     dm = data.ImageDataModule(
         task="classification",
@@ -98,11 +110,14 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         # train
         train_image_paths=train_image_paths,
         train_targets=train_targets,
+        train_augmentations=train_aug,
         # valid
         val_image_paths=val_image_paths,
         val_targets=val_targets,
+        val_augmentations=val_aug,
         # test
         test_image_paths=val_image_paths,
+        test_augmentations=val_aug,
     )
 
     model = learner.ImageClassifier(

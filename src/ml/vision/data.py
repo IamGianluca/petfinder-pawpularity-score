@@ -28,16 +28,12 @@ class ImageClassificationDataset(Dataset):
 
     def __getitem__(self, index):
         image = Image.open(self.image_paths[index])
-        image = np.array(image) / 255.0
+        image = self.augmentations(image)
 
-        # set channel first --> from [H, W, C] to [C, H, W]
-        image = np.transpose(image, (2, 0, 1)).astype(np.float32)
-
-        image_tensor = torch.tensor(image)
         if self.targets is not None:  # train/val dataset
-            return image_tensor, torch.tensor(self.targets[index])
+            return image, torch.tensor(self.targets[index])
         else:  # test dataset
-            return image_tensor
+            return image
 
 
 class Image3DClassificationDataset(Dataset):
