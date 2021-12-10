@@ -92,13 +92,11 @@ class ImageClassifier(pl.LightningModule):
             target = target.reshape(-1, 1)
 
         self.log("train_loss", loss, on_step=True, on_epoch=False)
-        self.log(
-            "train_metric",
-            self.train_metric(preds, target),
-            on_step=False,
-            on_epoch=True,
-        )
+        self.train_metric.update(preds=preds, target=target)
         return loss
+
+    def training_epoch_end(self, outputs) -> None:
+        self.log("train_metric", self.train_metric.compute())
 
     def validation_step(self, batch, batch_idx):
         x, target = batch
@@ -110,15 +108,11 @@ class ImageClassifier(pl.LightningModule):
 
         loss, target, preds = self._step(x, target)
         self.log("val_loss", loss, on_step=True, on_epoch=False)
-        self.log(
-            "val_metric",
-            self.val_metric(preds, target),
-            on_step=False,
-            on_epoch=True,
-        )
+        self.val_metric.update(preds=preds, target=target)
         return loss
 
     def validation_epoch_end(self, outputs: List):
+        self.log("val_metric", self.val_metric.compute())
         self._register_best_train_and_val_metrics()
         # BUG: the metrics for the very last epoch are not printed
         # but are nonetheless logged in neptune
@@ -157,8 +151,14 @@ class ImageClassifier(pl.LightningModule):
         )
         return {
             "optimizer": optimizer,
-            "lr_scheduler": scheduler,
-            "monitor": "val_metric",
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "interval": "step",
+                "frequency": 1,
+                "monitor": "val_metric",
+                "strict": True,
+                "name": "lr",
+            },
         }
 
     def _check_input(self, x, target):

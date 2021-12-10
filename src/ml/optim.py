@@ -35,6 +35,7 @@ def optimizer_factory(params, hparams):
 
 
 def lr_scheduler_factory(optimizer, hparams, data_loader):
+    steps_per_epoch = len(data_loader)
     if hparams.sched == "plateau":
         return lr_scheduler.ReduceLROnPlateau(
             optimizer,
@@ -49,17 +50,17 @@ def lr_scheduler_factory(optimizer, hparams, data_loader):
             optimizer=optimizer,
             max_lr=hparams.lr,
             cycle_momentum=True,
-            pct_start=hparams.warmup,
+            pct_start=0.1,  # hparams.warmup_epochs / hparams.epochs,
             div_factor=25.0,
             final_div_factor=100000.0,
-            steps_per_epoch=len(data_loader),
+            steps_per_epoch=steps_per_epoch,
             epochs=hparams.epochs,
         )
     elif hparams.sched == "cosine":
         return transformers.get_cosine_schedule_with_warmup(
             optimizer=optimizer,
-            num_warmup_steps=hparams.warmup_epochs,
-            num_training_steps=hparams.epochs,
+            num_warmup_steps=steps_per_epoch * hparams.warmup_epochs,
+            num_training_steps=steps_per_epoch * hparams.epochs,
         )
     elif hparams.sched == "cosine_with_restart":
         return lr_scheduler.CosineAnnealingWarmRestarts(
@@ -67,7 +68,6 @@ def lr_scheduler_factory(optimizer, hparams, data_loader):
             T_0=20,
             eta_min=1e-4,
         )
-
     else:
         raise ValueError("Learning rate scheduler not supported yet.")
 
