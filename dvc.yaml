@@ -58,11 +58,7 @@ stages:
     - ckpts/model_one_fold2.ckpt
     - ckpts/model_one_fold3.ckpt
     - ckpts/model_one_fold4.ckpt
-    - preds/model_one_fold0.npy
-    - preds/model_one_fold1.npy
-    - preds/model_one_fold2.npy
-    - preds/model_one_fold3.npy
-    - preds/model_one_fold4.npy
+    - preds/model_one_oof.npy
     metrics:
     - metrics/model_one.json:
         cache: false
@@ -81,11 +77,60 @@ stages:
     - ckpts/model_two_fold2.ckpt
     - ckpts/model_two_fold3.ckpt
     - ckpts/model_two_fold4.ckpt
-    - preds/model_two_fold0.npy
-    - preds/model_two_fold1.npy
-    - preds/model_two_fold2.npy
-    - preds/model_two_fold3.npy
-    - preds/model_two_fold4.npy
+    - preds/model_two_oof.npy
     metrics:
     - metrics/model_two.json:
+        cache: false
+  train_three:
+    cmd: python pipe/train_three.py
+    params:
+    - train_three
+    deps:
+    - pipe/train_three.py
+    - data/train_224
+    - data/train_5folds.csv
+    - data/train_10folds.csv
+    outs:
+    - ckpts/model_three_fold0.ckpt
+    - ckpts/model_three_fold1.ckpt
+    - ckpts/model_three_fold2.ckpt
+    - ckpts/model_three_fold3.ckpt
+    - ckpts/model_three_fold4.ckpt
+    - preds/model_three_oof.npy
+    metrics:
+    - metrics/model_three.json:
+        cache: false
+  train_four:
+    cmd: python pipe/train_four.py
+    params:
+    - train_four
+    deps:
+    - pipe/train_four.py
+    - data/train_224
+    - data/train_5folds.csv
+    - data/train_10folds.csv
+    outs:
+    - ckpts/model_four_fold0.ckpt
+    - ckpts/model_four_fold1.ckpt
+    - ckpts/model_four_fold2.ckpt
+    - ckpts/model_four_fold3.ckpt
+    - ckpts/model_four_fold4.ckpt
+    - preds/model_four_oof.npy
+    metrics:
+    - metrics/model_four.json:
+        cache: false
+  ensemble:
+    cmd: python pipe/ensemble.py
+    params:
+    - ensemble
+    deps:
+    - data/train_10folds.csv
+    - data/train_5folds.csv
+    - pipe/ensemble.py
+    - preds/model_one_oof.npy
+    - preds/model_two_oof.npy
+    - preds/model_three_oof.npy
+    - preds/model_four_oof.npy
+    metrics:
+    - metrics/ensemble.json:
         cache: false

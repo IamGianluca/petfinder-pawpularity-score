@@ -82,3 +82,85 @@ train_two:
   lr: 0.000024
   auto_lr: false
   mom: 0.9
+
+train_three:
+  name: three
+  seed: 7591
+  n_folds: 5
+  fold: -1
+  # problem
+  metric: rmse
+  metric_mode: min
+  # input images
+  train_data: data/train_224
+  # model
+  arch: xcit_large_24_p8_224_dist
+  pretrained: true
+  epochs: 6
+  bs: 16
+  auto_batch_size: false
+  accumulate_grad_batches: 1
+  precision: bf16
+  # augmentations
+  use_normalize: true
+  n_tfms: 1
+  magn: 5
+  sz: 224
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
+  # regularization
+  dropout: 0.0
+  wd: 0.0
+  label_smoothing: 0.1
+  # optimizer
+  loss: bce_with_logits
+  opt: adamw
+  sched: cosine
+  warmup_epochs: 1
+  lr: 0.00001
+  auto_lr: false
+  mom: 0.9
+
+train_four:
+  name: four
+  seed: 7591
+  n_folds: 5
+  fold: -1
+  # problem
+  metric: rmse
+  metric_mode: min
+  # input images
+  train_data: data/train_224
+  # model
+  arch: cait_s24_224
+  pretrained: true
+  epochs: 6
+  bs: 64
+  auto_batch_size: false
+  accumulate_grad_batches: 1
+  precision: bf16
+  # augmentations
+  use_normalize: true
+  n_tfms: 1
+  magn: 5
+  sz: 224
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
+  # regularization
+  dropout: 0.0
+  wd: 0.0
+  label_smoothing: 0.1
+  # optimizer
+  loss: bce_with_logits
+  opt: adamw
+  sched: cosine
+  warmup_epochs: 1
+  lr: 0.00004
+  auto_lr: false
+  mom: 0.9
+
+ensemble:
+  models: [one, two, three, four]
+  n_folds: 5

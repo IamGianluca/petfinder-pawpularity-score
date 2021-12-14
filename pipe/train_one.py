@@ -49,13 +49,16 @@ def train(cfg: OmegaConf):
             valid_scores.append(valid_score)
             train_scores.append(train_score)
 
+        # needed for final ensemble
+        save_predictions(cfg=cfg, preds=y_pred)
+
         train_metric = np.mean(train_scores)
         val_metric = np.mean(valid_scores)
 
-        oof_rmse = MeanSquaredError(squared=False)
+        rmse = MeanSquaredError(squared=False)
         y_pred = torch.tensor(y_pred)
         y_true = torch.tensor(y_true)
-        oof_metric = oof_rmse(y_pred, y_true)
+        oof_metric = rmse(y_pred, y_true)
     else:
         train_metric, val_metric = train_one_fold(cfg=cfg, logger=wandb_logger)
 
@@ -159,8 +162,6 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     preds = trainer.predict(model, dm.test_dataloader(), ckpt_path="best")
     preds_list = [p[0] * 100 for b in preds for p in b]
 
-    save_predictions(cfg, preds)
-
     print_metrics(cfg.metric, model.best_train_metric, model.best_val_metric)
     return (
         model.best_train_metric.detach().cpu().numpy(),
@@ -170,9 +171,9 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     )
 
 
-def save_predictions(cfg: OmegaConf, preds: List[List]):
-    preds = np.vstack([i for sl in preds for i in sl])
-    with open(f"preds/model_{cfg.name}_fold{cfg.fold}.npy", "wb") as f:
+def save_predictions(cfg: OmegaConf, preds: List):
+    preds = np.array(preds)
+    with open(f"preds/model_{cfg.name}_oof.npy", "wb") as f:
         np.save(f, preds)
 
 
