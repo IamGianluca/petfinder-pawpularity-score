@@ -85,7 +85,7 @@ train_two:
 
 train_three:
   name: three
-  seed: 7591
+  seed: 9102
   n_folds: 5
   fold: -1
   # problem
@@ -124,7 +124,7 @@ train_three:
 
 train_four:
   name: four
-  seed: 7591
+  seed: 1230
   n_folds: 5
   fold: -1
   # problem
