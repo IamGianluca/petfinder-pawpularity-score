@@ -117,7 +117,7 @@ def resize(
     antialiasing=True,
     by_convs=False,
     scale_tolerance=None,
-    max_denominator=10,
+    max_numerator=10,
     pad_mode="constant",
 ):
     # get properties of the input tensor
@@ -138,7 +138,7 @@ def resize(
         scale_factors,
         by_convs,
         scale_tolerance,
-        max_denominator,
+        max_numerator,
         eps,
         fw,
     )
@@ -203,7 +203,7 @@ def resize(
         )
 
         # STEP 3- CALCULATE WEIGHTS: Match a set of weights to the pixels in
-        # the# field of view for each output pixel
+        # the field of view for each output pixel
         weights = get_weights(cur_interp_method, projected_grid, field_of_view)
 
         # STEP 4- APPLY WEIGHTS: Each output pixel is calculated by multiplying
@@ -299,7 +299,7 @@ def calc_pad_sz(
         # calculate left and right boundaries for each conv. left can also be
         # negative right can be bigger than in_sz. such cases imply padding if
         # needed. however if# both are in-bounds, it means we need to crop,
-        # pracitacally apply the conv only on part of the image.
+        # practically apply the conv only on part of the image.
         left_pads = -field_of_view[:, 0]
 
         # next calc is tricky, explanation by rows:
@@ -328,10 +328,8 @@ def calc_pad_sz(
 
         # in the by_convs case pad_sz is a list of left-right pairs. one per
         # each filter
-        pad_sz = [
-            (left_pad, right_pad)
-            for (left_pad, right_pad) in zip(left_pads, right_pads)
-        ]
+
+        pad_sz = list(zip(left_pads, right_pads))
 
     return pad_sz, projected_grid, field_of_view
 
@@ -397,7 +395,7 @@ def apply_convs(
     # prepare an empty tensor for the output
     tmp_out_shape = list(input.shape)
     tmp_out_shape[-1] = out_sz
-    tmp_output = fw_empty((*tmp_out_shape,), fw, input.device)
+    tmp_output = fw_empty(tuple(tmp_out_shape), fw, input.device)
 
     # iterate over the conv operations. we have as many as the numerator
     # of the scale-factor. for each we need boundaries and a filter.
@@ -420,7 +418,7 @@ def set_scale_and_out_sz(
     scale_factors,
     by_convs,
     scale_tolerance,
-    max_denominator,
+    max_numerator,
     eps,
     fw,
 ):
@@ -434,7 +432,7 @@ def set_scale_and_out_sz(
         # if out_shape has less dims than in_shape, we defaultly resize the
         # first dims for numpy and last dims for torch
         out_shape = (
-            list(out_shape) + list(in_shape[: -len(out_shape)])
+            list(out_shape) + list(in_shape[len(out_shape) :])
             if fw is numpy
             else list(in_shape[: -len(out_shape)]) + list(out_shape)
         )
@@ -470,14 +468,17 @@ def set_scale_and_out_sz(
         # next part intentionally after out_shape determined for stability
         # we fix by_convs to be a list of truth values in case it is not
         if not isinstance(by_convs, (list, tuple)):
-            by_convs = [by_convs for _ in range(len(out_shape))]
+            by_convs = [by_convs] * len(out_shape)
 
         # next loop fixes the scale for each dim to be either frac or float.
         # this is determined by by_convs and by tolerance for scale accuracy.
         for ind, (sf, dim_by_convs) in enumerate(zip(scale_factors, by_convs)):
             # first we fractionaize
             if dim_by_convs:
-                frac = Fraction(sf).limit_denominator(max_denominator)
+                frac = Fraction(1 / sf).limit_denominator(max_numerator)
+                frac = Fraction(
+                    numerator=frac.denominator, denominator=frac.numerator
+                )
 
             # if accuracy is within tolerance scale will be frac. if not, then
             # it will be float and the by_convs attr will be set false for
@@ -542,13 +543,14 @@ def fw_pad(x, fw, pad_sz, pad_mode, dim=0):
     if pad_sz == (0, 0):
         return x
     if fw is numpy:
-        pad_vec = [(0, 0) for _ in range(x.ndim)]
+        pad_vec = [(0, 0)] * x.ndim
         pad_vec[dim] = pad_sz
         return fw.pad(x, pad_width=pad_vec, mode=pad_mode)
     else:
         if x.ndim < 3:
             x = x[None, None, ...]
-        pad_vec = [0 for _ in range((x.ndim - 2) * 2)]
+
+        pad_vec = [0] * ((x.ndim - 2) * 2)
         pad_vec[0:2] = pad_sz
         return fw.nn.functional.pad(
             x.transpose(dim, -1), pad=pad_vec, mode=pad_mode

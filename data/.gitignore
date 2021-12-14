@@ -12,3 +12,8 @@
 /train_deduped.csv
 /train_5folds.csv
 /train_10folds.csv
+/petfinder-adoption-prediction
+/extra
+/extra_224
+/extra_384
+/extra.csv

@@ -23,8 +23,8 @@ def resize_image_from_folder(
 ):
     img = Image.open(in_path / fname)
     try:
-        resized_img = resizeright(img=img, sz=sz)
-    except ValueError as err:
+        resized_img = resize(img=img, sz=sz)
+    except Exception as err:
         print(fname, img.size, err)
         raise err
     resized_img.save(out_path / fname)

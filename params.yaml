@@ -5,6 +5,9 @@ create_folds:
 resize:
   sz: [224, 384]
 
+resize_extra_images:
+  sz: [224, 384]
+
 train_one:
   name: one
   seed: 5899
@@ -164,3 +167,173 @@ train_four:
 ensemble:
   models: [one, two, three, four]
   n_folds: 5
+
+pseudo_labeling:
+  models: [one, two, three, four]
+  n_folds: 5
+
+train_one_extra:
+  name: one_extra
+  seed: 6921
+  n_folds: 5
+  fold: -1
+  # problem
+  metric: rmse
+  metric_mode: min
+  # input images
+  train_data: data/train_384
+  use_extra_images: true
+  # model
+  arch: swin_large_patch4_window12_384
+  pretrained: true
+  epochs: 6
+  bs: 16
+  auto_batch_size: false
+  accumulate_grad_batches: 1
+  precision: 16
+  # augmentations
+  use_normalize: true
+  n_tfms: 2
+  magn: 3
+  sz: 384
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
+  # regularization
+  dropout: 0.0
+  wd: 0.0
+  label_smoothing: 0.1
+  # optimizer
+  loss: bce_with_logits
+  opt: adamw
+  sched: cosine
+  lr: 0.000006
+  warmup_epochs: 1
+  auto_lr: false
+  mom: 0.9
+
+train_two_extra:
+  name: two_extra
+  seed: 7591
+  n_folds: 5
+  fold: -1
+  # problem
+  metric: rmse
+  metric_mode: min
+  # input images
+  train_data: data/train_224
+  use_extra_images: true
+  # model
+  arch: swin_large_patch4_window7_224
+  pretrained: true
+  epochs: 6
+  bs: 64
+  auto_batch_size: false
+  accumulate_grad_batches: 1
+  precision: bf16
+  # augmentations
+  use_normalize: true
+  n_tfms: 1
+  magn: 5
+  sz: 224
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
+  # regularization
+  dropout: 0.0
+  wd: 0.0
+  label_smoothing: 0.1
+  # optimizer
+  loss: bce_with_logits
+  opt: adamw
+  sched: cosine
+  warmup_epochs: 1
+  lr: 0.000024
+  auto_lr: false
+  mom: 0.9
+
+# train_three_extra:
+#   name: three_extra
+#   seed: 9102
+#   n_folds: 5
+#   fold: -1
+#   # problem
+#   metric: rmse
+#   metric_mode: min
+#   # input images
+#   train_data: data/train_224
+#   use_extra_images: true
+#   # model
+#   arch: xcit_large_24_p8_224_dist
+#   pretrained: true
+#   epochs: 6
+#   bs: 16
+#   auto_batch_size: false
+#   accumulate_grad_batches: 1
+#   precision: bf16
+#   # augmentations
+#   use_normalize: true
+#   n_tfms: 1
+#   magn: 5
+#   sz: 224
+#   use_mix: 0
+#   mix_p: 0.0
+#   resize: -1
+#   # regularization
+#   dropout: 0.0
+#   wd: 0.0
+#   label_smoothing: 0.1
+#   # optimizer
+#   loss: bce_with_logits
+#   opt: adamw
+#   sched: cosine
+#   warmup_epochs: 1
+#   lr: 0.00001
+  # auto_lr: false
+  # mom: 0.9
+
+train_four_extra:
+  name: four_extra
+  seed: 1230
+  n_folds: 5
+  fold: -1
+  # problem
+  metric: rmse
+  metric_mode: min
+  # input images
+  train_data: data/train_224
+  use_extra_images: true
+  # model
+  arch: cait_s24_224
+  pretrained: true
+  epochs: 6
+  bs: 64
+  auto_batch_size: false
+  accumulate_grad_batches: 1
+  precision: bf16
+  # augmentations
+  use_normalize: true
+  n_tfms: 1
+  magn: 5
+  sz: 224
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
+  # regularization
+  dropout: 0.0
+  wd: 0.0
+  label_smoothing: 0.1
+  # optimizer
+  loss: bce_with_logits
+  opt: adamw
+  sched: cosine
+  warmup_epochs: 1
+  lr: 0.00004
+  auto_lr: false
+  mom: 0.9
+
+ensemble_final:
+  name: ensemble_final
+  seed: 1010
+  n_folds: 5
+  models: [one, two, three, four, one_extra, two_extra, four_extra]
