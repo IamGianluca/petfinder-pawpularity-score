@@ -134,3 +134,175 @@ stages:
     metrics:
     - metrics/ensemble.json:
         cache: false
+  download_extra_data:
+    cmd: kaggle competitions download -c petfinder-adoption-prediction -p data/petfinder-adoption-prediction
+    outs:
+    - data/petfinder-adoption-prediction/petfinder-adoption-prediction.zip
+  unzip_extra_data:
+    cmd: unzip data/petfinder-adoption-prediction/petfinder-adoption-prediction.zip
+      -d data/petfinder-adoption-prediction/
+    deps:
+    - data/petfinder-adoption-prediction/petfinder-adoption-prediction.zip
+    outs:
+    - data/petfinder-adoption-prediction/BreedLabels.csv
+    - data/petfinder-adoption-prediction/ColorLabels.csv
+    - data/petfinder-adoption-prediction/PetFinder-BreedLabels.csv
+    - data/petfinder-adoption-prediction/PetFinder-ColorLabels.csv
+    - data/petfinder-adoption-prediction/PetFinder-StateLabels.csv
+    - data/petfinder-adoption-prediction/StateLabels.csv
+    - data/petfinder-adoption-prediction/breed_labels.csv
+    - data/petfinder-adoption-prediction/color_labels.csv
+    - data/petfinder-adoption-prediction/state_labels.csv
+    - data/petfinder-adoption-prediction/test/
+    - data/petfinder-adoption-prediction/test_images
+    - data/petfinder-adoption-prediction/test_metadata
+    - data/petfinder-adoption-prediction/test_sentiment
+    - data/petfinder-adoption-prediction/train/
+    - data/petfinder-adoption-prediction/train_images/
+    - data/petfinder-adoption-prediction/train_metadata
+    - data/petfinder-adoption-prediction/train_sentiment
+  organize_extra_images:
+    cmd: mkdir data/extra && find data/petfinder-adoption-prediction/ -name '*.jpg'
+      -exec cp {} data/extra/ \;
+    deps:
+    - data/petfinder-adoption-prediction/test_images/
+    - data/petfinder-adoption-prediction/train_images/
+    outs:
+    - data/extra
+  resize_extra_images:
+    cmd: python pipe/resize_extra_images.py
+    params:
+    - resize_extra_images
+    deps:
+    - data/extra/
+    - pipe/resize_extra_images.py
+    outs:
+    - data/extra_224
+    - data/extra_384
+  pseudo_labeling:
+    cmd: python pipe/pseudo_label.py
+    params:
+    - pseudo_labeling
+    deps:
+    - data/train_10folds.csv
+    - data/train_5folds.csv
+    - data/extra_224/
+    - data/extra_384/
+    - pipe/pseudo_label.py
+    - ckpts/model_one_fold0.ckpt
+    - ckpts/model_one_fold1.ckpt
+    - ckpts/model_one_fold2.ckpt
+    - ckpts/model_one_fold3.ckpt
+    - ckpts/model_one_fold4.ckpt
+    - ckpts/model_two_fold0.ckpt
+    - ckpts/model_two_fold1.ckpt
+    - ckpts/model_two_fold2.ckpt
+    - ckpts/model_two_fold3.ckpt
+    - ckpts/model_two_fold4.ckpt
+    - ckpts/model_three_fold0.ckpt
+    - ckpts/model_three_fold1.ckpt
+    - ckpts/model_three_fold2.ckpt
+    - ckpts/model_three_fold3.ckpt
+    - ckpts/model_three_fold4.ckpt
+    - ckpts/model_four_fold0.ckpt
+    - ckpts/model_four_fold1.ckpt
+    - ckpts/model_four_fold2.ckpt
+    - ckpts/model_four_fold3.ckpt
+    - ckpts/model_four_fold4.ckpt
+    outs:
+    - data/extra.csv
+  train_one_extra:
+    cmd: python pipe/train_one_extra.py
+    params:
+    - train_one_extra
+    deps:
+    - pipe/train_one_extra.py
+    - data/train_384
+    - data/extra_384
+    - data/train_5folds.csv
+    - data/train_10folds.csv
+    outs:
+    - ckpts/model_one_extra_fold0.ckpt
+    - ckpts/model_one_extra_fold1.ckpt
+    - ckpts/model_one_extra_fold2.ckpt
+    - ckpts/model_one_extra_fold3.ckpt
+    - ckpts/model_one_extra_fold4.ckpt
+    - preds/model_one_extra_oof.npy
+    metrics:
+    - metrics/model_one_extra.json:
+        cache: false
+  train_two_extra:
+    cmd: python pipe/train_two_extra.py
+    params:
+    - train_two_extra
+    deps:
+    - pipe/train_two_extra.py
+    - data/train_224
+    - data/extra_224
+    - data/train_5folds.csv
+    - data/train_10folds.csv
+    outs:
+    - ckpts/model_two_extra_fold0.ckpt
+    - ckpts/model_two_extra_fold1.ckpt
+    - ckpts/model_two_extra_fold2.ckpt
+    - ckpts/model_two_extra_fold3.ckpt
+    - ckpts/model_two_extra_fold4.ckpt
+    - preds/model_two_extra_oof.npy
+    metrics:
+    - metrics/model_two_extra.json:
+        cache: false
+  # train_three_extra:
+  #   cmd: python pipe/train_three_extra.py
+  #   params:
+  #   - train_three_extra
+  #   deps:
+  #   - pipe/train_three_extra.py
+  #   - data/train_224
+  #   - data/extra_224
+  #   - data/train_5folds.csv
+  #   - data/train_10folds.csv
+  #   outs:
+  #   - ckpts/model_three_extra_fold0.ckpt
+  #   - ckpts/model_three_extra_fold1.ckpt
+  #   - ckpts/model_three_extra_fold2.ckpt
+  #   - ckpts/model_three_extra_fold3.ckpt
+  #   - ckpts/model_three_extra_fold4.ckpt
+  #   - preds/model_three_extra_oof.npy
+  #   metrics:
+  #   - metrics/model_three_extra.json:
+  #       cache: false
+  train_four_extra:
+    cmd: python pipe/train_four_extra.py
+    params:
+    - train_four_extra
+    deps:
+    - pipe/train_four_extra.py
+    - data/train_224
+    - data/extra_224
+    - data/train_5folds.csv
+    - data/train_10folds.csv
+    outs:
+    - ckpts/model_four_extra_fold0.ckpt
+    - ckpts/model_four_extra_fold1.ckpt
+    - ckpts/model_four_extra_fold2.ckpt
+    - ckpts/model_four_extra_fold3.ckpt
+    - ckpts/model_four_extra_fold4.ckpt
+    - preds/model_four_extra_oof.npy
+    metrics:
+    - metrics/model_four_extra.json:
+        cache: false
+  ensemble_final:
+    cmd: python pipe/ensemble_extra.py
+    params:
+    - ensemble_final
+    deps:
+    - data/train_10folds.csv
+    - data/train_5folds.csv
+    - pipe/ensemble_final.py
+    - preds/model_one_extra_oof.npy
+    - preds/model_two_extra_oof.npy
+    # - preds/model_three_extra_oof.npy
+    - preds/model_four_extra_oof.npy
+    metrics:
+    - metrics/ensemble_final.json:
+        cache: false

@@ -27,7 +27,7 @@ class ImageClassificationDataset(Dataset):
         return self.length
 
     def __getitem__(self, index):
-        image = Image.open(self.image_paths[index])
+        image = Image.open(self.image_paths[index]).convert("RGB")
         image = self.augmentations(image)
 
         if self.targets is not None:  # train/val dataset
