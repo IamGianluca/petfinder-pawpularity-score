@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 import pytorch_lightning as pl
@@ -13,23 +14,17 @@ from timm.data import transforms_factory
 import constants
 
 
-def pseudo_label():
-    cfg = load_cfg(
-        constants.cfg_fpath,
-        cfg_name=f"pseudo_labeling",
-    )
-    cfg = OmegaConf.create(cfg)
-
+def pseudo_label(cfg):
     extra_image_paths = list(Path(constants.extra_images_path).glob("*.jpg"))
 
-    df = pd.DataFrame()
-    df["Id"] = np.array([p.name.split(".")[0] for p in extra_image_paths])
+    x_test = pd.DataFrame()
+    x_test["Id"] = np.array([p.name.split(".")[0] for p in extra_image_paths])
 
     # for each model, set up ImageDataModule
     for model_name in cfg.models:
         print()
         print(f"#####################")
-        print(f"# Generating predictions for model {model_name}")
+        print(f"# Generating predictions for model {model_name}...")
         print(f"#####################")
         model_cfg = load_cfg(
             constants.cfg_fpath, cfg_name=f"train_{model_name}"
@@ -59,30 +54,32 @@ def pseudo_label():
 
             trainer = pl.Trainer(gpus=1)
             preds = trainer.predict(model, dm.test_dataloader())
-            df[f"preds_{model_name}_fold{idx}"] = np.vstack(preds) * 100
+            x_test[f"preds_{model_name}_fold{idx}"] = np.vstack(preds) * 100
 
-    # write pseudo labels are the average prediction from
-    # the different L1 models
-    # NOTE: later on, we will replace the ensemble method
-    # with something more powerful
-    print()
-    print(f"#####################")
-    print(f"Creating pseudo labels")
+    print(f"\n#####################")
+    print(f"Creating pseudo labels...")
     print(f"#####################")
     for fold_number in range(cfg.n_folds):
         preds_cols = [
             f"preds_{model_name}_fold{fold_number}"
             for model_name in cfg.models
         ]
-        df[f"pseudo_label_fold{fold_number}"] = df.loc[:, preds_cols].mean(
-            axis=1
-        )
+        lr = joblib.load("ckpts/model_ensemble.joblib")
+        pseudo_labels = lr.predict(X=x_test.loc[:, preds_cols])
+
+        x_test[f"pseudo_label_fold{fold_number}"] = pseudo_labels
 
     # we should have 5 pseudo labels for each record, one
     # for each fold
-    df.head()
-    df.to_csv("data/extra.csv", index=False)
+    x_test.head()
+    x_test.to_csv("data/extra.csv", index=False)
 
 
 if __name__ == "__main__":
-    pseudo_label()
+    cfg = load_cfg(
+        constants.cfg_fpath,
+        cfg_name=f"pseudo_labeling",
+    )
+    cfg = OmegaConf.create(cfg)
+
+    pseudo_label(cfg)

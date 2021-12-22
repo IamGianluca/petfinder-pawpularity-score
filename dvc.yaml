@@ -131,8 +131,10 @@ stages:
     - preds/model_two_oof.npy
     - preds/model_three_oof.npy
     - preds/model_four_oof.npy
+    outs:
+    - ckpts/model_ensemble.joblib
     metrics:
-    - metrics/ensemble.json:
+    - metrics/model_ensemble.json:
         cache: false
   download_extra_data:
     cmd: kaggle competitions download -c petfinder-adoption-prediction -p data/petfinder-adoption-prediction
@@ -221,6 +223,7 @@ stages:
     - data/extra_384
     - data/train_5folds.csv
     - data/train_10folds.csv
+    - data/extra.csv
     outs:
     - ckpts/model_one_extra_fold0.ckpt
     - ckpts/model_one_extra_fold1.ckpt
@@ -241,6 +244,7 @@ stages:
     - data/extra_224
     - data/train_5folds.csv
     - data/train_10folds.csv
+    - data/extra.csv
     outs:
     - ckpts/model_two_extra_fold0.ckpt
     - ckpts/model_two_extra_fold1.ckpt
@@ -251,26 +255,27 @@ stages:
     metrics:
     - metrics/model_two_extra.json:
         cache: false
-  # train_three_extra:
-  #   cmd: python pipe/train_three_extra.py
-  #   params:
-  #   - train_three_extra
-  #   deps:
-  #   - pipe/train_three_extra.py
-  #   - data/train_224
-  #   - data/extra_224
-  #   - data/train_5folds.csv
-  #   - data/train_10folds.csv
-  #   outs:
-  #   - ckpts/model_three_extra_fold0.ckpt
-  #   - ckpts/model_three_extra_fold1.ckpt
-  #   - ckpts/model_three_extra_fold2.ckpt
-  #   - ckpts/model_three_extra_fold3.ckpt
-  #   - ckpts/model_three_extra_fold4.ckpt
-  #   - preds/model_three_extra_oof.npy
-  #   metrics:
-  #   - metrics/model_three_extra.json:
-  #       cache: false
+  train_three_extra:
+    cmd: python pipe/train_three_extra.py
+    params:
+    - train_three_extra
+    deps:
+    - pipe/train_three_extra.py
+    - data/train_224
+    - data/extra_224
+    - data/train_5folds.csv
+    - data/train_10folds.csv
+    - data/extra.csv
+    outs:
+    - ckpts/model_three_extra_fold0.ckpt
+    - ckpts/model_three_extra_fold1.ckpt
+    - ckpts/model_three_extra_fold2.ckpt
+    - ckpts/model_three_extra_fold3.ckpt
+    - ckpts/model_three_extra_fold4.ckpt
+    - preds/model_three_extra_oof.npy
+    metrics:
+    - metrics/model_three_extra.json:
+        cache: false
   train_four_extra:
     cmd: python pipe/train_four_extra.py
     params:
@@ -281,6 +286,7 @@ stages:
     - data/extra_224
     - data/train_5folds.csv
     - data/train_10folds.csv
+    - data/extra.csv
     outs:
     - ckpts/model_four_extra_fold0.ckpt
     - ckpts/model_four_extra_fold1.ckpt
@@ -292,7 +298,7 @@ stages:
     - metrics/model_four_extra.json:
         cache: false
   ensemble_final:
-    cmd: python pipe/ensemble_extra.py
+    cmd: python pipe/ensemble_final.py
     params:
     - ensemble_final
     deps:
@@ -303,6 +309,8 @@ stages:
     - preds/model_two_extra_oof.npy
     # - preds/model_three_extra_oof.npy
     - preds/model_four_extra_oof.npy
+    outs:
+    - ckpts/model_ensemble_final.joblib
     metrics:
-    - metrics/ensemble_final.json:
+    - metrics/model_ensemble_final.json:
         cache: false
