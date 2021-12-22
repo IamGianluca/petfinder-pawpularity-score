@@ -307,7 +307,7 @@ stages:
     - pipe/ensemble_final.py
     - preds/model_one_extra_oof.npy
     - preds/model_two_extra_oof.npy
-    # - preds/model_three_extra_oof.npy
+    - preds/model_three_extra_oof.npy
     - preds/model_four_extra_oof.npy
     outs:
     - ckpts/model_ensemble_final.joblib

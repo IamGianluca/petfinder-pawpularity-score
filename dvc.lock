@@ -933,6 +933,9 @@ stages:
     - path: preds/model_one_extra_oof.npy
       md5: df13fcdb94b31bf9ec68ff1379d8912c
       size: 79128
+    - path: preds/model_three_extra_oof.npy
+      md5: 0ea9159f685898fa21429e555084fb24
+      size: 79128
     - path: preds/model_two_extra_oof.npy
       md5: 10f8da6dcff6789f0ca2586a611cd0b0
       size: 79128
@@ -949,14 +952,15 @@ stages:
           - four
           - one_extra
           - two_extra
+          - three_extra
           - four_extra
     outs:
     - path: ckpts/model_ensemble_final.joblib
-      md5: 91bda23f5a0d7faade52a31f08e68de3
-      size: 84951
+      md5: 79e24c7009fcc88fc3d4e42e992eaf54
+      size: 84959
     - path: metrics/model_ensemble_final.json
-      md5: ef999082394e2454ff81458854c239dd
-      size: 22
+      md5: 78d1680d84fd573603df31b3a867f7c9
+      size: 21
   train_three_extra:
     cmd: python pipe/train_three_extra.py
     deps:

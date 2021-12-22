@@ -338,4 +338,4 @@ ensemble_final:
   name: ensemble_final
   seed: 1010
   n_folds: 5
-  models: [one, two, three, four, one_extra, two_extra, four_extra]
+  models: [one, two, three, four, one_extra, two_extra, three_extra, four_extra]
