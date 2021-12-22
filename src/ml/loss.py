@@ -12,6 +12,8 @@ def loss_factory(name):
         return MixUpBCEWithLogitsLoss()
     elif name == "mixup_ce_with_logits":
         return MixUpCrossEntropy()
+    elif name == "crossentropy":
+        return nn.CrossEntropyLoss()
     elif name == "focal_loss":
         return BinaryFocalLossWithLogits()
     else:

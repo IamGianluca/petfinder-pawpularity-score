@@ -1,18 +1,19 @@
 import json
 
+import joblib
 import numpy as np
 import pandas as pd
 from ml.params import load_cfg
 from omegaconf import OmegaConf
 from sklearn.linear_model import LassoCV
 from sklearn.metrics import mean_squared_error
-from torchmetrics import MeanSquaredError
+from sklearn.model_selection import PredefinedSplit
 
 import constants
 from utils import train_folds_fpath
 
 
-def ensemble(cfg: OmegaConf):
+def ensemble(cfg):
     # reconstruct target
     df = pd.read_csv(train_folds_fpath[cfg.n_folds])
     y_true = []
@@ -21,14 +22,16 @@ def ensemble(cfg: OmegaConf):
     y_true = np.array(y_true)
 
     # create training set for meta-learner by using OOF predictions from
-    # L1 models and meta-data
+    # L1 models
     x_train = pd.DataFrame()
 
     for model in cfg.models:
         x_train[f"preds_{model}"] = np.load(f"preds/model_{model}_oof.npy")
 
+    kfolds = []
     meta_data = []
     for i in range(cfg.n_folds):
+        kfolds.extend(df[df.kfold == i].kfold.values.tolist())
         meta_data.extend(
             df[df.kfold == i][
                 [
@@ -67,13 +70,16 @@ def ensemble(cfg: OmegaConf):
     ] = meta_data
 
     # train meta-learner
+    cv = PredefinedSplit(kfolds)
     lr = LassoCV(
         fit_intercept=True,
         normalize=True,
-        cv=cfg.n_folds,
+        cv=cv,
         random_state=cfg.seed,
     )
     lr.fit(X=x_train, y=y_true)
+    joblib.dump(lr, f"ckpts/model_{cfg.name}.joblib")
+
     y_pred = lr.predict(X=x_train)
 
     # compute ensemble score
