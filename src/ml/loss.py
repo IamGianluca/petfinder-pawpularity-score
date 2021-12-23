@@ -13,7 +13,7 @@ def loss_factory(name):
     elif name == "mixup_ce_with_logits":
         return MixUpCrossEntropy()
     elif name == "crossentropy":
-        return nn.CrossEntropyLoss()
+        return nn.CrossEntropyLoss(label_smoothing=0.1)
     elif name == "focal_loss":
         return BinaryFocalLossWithLogits()
     else:

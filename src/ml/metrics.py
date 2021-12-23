@@ -16,6 +16,10 @@ def metric_factory(name):
         return torchmetrics.MeanSquaredError(squared=True)
     elif name == "rmse":
         return RootMeanSquaredError()
+    elif name == "accuracy":
+        return torchmetrics.Accuracy()
+    elif name == "auroc_weighted":
+        return torchmetrics.AUROC(num_classes=10, average="weighted")
     else:
         raise ValueError("Metric not supported yet.")
 
