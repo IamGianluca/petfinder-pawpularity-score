@@ -30,26 +30,26 @@ stages:
     outs:
     - data/train_5folds.csv
     - data/train_10folds.csv
-  resize_images:
-    cmd: python pipe/resize_images.py
-    deps:
-    - data/test
-    - data/train
-    - pipe/resize_images.py
-    params:
-    - resize
-    outs:
-    - data/test_224/
-    - data/train_224/
-    - data/test_384/
-    - data/train_384/
+  # resize_images:
+  #   cmd: python pipe/resize_images.py
+  #   deps:
+  #   - data/test
+  #   - data/train
+  #   - pipe/resize_images.py
+  #   params:
+  #   - resize
+  #   outs:
+  #   - data/test_224/
+  #   - data/train_224/
+  #   - data/test_384/
+  #   - data/train_384/
   train_one:
     cmd: python pipe/train_one.py
     params:
     - train_one
     deps:
     - pipe/train_one.py
-    - data/train_384
+    - data/train
     - data/train_5folds.csv
     - data/train_10folds.csv
     outs:
@@ -68,7 +68,7 @@ stages:
     - train_two
     deps:
     - pipe/train_two.py
-    - data/train_224
+    - data/train
     - data/train_5folds.csv
     - data/train_10folds.csv
     outs:
@@ -87,7 +87,7 @@ stages:
     - train_three
     deps:
     - pipe/train_three.py
-    - data/train_224
+    - data/train
     - data/train_5folds.csv
     - data/train_10folds.csv
     outs:
@@ -106,7 +106,7 @@ stages:
     - train_four
     deps:
     - pipe/train_four.py
-    - data/train_224
+    - data/train
     - data/train_5folds.csv
     - data/train_10folds.csv
     outs:
@@ -171,16 +171,16 @@ stages:
     - data/petfinder-adoption-prediction/train_images/
     outs:
     - data/extra
-  resize_extra_images:
-    cmd: python pipe/resize_extra_images.py
-    params:
-    - resize_extra_images
-    deps:
-    - data/extra/
-    - pipe/resize_extra_images.py
-    outs:
-    - data/extra_224
-    - data/extra_384
+  # resize_extra_images:
+  #   cmd: python pipe/resize_extra_images.py
+  #   params:
+  #   - resize_extra_images
+  #   deps:
+  #   - data/extra/
+  #   - pipe/resize_extra_images.py
+  #   outs:
+  #   - data/extra_224
+  #   - data/extra_384
   pseudo_labeling:
     cmd: python pipe/pseudo_label.py
     params:
@@ -188,8 +188,7 @@ stages:
     deps:
     - data/train_10folds.csv
     - data/train_5folds.csv
-    - data/extra_224/
-    - data/extra_384/
+    - data/extra/
     - pipe/pseudo_label.py
     - ckpts/model_one_fold0.ckpt
     - ckpts/model_one_fold1.ckpt
@@ -219,8 +218,8 @@ stages:
     - train_one_extra
     deps:
     - pipe/train_one_extra.py
-    - data/train_384
-    - data/extra_384
+    - data/train
+    - data/extra
     - data/train_5folds.csv
     - data/train_10folds.csv
     - data/extra.csv
@@ -240,8 +239,8 @@ stages:
     - train_two_extra
     deps:
     - pipe/train_two_extra.py
-    - data/train_224
-    - data/extra_224
+    - data/train
+    - data/extra
     - data/train_5folds.csv
     - data/train_10folds.csv
     - data/extra.csv
@@ -261,8 +260,8 @@ stages:
     - train_three_extra
     deps:
     - pipe/train_three_extra.py
-    - data/train_224
-    - data/extra_224
+    - data/train
+    - data/extra
     - data/train_5folds.csv
     - data/train_10folds.csv
     - data/extra.csv
@@ -282,8 +281,8 @@ stages:
     - train_four_extra
     deps:
     - pipe/train_four_extra.py
-    - data/train_224
-    - data/extra_224
+    - data/train
+    - data/extra
     - data/train_5folds.csv
     - data/train_10folds.csv
     - data/extra.csv

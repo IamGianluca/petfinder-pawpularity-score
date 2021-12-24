@@ -56,13 +56,13 @@ stages:
   train_one:
     cmd: python pipe/train_one.py
     deps:
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_384
-      md5: 3e12f820928b7b6770891beda13b8af2.dir
-      size: 236133550
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -78,7 +78,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_384
+          train_data: data/train
           arch: swin_large_patch4_window12_384
           pretrained: true
           epochs: 6
@@ -105,25 +105,25 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_fold0.ckpt
-      md5: 457bdc51107293602a5b34a93e2a9b66
-      size: 795385889
+      md5: c48c8ee1206e88abde5086dc91063061
+      size: 795412065
     - path: ckpts/model_one_fold1.ckpt
-      md5: 196661bcfe1665d7b5e07b800be512c7
-      size: 795385889
+      md5: 4a61881d00c16fdcceaff9160d6e1325
+      size: 795412065
     - path: ckpts/model_one_fold2.ckpt
-      md5: 19619e36ed3dbe7a35c179ddbc7c3052
-      size: 795385889
+      md5: f92f592bf4d8e74f1a49e193c81a5246
+      size: 795412065
     - path: ckpts/model_one_fold3.ckpt
-      md5: 98f0b48228e887fa52f57c624a24e7ec
-      size: 795385889
+      md5: 0fee8692971090d96dae831784cfe3e1
+      size: 795412065
     - path: ckpts/model_one_fold4.ckpt
-      md5: 96af8e33bfb7f23d140862fec93aa243
-      size: 795385889
+      md5: c69ca77ac2ae7034ba867807b4e39ae4
+      size: 795412065
     - path: metrics/model_one.json
-      md5: bbd540db72a2ce3c8e84fc25870adc13
-      size: 60
+      md5: 6c664a018dae8e006fb2d6e9d129cbeb
+      size: 62
     - path: preds/model_one_oof.npy
-      md5: ce21d15ed239169eb83e8447e6a5dc75
+      md5: b98243b3807ba12b079f4477fa7f80f9
       size: 79128
   resize_images:
     cmd: python pipe/resize_images.py
@@ -165,13 +165,13 @@ stages:
   train_two:
     cmd: python pipe/train_two.py
     deps:
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_224
-      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
-      size: 97308155
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -187,7 +187,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_224
+          train_data: data/train
           arch: swin_large_patch4_window7_224
           pretrained: true
           epochs: 6
@@ -214,25 +214,25 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_fold0.ckpt
-      md5: 03e6d837cc949f3ead50e2cb3aab13f6
-      size: 782545633
+      md5: 0eda6fbe46915f679a0854020e40f89b
+      size: 782571809
     - path: ckpts/model_two_fold1.ckpt
-      md5: e863e524768c84100a16473608517d8a
-      size: 782545633
+      md5: 1b25e121b472954fdb018763b4ac51c7
+      size: 782571809
     - path: ckpts/model_two_fold2.ckpt
-      md5: 4ddf818c4d8fb1e55ac8bbb5b09d0ed8
-      size: 782545633
+      md5: c19d2c431b28cb00fc75df8f59ff96b8
+      size: 782571809
     - path: ckpts/model_two_fold3.ckpt
-      md5: d8ad999fc086cb4e74bfa6e369c5b54f
-      size: 782545633
+      md5: 5c8515a50a899037ba334db6d15fe6d7
+      size: 782571809
     - path: ckpts/model_two_fold4.ckpt
-      md5: 7e3027ecc673bfa60364d8729a157406
-      size: 782545633
+      md5: c5c73889f9df7dbdeda5a5589c259446
+      size: 782571809
     - path: metrics/model_two.json
-      md5: 94c436d7599acc83d071200d4bdbfdd6
-      size: 61
+      md5: 400265e894d2f4a972a0d7d7412fe234
+      size: 60
     - path: preds/model_two_oof.npy
-      md5: 1e37edfce0dbfad147f2b366196b3a33
+      md5: 9533174f0887141341b143e895da7321
       size: 79128
   remove_duplicates:
     cmd: python pipe/remove_duplicate_images.py
@@ -251,13 +251,13 @@ stages:
   train_three:
     cmd: python pipe/train_three.py
     deps:
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_224
-      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
-      size: 97308155
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -273,7 +273,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_224
+          train_data: data/train
           arch: xcit_large_24_p8_224_dist
           pretrained: true
           epochs: 6
@@ -300,36 +300,36 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_three_fold0.ckpt
-      md5: 553b32cce751766f063a3d9db0c31d42
-      size: 753522607
+      md5: cfb1b4d36627ab4e9bc77bad9e4e298a
+      size: 753548527
     - path: ckpts/model_three_fold1.ckpt
-      md5: 801d8c13d68d955eac58746ee8350dc5
-      size: 753522607
+      md5: 45e2dfa7ee6907916539c1f7aef0aecd
+      size: 753548527
     - path: ckpts/model_three_fold2.ckpt
-      md5: 588a8433a3901beb0fafff826a70c0be
-      size: 753522607
+      md5: 656ae2aae8ced258b98b674609faa386
+      size: 753548527
     - path: ckpts/model_three_fold3.ckpt
-      md5: f65b0e3204fb2b2e39994f475ee11afa
-      size: 753522607
+      md5: a443b6c1bc04cb34b9ee184c5929d703
+      size: 753548527
     - path: ckpts/model_three_fold4.ckpt
-      md5: 44ce955b0b601a60c9cfaf6d5506e48a
-      size: 753522607
+      md5: 0766b118ced3db8a31c9c6678b63a15f
+      size: 753548527
     - path: metrics/model_three.json
-      md5: 2f21dbf633ce1e4c218ea83a83504199
-      size: 60
+      md5: b7462d2fd5102845ae1cdb9b749fcc96
+      size: 61
     - path: preds/model_three_oof.npy
-      md5: 774b89411389c42868c96f1029808c74
+      md5: ebfbf525ce7ead20e2862f58ee9e61f7
       size: 79128
   train_four:
     cmd: python pipe/train_four.py
     deps:
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_224
-      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
-      size: 97308155
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -345,7 +345,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_224
+          train_data: data/train
           arch: cait_s24_224
           pretrained: true
           epochs: 6
@@ -372,25 +372,25 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_four_fold0.ckpt
-      md5: ff4ea117e926dd2f087da5caa2186350
-      size: 186554817
+      md5: 78100c60219bd32389c422408f536dce
+      size: 186580673
     - path: ckpts/model_four_fold1.ckpt
-      md5: 7bb72edc5571454c51df8fe0dda5ee2a
-      size: 186554817
+      md5: 0ff284ccb238ecc3338f08ec6df07c8f
+      size: 186580673
     - path: ckpts/model_four_fold2.ckpt
-      md5: 297a7ba42db9de8ccc80c9dc9e1dde1d
-      size: 186554817
+      md5: 7d4f28d43dec906779d66ed6d047d2bf
+      size: 186580673
     - path: ckpts/model_four_fold3.ckpt
-      md5: e7a27a6020317fd3e71d16a521089b92
-      size: 186554817
+      md5: f4914b8faf3dd45dbea24fee4ca291db
+      size: 186580673
     - path: ckpts/model_four_fold4.ckpt
-      md5: b1926f67194ff5eed876256c5728ecdb
-      size: 186554817
+      md5: 13baa4faeace938e134f100560e7229c
+      size: 186580673
     - path: metrics/model_four.json
-      md5: 97ee81cc88c8c1ea605ea0531d09d951
+      md5: 35696d3a1f87dccdc4a9896ac6871a3b
       size: 62
     - path: preds/model_four_oof.npy
-      md5: 6f2757ecc85fb79286fb4d5ecf9f3c2a
+      md5: 513e66c722befa489d173a00887157e0
       size: 79128
   ensemble:
     cmd: python pipe/ensemble.py
@@ -405,16 +405,16 @@ stages:
       md5: eb17b3e9f66790fa0a705dc9c0d89d32
       size: 1779
     - path: preds/model_four_oof.npy
-      md5: 6f2757ecc85fb79286fb4d5ecf9f3c2a
+      md5: 513e66c722befa489d173a00887157e0
       size: 79128
     - path: preds/model_one_oof.npy
-      md5: ce21d15ed239169eb83e8447e6a5dc75
+      md5: b98243b3807ba12b079f4477fa7f80f9
       size: 79128
     - path: preds/model_three_oof.npy
-      md5: 774b89411389c42868c96f1029808c74
+      md5: ebfbf525ce7ead20e2862f58ee9e61f7
       size: 79128
     - path: preds/model_two_oof.npy
-      md5: 1e37edfce0dbfad147f2b366196b3a33
+      md5: 9533174f0887141341b143e895da7321
       size: 79128
     params:
       params.yaml:
@@ -429,10 +429,10 @@ stages:
           n_folds: 5
     outs:
     - path: ckpts/model_ensemble.joblib
-      md5: d779c73f3ef685b2fae9d3730e903688
+      md5: edaa757bb88c5304709a3476f69e7c58
       size: 84831
     - path: metrics/model_ensemble.json
-      md5: 39fbac63821cb8ee23b039ad5e082fea
+      md5: 316051dcde35c10ea074a3d342236974
       size: 22
   download_extra_data:
     cmd: kaggle competitions download -c petfinder-adoption-prediction -p data/petfinder-adoption-prediction
@@ -553,72 +553,68 @@ stages:
     cmd: python pipe/pseudo_label.py
     deps:
     - path: ckpts/model_four_fold0.ckpt
-      md5: ff4ea117e926dd2f087da5caa2186350
-      size: 186554817
+      md5: 78100c60219bd32389c422408f536dce
+      size: 186580673
     - path: ckpts/model_four_fold1.ckpt
-      md5: 7bb72edc5571454c51df8fe0dda5ee2a
-      size: 186554817
+      md5: 0ff284ccb238ecc3338f08ec6df07c8f
+      size: 186580673
     - path: ckpts/model_four_fold2.ckpt
-      md5: 297a7ba42db9de8ccc80c9dc9e1dde1d
-      size: 186554817
+      md5: 7d4f28d43dec906779d66ed6d047d2bf
+      size: 186580673
     - path: ckpts/model_four_fold3.ckpt
-      md5: e7a27a6020317fd3e71d16a521089b92
-      size: 186554817
+      md5: f4914b8faf3dd45dbea24fee4ca291db
+      size: 186580673
     - path: ckpts/model_four_fold4.ckpt
-      md5: b1926f67194ff5eed876256c5728ecdb
-      size: 186554817
+      md5: 13baa4faeace938e134f100560e7229c
+      size: 186580673
     - path: ckpts/model_one_fold0.ckpt
-      md5: 457bdc51107293602a5b34a93e2a9b66
-      size: 795385889
+      md5: c48c8ee1206e88abde5086dc91063061
+      size: 795412065
     - path: ckpts/model_one_fold1.ckpt
-      md5: 196661bcfe1665d7b5e07b800be512c7
-      size: 795385889
+      md5: 4a61881d00c16fdcceaff9160d6e1325
+      size: 795412065
     - path: ckpts/model_one_fold2.ckpt
-      md5: 19619e36ed3dbe7a35c179ddbc7c3052
-      size: 795385889
+      md5: f92f592bf4d8e74f1a49e193c81a5246
+      size: 795412065
     - path: ckpts/model_one_fold3.ckpt
-      md5: 98f0b48228e887fa52f57c624a24e7ec
-      size: 795385889
+      md5: 0fee8692971090d96dae831784cfe3e1
+      size: 795412065
     - path: ckpts/model_one_fold4.ckpt
-      md5: 96af8e33bfb7f23d140862fec93aa243
-      size: 795385889
+      md5: c69ca77ac2ae7034ba867807b4e39ae4
+      size: 795412065
     - path: ckpts/model_three_fold0.ckpt
-      md5: 553b32cce751766f063a3d9db0c31d42
-      size: 753522607
+      md5: cfb1b4d36627ab4e9bc77bad9e4e298a
+      size: 753548527
     - path: ckpts/model_three_fold1.ckpt
-      md5: 801d8c13d68d955eac58746ee8350dc5
-      size: 753522607
+      md5: 45e2dfa7ee6907916539c1f7aef0aecd
+      size: 753548527
     - path: ckpts/model_three_fold2.ckpt
-      md5: 588a8433a3901beb0fafff826a70c0be
-      size: 753522607
+      md5: 656ae2aae8ced258b98b674609faa386
+      size: 753548527
     - path: ckpts/model_three_fold3.ckpt
-      md5: f65b0e3204fb2b2e39994f475ee11afa
-      size: 753522607
+      md5: a443b6c1bc04cb34b9ee184c5929d703
+      size: 753548527
     - path: ckpts/model_three_fold4.ckpt
-      md5: 44ce955b0b601a60c9cfaf6d5506e48a
-      size: 753522607
+      md5: 0766b118ced3db8a31c9c6678b63a15f
+      size: 753548527
     - path: ckpts/model_two_fold0.ckpt
-      md5: 03e6d837cc949f3ead50e2cb3aab13f6
-      size: 782545633
+      md5: 0eda6fbe46915f679a0854020e40f89b
+      size: 782571809
     - path: ckpts/model_two_fold1.ckpt
-      md5: e863e524768c84100a16473608517d8a
-      size: 782545633
+      md5: 1b25e121b472954fdb018763b4ac51c7
+      size: 782571809
     - path: ckpts/model_two_fold2.ckpt
-      md5: 4ddf818c4d8fb1e55ac8bbb5b09d0ed8
-      size: 782545633
+      md5: c19d2c431b28cb00fc75df8f59ff96b8
+      size: 782571809
     - path: ckpts/model_two_fold3.ckpt
-      md5: d8ad999fc086cb4e74bfa6e369c5b54f
-      size: 782545633
+      md5: 5c8515a50a899037ba334db6d15fe6d7
+      size: 782571809
     - path: ckpts/model_two_fold4.ckpt
-      md5: 7e3027ecc673bfa60364d8729a157406
-      size: 782545633
-    - path: data/extra_224/
-      md5: 38167aa44a98fa7a2b33a53c2665327b.dir
-      size: 694454778
-      nfiles: 72776
-    - path: data/extra_384/
-      md5: f0d0d79586659ba82df50d4314effbc2.dir
-      size: 1109231399
+      md5: c5c73889f9df7dbdeda5a5589c259446
+      size: 782571809
+    - path: data/extra/
+      md5: ab4e24fc3d00c4345d86a2647e55685b.dir
+      size: 1998094758
       nfiles: 72776
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
@@ -640,25 +636,25 @@ stages:
           n_folds: 5
     outs:
     - path: data/extra.csv
-      md5: ef9d301bed7a5196c89dd5d843c4d241
-      size: 21545825
+      md5: 53b24e43fae8db27cbe091d184a0374c
+      size: 21563472
   train_four_extra:
     cmd: python pipe/train_four_extra.py
     deps:
-    - path: data/extra.csv
-      md5: ef9d301bed7a5196c89dd5d843c4d241
-      size: 21545825
-    - path: data/extra_224
-      md5: 38167aa44a98fa7a2b33a53c2665327b.dir
-      size: 694454778
+    - path: data/extra
+      md5: ab4e24fc3d00c4345d86a2647e55685b.dir
+      size: 1998094758
       nfiles: 72776
+    - path: data/extra.csv
+      md5: 53b24e43fae8db27cbe091d184a0374c
+      size: 21563472
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_224
-      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
-      size: 97308155
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -674,7 +670,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_224
+          train_data: data/train
           use_extra_images: true
           arch: cait_s24_224
           pretrained: true
@@ -702,43 +698,43 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_four_extra_fold0.ckpt
-      md5: 9a4d43b14cbfeb0df7925146b03f8241
-      size: 186575105
+      md5: 217f2170fcb70d7199bf70f9b07002a5
+      size: 186579393
     - path: ckpts/model_four_extra_fold1.ckpt
-      md5: f86da33bad72f5bc575855eccdedcd91
-      size: 186575105
+      md5: 12bbe8e26802735df4ba52c5ec018946
+      size: 186579393
     - path: ckpts/model_four_extra_fold2.ckpt
-      md5: 078f61800ade0cb717bebaf1b1633f91
-      size: 186575105
+      md5: 3310f4af77fc813ea3f2c58dc392df9e
+      size: 186579393
     - path: ckpts/model_four_extra_fold3.ckpt
-      md5: 1bc99151eed2553adeb8c470f72b4156
-      size: 186575105
+      md5: f19abbfe492cc24930ddc2e247d5d8a9
+      size: 186579393
     - path: ckpts/model_four_extra_fold4.ckpt
-      md5: ac40bc6201fe782b21edc8ba92ea1f77
-      size: 186575105
+      md5: 16a48097cb9bfb797a34f0207013d959
+      size: 186579393
     - path: metrics/model_four_extra.json
-      md5: 2ead0ba976708030a2f745fae0f903f8
-      size: 62
+      md5: c0991de4ac2fc7615edaf25c0645d651
+      size: 61
     - path: preds/model_four_extra_oof.npy
-      md5: dbd7de6455ecb8e7cd4ab8295e19c8ec
+      md5: 52315795f385e469fb06e28088203f73
       size: 79128
   train_two_extra:
     cmd: python pipe/train_two_extra.py
     deps:
-    - path: data/extra.csv
-      md5: ef9d301bed7a5196c89dd5d843c4d241
-      size: 21545825
-    - path: data/extra_224
-      md5: 38167aa44a98fa7a2b33a53c2665327b.dir
-      size: 694454778
+    - path: data/extra
+      md5: ab4e24fc3d00c4345d86a2647e55685b.dir
+      size: 1998094758
       nfiles: 72776
+    - path: data/extra.csv
+      md5: 53b24e43fae8db27cbe091d184a0374c
+      size: 21563472
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_224
-      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
-      size: 97308155
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -754,7 +750,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_224
+          train_data: data/train
           use_extra_images: true
           arch: swin_large_patch4_window7_224
           pretrained: true
@@ -782,43 +778,43 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_two_extra_fold0.ckpt
-      md5: 811992104ee25de2b720acac41df190e
-      size: 782566241
+      md5: 392b45b1b9a5185655ca61803308f594
+      size: 782570529
     - path: ckpts/model_two_extra_fold1.ckpt
-      md5: 0293becf0917ff64d9bd9434db6fc517
-      size: 782566241
+      md5: 7204a8c3660c040624238bb27714fb95
+      size: 782570529
     - path: ckpts/model_two_extra_fold2.ckpt
-      md5: d8bd8c9575b4c42d9004fd8375d934a7
-      size: 782566241
+      md5: 4ad88e1b5dafca55979e187abc6011c9
+      size: 782570529
     - path: ckpts/model_two_extra_fold3.ckpt
-      md5: ce3df838384fa86c41076f860905b66e
-      size: 782566241
+      md5: 7fc5b8ebcfd4f0b47279ac34e9ba5975
+      size: 782570529
     - path: ckpts/model_two_extra_fold4.ckpt
-      md5: 14b462600f8c5f05b1ac2ba360fb0df6
-      size: 782566241
+      md5: f82414904c304cca59e5e6e31529fcdd
+      size: 782570529
     - path: metrics/model_two_extra.json
-      md5: a6729a7c2a5b23986adcf2da4446c9ee
-      size: 62
+      md5: 67c786964eccc0f40fbb1308708d6f16
+      size: 61
     - path: preds/model_two_extra_oof.npy
-      md5: 10f8da6dcff6789f0ca2586a611cd0b0
+      md5: d01d42a87f1f723381704dca3ab998ef
       size: 79128
   train_one_extra:
     cmd: python pipe/train_one_extra.py
     deps:
-    - path: data/extra.csv
-      md5: ef9d301bed7a5196c89dd5d843c4d241
-      size: 21545825
-    - path: data/extra_384
-      md5: f0d0d79586659ba82df50d4314effbc2.dir
-      size: 1109231399
+    - path: data/extra
+      md5: ab4e24fc3d00c4345d86a2647e55685b.dir
+      size: 1998094758
       nfiles: 72776
+    - path: data/extra.csv
+      md5: 53b24e43fae8db27cbe091d184a0374c
+      size: 21563472
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_384
-      md5: 3e12f820928b7b6770891beda13b8af2.dir
-      size: 236133550
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -834,7 +830,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_384
+          train_data: data/train
           use_extra_images: true
           arch: swin_large_patch4_window12_384
           pretrained: true
@@ -842,7 +838,7 @@ stages:
           bs: 16
           auto_batch_size: false
           accumulate_grad_batches: 1
-          precision: 16
+          precision: bf16
           use_normalize: true
           n_tfms: 2
           magn: 3
@@ -862,25 +858,25 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_one_extra_fold0.ckpt
-      md5: b373e2e62ca2b4ad591b274b43a87bb8
-      size: 795406497
+      md5: d3d4d9f72abd8479caef6b4ff9f3880f
+      size: 795410785
     - path: ckpts/model_one_extra_fold1.ckpt
-      md5: cce86c58dfd5458f950e4c0dd96726e1
-      size: 795406497
+      md5: b122aa86a3eea67bb78131f9c17bef7d
+      size: 795410785
     - path: ckpts/model_one_extra_fold2.ckpt
-      md5: c37525508e5b3f7a82745d823631adf2
-      size: 795406497
+      md5: 39d8351ae18209621e1190818d11d6b3
+      size: 795410785
     - path: ckpts/model_one_extra_fold3.ckpt
-      md5: 6159735b7e53daa7ec00fd5aadb5072f
-      size: 795406497
+      md5: 2236e6292fad758fa7bddff04fa4a1d7
+      size: 795410785
     - path: ckpts/model_one_extra_fold4.ckpt
-      md5: 83c235f25975bd541438fe12da52f641
-      size: 795406497
+      md5: 0be481f8f786ac081115be4707787117
+      size: 795410785
     - path: metrics/model_one_extra.json
-      md5: 2e73016372f4670b55cc32cf7479460b
+      md5: a77e5864909b52e6f092b93eba48402c
       size: 62
     - path: preds/model_one_extra_oof.npy
-      md5: df13fcdb94b31bf9ec68ff1379d8912c
+      md5: 7e6445741a8f9e0a84b0d26d3286137a
       size: 79128
   ensemble_extra:
     cmd: python pipe/ensemble_extra.py
@@ -928,16 +924,16 @@ stages:
       md5: 53a155a8e955c654a35fc29e33b893a9
       size: 2659
     - path: preds/model_four_extra_oof.npy
-      md5: dbd7de6455ecb8e7cd4ab8295e19c8ec
+      md5: 52315795f385e469fb06e28088203f73
       size: 79128
     - path: preds/model_one_extra_oof.npy
-      md5: df13fcdb94b31bf9ec68ff1379d8912c
+      md5: 7e6445741a8f9e0a84b0d26d3286137a
       size: 79128
     - path: preds/model_three_extra_oof.npy
-      md5: 0ea9159f685898fa21429e555084fb24
+      md5: 6d720e59bf6d5c0e1b3b2d4ae795ffc0
       size: 79128
     - path: preds/model_two_extra_oof.npy
-      md5: 10f8da6dcff6789f0ca2586a611cd0b0
+      md5: d01d42a87f1f723381704dca3ab998ef
       size: 79128
     params:
       params.yaml:
@@ -956,28 +952,28 @@ stages:
           - four_extra
     outs:
     - path: ckpts/model_ensemble_final.joblib
-      md5: 79e24c7009fcc88fc3d4e42e992eaf54
-      size: 84959
+      md5: 8321a46a52348f969afc36dec9cec054
+      size: 84960
     - path: metrics/model_ensemble_final.json
-      md5: 78d1680d84fd573603df31b3a867f7c9
-      size: 21
+      md5: 6467cc91f75638f769e17c1878751935
+      size: 22
   train_three_extra:
     cmd: python pipe/train_three_extra.py
     deps:
-    - path: data/extra.csv
-      md5: ef9d301bed7a5196c89dd5d843c4d241
-      size: 21545825
-    - path: data/extra_224
-      md5: 38167aa44a98fa7a2b33a53c2665327b.dir
-      size: 694454778
+    - path: data/extra
+      md5: ab4e24fc3d00c4345d86a2647e55685b.dir
+      size: 1998094758
       nfiles: 72776
+    - path: data/extra.csv
+      md5: 53b24e43fae8db27cbe091d184a0374c
+      size: 21563472
+    - path: data/train
+      md5: 065c7f4be0d67e5175f532982b56cb52.dir
+      size: 1039930050
+      nfiles: 9912
     - path: data/train_10folds.csv
       md5: 2e136ecbf70718f80898b57cbd7fe878
       size: 660556
-    - path: data/train_224
-      md5: 3452a5af5bd28029d534ec33b0bd09f4.dir
-      size: 97308155
-      nfiles: 9912
     - path: data/train_5folds.csv
       md5: df60fb7c97941742af389960321d6f97
       size: 660556
@@ -993,7 +989,7 @@ stages:
           fold: -1
           metric: rmse
           metric_mode: min
-          train_data: data/train_224
+          train_data: data/train
           use_extra_images: true
           arch: xcit_large_24_p8_224_dist
           pretrained: true
@@ -1021,23 +1017,23 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_three_extra_fold0.ckpt
-      md5: adda90af98d59d804d02704f4e6e7749
-      size: 753548335
+      md5: 118380eb6393e9fa7a3c9b3de2ce11fc
+      size: 753547183
     - path: ckpts/model_three_extra_fold1.ckpt
-      md5: ccaef2c0269e1bfc84ea624daa0a788c
-      size: 753548335
+      md5: 06a5ab5140d021bc3562a4ade1d21119
+      size: 753547183
     - path: ckpts/model_three_extra_fold2.ckpt
-      md5: 171282fade81c03812c8e86a5e4ce934
-      size: 753548335
+      md5: e571e3ee3d39243c50d7603a12c42588
+      size: 753547183
     - path: ckpts/model_three_extra_fold3.ckpt
-      md5: abc8a6d4423d370d4b9d6258c9fbb6ee
-      size: 753548335
+      md5: 10ada413a592102f470c1a63ce164451
+      size: 753547183
     - path: ckpts/model_three_extra_fold4.ckpt
-      md5: 64e055700f0697b22a9587f7c3a7ff2d
-      size: 753548335
+      md5: a1b8a78dd2f59dbb7b0e2caaa69d9868
+      size: 753547183
     - path: metrics/model_three_extra.json
-      md5: f57b75df54717eae491a415e38d1363b
+      md5: 94d5fe040b73cab046affb4f6a736869
       size: 62
     - path: preds/model_three_extra_oof.npy
-      md5: 0ea9159f685898fa21429e555084fb24
+      md5: 6d720e59bf6d5c0e1b3b2d4ae795ffc0
       size: 79128

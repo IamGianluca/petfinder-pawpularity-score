@@ -20,7 +20,7 @@ def get_image_paths_and_targets(
 ) -> Union[List[Path], List[List[int]]]:
 
     # add image fpaths
-    df["fpath"] = f"./data/train_{cfg.sz}/" + df.Id + ".jpg"
+    df["fpath"] = f"./{cfg.train_data}/" + df.Id + ".jpg"
 
     image_paths = df.fpath.tolist()
     targets = df.Pawpularity.tolist()
@@ -35,7 +35,7 @@ def get_image_paths_and_targets(
         targets += extra_targets
 
     if target_format == "binary_classification":
-        targets = [t / 100.0 for t in targets]
+        targets = [[t / 100.0] for t in targets]
     elif target_format == "multiclass_classification":
         targets = pd.cut(targets, bins=10, retbins=True, labels=False)[
             0
