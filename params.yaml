@@ -2,11 +2,11 @@ create_folds:
   seed: 42
   k: [5, 10]
 
-resize:
-  sz: [224, 384]
+# resize:
+#   sz: [224, 384]
 
-resize_extra_images:
-  sz: [224, 384]
+# resize_extra_images:
+#   sz: [224, 384]
 
 train_one:
   name: one
@@ -17,7 +17,7 @@ train_one:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_384
+  train_data: data/train
   # model
   arch: swin_large_patch4_window12_384
   pretrained: true
@@ -56,7 +56,7 @@ train_two:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
+  train_data: data/train
   # model
   arch: swin_large_patch4_window7_224
   pretrained: true
@@ -95,7 +95,7 @@ train_three:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
+  train_data: data/train
   # model
   arch: xcit_large_24_p8_224_dist
   pretrained: true
@@ -134,7 +134,7 @@ train_four:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
+  train_data: data/train
   # model
   arch: cait_s24_224
   pretrained: true
@@ -183,7 +183,7 @@ train_one_extra:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_384
+  train_data: data/train
   use_extra_images: true
   # model
   arch: swin_large_patch4_window12_384
@@ -192,7 +192,7 @@ train_one_extra:
   bs: 16
   auto_batch_size: false
   accumulate_grad_batches: 1
-  precision: 16
+  precision: bf16
   # augmentations
   use_normalize: true
   n_tfms: 2
@@ -223,7 +223,7 @@ train_two_extra:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
+  train_data: data/train
   use_extra_images: true
   # model
   arch: swin_large_patch4_window7_224
@@ -263,7 +263,7 @@ train_three_extra:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
+  train_data: data/train
   use_extra_images: true
   # model
   arch: xcit_large_24_p8_224_dist
@@ -303,7 +303,7 @@ train_four_extra:
   metric: rmse
   metric_mode: min
   # input images
-  train_data: data/train_224
+  train_data: data/train
   use_extra_images: true
   # model
   arch: cait_s24_224
