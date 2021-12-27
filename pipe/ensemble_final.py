@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from ml.params import load_cfg
 from omegaconf import OmegaConf
+from scipy.stats import skew
 from sklearn.linear_model import LassoCV
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import PredefinedSplit
@@ -27,6 +28,16 @@ def ensemble(cfg):
 
     for model in cfg.models:
         x_train[f"preds_{model}"] = np.load(f"preds/model_{model}_oof.npy")
+
+    # add statistical properties of OOF predictions
+    preds_cols = x_train.columns
+    x_train["preds_min"] = x_train[preds_cols].min(axis=1)
+    x_train["preds_max"] = x_train[preds_cols].max(axis=1)
+    x_train["preds_range"] = x_train["preds_max"] - x_train["preds_min"]
+    x_train["preds_mean"] = x_train[preds_cols].mean(axis=1)
+    x_train["preds_median"] = np.median(x_train[preds_cols], axis=1)
+    x_train["preds_std"] = x_train[preds_cols].std(axis=1)
+    x_train["preds_skew"] = skew(x_train[preds_cols], axis=1)
 
     kfolds = []
     meta_data = []
