@@ -199,7 +199,8 @@ def save_metrics(
 
 
 if __name__ == "__main__":
+
     cfg = load_cfg(
-        fpath=str(constants.cfg_fpath), cfg_name=f"train_four_extra"
+        fpath=str(constants.cfg_fpath), cfg_name=f"train_one_extra2"
     )
     train(cfg)

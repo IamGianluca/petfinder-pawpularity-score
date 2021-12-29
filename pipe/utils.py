@@ -15,7 +15,7 @@ train_folds_fpath = {
 def get_image_paths_and_targets(
     df: pd.DataFrame,
     cfg: OmegaConf,
-    include_extra: bool = False,
+    include_extra: int = 0,
     target_format: str = "binary_classification",
 ) -> Union[List[Path], List[List[int]]]:
 
@@ -25,9 +25,19 @@ def get_image_paths_and_targets(
     image_paths = df.fpath.tolist()
     targets = df.Pawpularity.tolist()
 
-    if include_extra:
-        extra_df = pd.read_csv(constants.extra_labels_fpath)
-        extra_df["fpath"] = f"./data/extra_{cfg.sz}/" + extra_df.Id + ".jpg"
+    if include_extra == 0:
+        pass
+    elif include_extra == 1:
+        extra_df = pd.read_csv(constants.adoption_labels_fpath)
+        extra_df["fpath"] = f"./data/extra/" + extra_df.Id + ".jpg"
+        extra_image_paths = extra_df.fpath.tolist()
+        image_paths += extra_image_paths
+
+        extra_targets = extra_df[f"pseudo_label_fold{cfg.fold}"].tolist()
+        targets += extra_targets
+    elif include_extra == 2:
+        extra_df = pd.read_csv(constants.dogsvscats_labels_fpath)
+        extra_df["fpath"] = f"./data/extra2/" + extra_df.Id + ".jpg"
         extra_image_paths = extra_df.fpath.tolist()
         image_paths += extra_image_paths
 

@@ -18,7 +18,7 @@ def pseudo_label(cfg):
     extra_image_paths = list(Path(constants.extra_images_path).glob("*.jpg"))
 
     x_test = pd.DataFrame()
-    x_test["Id"] = np.array([p.name.split(".")[0] for p in extra_image_paths])
+    x_test["Id"] = np.array([p.stem for p in extra_image_paths])
 
     # for each model, set up ImageDataModule
     for model_name in cfg.models:
@@ -72,7 +72,7 @@ def pseudo_label(cfg):
     # we should have 5 pseudo labels for each record, one
     # for each fold
     x_test.head()
-    x_test.to_csv("data/extra.csv", index=False)
+    x_test.to_csv("data/extra2.csv", index=False)
 
 
 if __name__ == "__main__":
