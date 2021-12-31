@@ -164,6 +164,45 @@ train_four:
   auto_lr: false
   mom: 0.9
 
+train_five:
+  name: five
+  seed: 8723
+  n_folds: 5
+  fold: -1
+  # problem
+  metric: rmse
+  metric_mode: min
+  # input images
+  train_data: data/train_224
+  # model
+  arch: swin_large_patch4_window7_224
+  pretrained: true
+  epochs: 10
+  bs: 64
+  auto_batch_size: false
+  accumulate_grad_batches: 1
+  precision: bf16
+  # augmentations
+  use_normalize: true
+  n_tfms: 1
+  magn: 5
+  sz: 224
+  use_mix: 0
+  mix_p: 0.0
+  resize: -1
+  # regularization
+  dropout: 0.0
+  wd: 0.0
+  label_smoothing: 0.0
+  # optimizer
+  loss: crossentropy
+  opt: adamw
+  sched: cosine
+  warmup_epochs: 1
+  lr: 0.000001
+  auto_lr: false
+  mom: 0.9
+
 ensemble:
   name: ensemble
   seed: 1616
