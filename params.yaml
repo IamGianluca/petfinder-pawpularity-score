@@ -174,8 +174,8 @@ pseudo_labeling:
   models: [one, two, three, four]
   n_folds: 5
 
-train_one_extra:
-  name: one_extra
+train_one_extra2:
+  name: one_extra2
   seed: 6921
   n_folds: 5
   fold: -1
@@ -184,7 +184,7 @@ train_one_extra:
   metric_mode: min
   # input images
   train_data: data/train
-  use_extra_images: true
+  use_extra_images: 2
   # model
   arch: swin_large_patch4_window12_384
   pretrained: true
@@ -214,8 +214,8 @@ train_one_extra:
   auto_lr: false
   mom: 0.9
 
-train_two_extra:
-  name: two_extra
+train_two_extra2:
+  name: two_extra2
   seed: 7591
   n_folds: 5
   fold: -1
@@ -224,7 +224,7 @@ train_two_extra:
   metric_mode: min
   # input images
   train_data: data/train
-  use_extra_images: true
+  use_extra_images: 2
   # model
   arch: swin_large_patch4_window7_224
   pretrained: true
@@ -250,12 +250,12 @@ train_two_extra:
   opt: adamw
   sched: cosine
   warmup_epochs: 1
-  lr: 0.000024
+  lr: 0.00002
   auto_lr: false
   mom: 0.9
 
-train_three_extra:
-  name: three_extra
+train_three_extra2:
+  name: three_extra2
   seed: 9102
   n_folds: 5
   fold: -1
@@ -264,7 +264,7 @@ train_three_extra:
   metric_mode: min
   # input images
   train_data: data/train
-  use_extra_images: true
+  use_extra_images: 2
   # model
   arch: xcit_large_24_p8_224_dist
   pretrained: true
@@ -294,8 +294,8 @@ train_three_extra:
   auto_lr: false
   mom: 0.9
 
-train_four_extra:
-  name: four_extra
+train_four_extra2:
+  name: four_extra2
   seed: 1230
   n_folds: 5
   fold: -1
@@ -304,12 +304,12 @@ train_four_extra:
   metric_mode: min
   # input images
   train_data: data/train
-  use_extra_images: true
+  use_extra_images: 2
   # model
   arch: cait_s24_224
   pretrained: true
   epochs: 6
-  bs: 64
+  bs: 128
   auto_batch_size: false
   accumulate_grad_batches: 1
   precision: bf16
@@ -338,4 +338,4 @@ ensemble_final:
   name: ensemble_final
   seed: 1010
   n_folds: 5
-  models: [one, two, three, four, one_extra, two_extra, three_extra, four_extra]
+  models: [one, two, three, four, one_extra2, two_extra2, three_extra2, four_extra2]
