@@ -15,7 +15,9 @@ import constants
 
 
 def pseudo_label(cfg):
-    extra_image_paths = list(Path(constants.extra_images_path).glob("*.jpg"))
+    extra_image_paths = list(
+        Path(constants.dogsvscats_images_path).glob("*.jpg")
+    )
 
     x_test = pd.DataFrame()
     x_test["Id"] = np.array([p.stem for p in extra_image_paths])
@@ -72,7 +74,7 @@ def pseudo_label(cfg):
     # we should have 5 pseudo labels for each record, one
     # for each fold
     x_test.head()
-    x_test.to_csv("data/extra2.csv", index=False)
+    x_test.to_csv(constants.dogsvscats_labels_fpath, index=False)
 
 
 if __name__ == "__main__":

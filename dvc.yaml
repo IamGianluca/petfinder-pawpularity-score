@@ -28,8 +28,39 @@ stages:
     - data/train_deduped.csv
     - pipe/create_folds.py
     outs:
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds_all.csv
+  train_zero:
+    cmd: python pipe/train_zero.py
+    params:
+    - train_zero
+    deps:
+    - pipe/train_zero.py
+    - data/train
+    - data/train_folds_all.csv
+    outs:
+    - ckpts/model_zero_fold0.ckpt
+    - ckpts/model_zero_fold1.ckpt
+    - ckpts/model_zero_fold2.ckpt
+    - ckpts/model_zero_fold3.ckpt
+    - ckpts/model_zero_fold4.ckpt
+    - preds/model_zero_oof.npy
+    metrics:
+    - metrics/model_zero.json:
+        cache: false
+  remove_hardest_samples:
+    cmd: python pipe/remove_hardest_samples.py
+    params:
+    - remove_hardest_samples
+    deps:
+    - data/train_folds_all.csv
+    - pipe/remove_hardest_samples.py
+    - ckpts/model_zero_fold0.ckpt
+    - ckpts/model_zero_fold1.ckpt
+    - ckpts/model_zero_fold2.ckpt
+    - ckpts/model_zero_fold3.ckpt
+    - ckpts/model_zero_fold4.ckpt
+    outs:
+    - data/train_folds.csv
   train_one:
     cmd: python pipe/train_one.py
     params:
@@ -37,8 +68,7 @@ stages:
     deps:
     - pipe/train_one.py
     - data/train
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     outs:
     - ckpts/model_one_fold0.ckpt
     - ckpts/model_one_fold1.ckpt
@@ -56,8 +86,7 @@ stages:
     deps:
     - pipe/train_two.py
     - data/train
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     outs:
     - ckpts/model_two_fold0.ckpt
     - ckpts/model_two_fold1.ckpt
@@ -75,8 +104,7 @@ stages:
     deps:
     - pipe/train_three.py
     - data/train
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     outs:
     - ckpts/model_three_fold0.ckpt
     - ckpts/model_three_fold1.ckpt
@@ -94,8 +122,7 @@ stages:
     deps:
     - pipe/train_four.py
     - data/train
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     outs:
     - ckpts/model_four_fold0.ckpt
     - ckpts/model_four_fold1.ckpt
@@ -111,8 +138,7 @@ stages:
     params:
     - ensemble
     deps:
-    - data/train_10folds.csv
-    - data/train_5folds.csv
+    - data/train_folds.csv
     - pipe/ensemble.py
     - preds/model_one_oof.npy
     - preds/model_two_oof.npy
@@ -184,8 +210,7 @@ stages:
     params:
     - pseudo_labeling
     deps:
-    - data/train_10folds.csv
-    - data/train_5folds.csv
+    - data/train_folds.csv
     - data/extra2/
     - pipe/pseudo_label_extra2.py
     - ckpts/model_one_fold0.ckpt
@@ -218,8 +243,7 @@ stages:
     - pipe/train_one_extra2.py
     - data/train
     - data/extra2
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     - data/extra2.csv
     outs:
     - ckpts/model_one_extra2_fold0.ckpt
@@ -239,8 +263,7 @@ stages:
     - pipe/train_two_extra2.py
     - data/train
     - data/extra2
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     - data/extra2.csv
     outs:
     - ckpts/model_two_extra2_fold0.ckpt
@@ -260,8 +283,7 @@ stages:
     - pipe/train_three_extra2.py
     - data/train
     - data/extra2
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     - data/extra2.csv
     outs:
     - ckpts/model_three_extra2_fold0.ckpt
@@ -281,8 +303,7 @@ stages:
     - pipe/train_four_extra2.py
     - data/train
     - data/extra2
-    - data/train_5folds.csv
-    - data/train_10folds.csv
+    - data/train_folds.csv
     - data/extra2.csv
     outs:
     - ckpts/model_four_extra2_fold0.ckpt
@@ -299,8 +320,7 @@ stages:
     params:
     - ensemble_final
     deps:
-    - data/train_10folds.csv
-    - data/train_5folds.csv
+    - data/train_folds.csv
     - pipe/ensemble_final.py
     - preds/model_one_extra2_oof.npy
     - preds/model_two_extra2_oof.npy

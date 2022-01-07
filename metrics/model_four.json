@@ -1,1 +1,1 @@
-{"train rmse": 0.1779, "cv rmse": 0.1762, "oof rmse": 17.6173}
+{"train rmse": 0.1206, "cv rmse": 0.175, "oof rmse": 17.4975}

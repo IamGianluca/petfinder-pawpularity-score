@@ -8,32 +8,29 @@ import utils
 
 
 def create_folds(cfg):
-    for n_folds in cfg.k:
-        df = pd.read_csv(constants.train_deduped_fpath)
+    df = pd.read_csv(constants.train_deduped_fpath)
 
-        # create bins for target variable
-        num_bins = int(np.floor(1 + np.log2(len(df))))
-        df.loc[:, "bins"] = pd.cut(
-            df["Pawpularity"], bins=num_bins, labels=False
-        )
+    # create bins for target variable
+    num_bins = int(np.floor(1 + np.log2(len(df))))
+    df.loc[:, "bins"] = pd.cut(df["Pawpularity"], bins=num_bins, labels=False)
 
-        # assign records to folds
-        df["kfold"] = -1
-        skf = StratifiedKFold(
-            n_splits=n_folds,
-            shuffle=True,
-            random_state=cfg.seed,
-        )
-        for fold_number, (_, val_idx) in enumerate(
-            skf.split(X=df, y=df.bins.values)
-        ):
-            df.loc[val_idx, "kfold"] = fold_number
+    # assign records to folds
+    df["kfold"] = -1
+    skf = StratifiedKFold(
+        n_splits=cfg.n_folds,
+        shuffle=True,
+        random_state=cfg.seed,
+    )
+    for fold_number, (_, val_idx) in enumerate(
+        skf.split(X=df, y=df.bins.values)
+    ):
+        df.loc[val_idx, "kfold"] = fold_number
 
-        # remove unused column
-        df = df.drop(["bins"], axis=1)
+    # remove unused column
+    df = df.drop(["bins"], axis=1)
 
-        print(df.groupby("kfold").mean())
-        df.to_csv(utils.train_folds_fpath[n_folds], index=False)
+    print(df.groupby("kfold").mean())
+    df.to_csv(constants.train_folds_all_fpath, index=False)
 
 
 if __name__ == "__main__":
