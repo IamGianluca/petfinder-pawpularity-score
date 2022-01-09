@@ -84,15 +84,19 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     print(f"#####################")
 
     # get image paths and targets
-    df = pd.read_csv(utils.train_folds_fpath[cfg.n_folds])
+    df = pd.read_csv(constants.train_folds_fpath)
     df_train = df[df.kfold != cfg.fold].reset_index()
     df_val = df[df.kfold == cfg.fold].reset_index()
 
     train_image_paths, train_targets = utils.get_image_paths_and_targets(
-        df=df_train, cfg=cfg
+        df=df_train,
+        cfg=cfg,
+        ignore=True,
     )
     val_image_paths, val_targets = utils.get_image_paths_and_targets(
-        df=df_val, cfg=cfg
+        df=df_val,
+        cfg=cfg,
+        ignore=False,
     )
 
     # define augmentations

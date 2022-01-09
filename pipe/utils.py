@@ -6,21 +6,20 @@ from omegaconf.omegaconf import OmegaConf
 
 import constants
 
-train_folds_fpath = {
-    5: constants.train_5folds_fpath,
-    10: constants.train_10folds_fpath,
-}
-
 
 def get_image_paths_and_targets(
     df: pd.DataFrame,
     cfg: OmegaConf,
     include_extra: int = 0,
+    ignore=False,
     target_format: str = "binary_classification",
 ) -> Union[List[Path], List[List[int]]]:
 
     # add image fpaths
     df["fpath"] = f"./{cfg.train_data}/" + df.Id + ".jpg"
+
+    if ignore:
+        df = df[df.ignore == 0]
 
     image_paths = df.fpath.tolist()
     targets = df.Pawpularity.tolist()

@@ -11,12 +11,11 @@ from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import PredefinedSplit
 
 import constants
-from utils import train_folds_fpath
 
 
 def ensemble(cfg):
     # reconstruct target
-    df = pd.read_csv(train_folds_fpath[cfg.n_folds])
+    df = pd.read_csv(constants.train_folds_fpath)
     y_true = []
     for i in range(cfg.n_folds):
         y_true.extend(df[df.kfold == i].Pawpularity.values.tolist())

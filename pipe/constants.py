@@ -17,8 +17,10 @@ train_deduped_fpath = data_path / "train_deduped.csv"
 adoption_labels_fpath = data_path / "extra.csv"
 dogsvscats_labels_fpath = data_path / "extra2.csv"
 
-train_5folds_fpath = data_path / "train_5folds.csv"
-train_10folds_fpath = data_path / "train_10folds.csv"
+# include all samples
+train_folds_all_fpath = data_path / "train_folds_all.csv"
+# do not include hardest 10% to classify samples
+train_folds_fpath = data_path / "train_folds.csv"
 
 cfg_fpath = path / "params.yaml"
 
