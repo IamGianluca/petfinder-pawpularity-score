@@ -919,20 +919,16 @@ stages:
           seed: 1010
           n_folds: 5
           models:
-          - one
-          - two
-          - three
-          - four
           - one_extra2
           - two_extra2
           - three_extra2
           - four_extra2
     outs:
     - path: ckpts/model_ensemble_final.joblib
-      md5: e4e2b40e95ee1e1f95ccc2cdc5b8e226
-      size: 85016
+      md5: 047eb7d499cbbbe375b2cd620dccb8ac
+      size: 84984
     - path: metrics/model_ensemble_final.json
-      md5: d34e22eca618dd44ea9969bd99be9cdf
+      md5: a653ed1209545c54c504ed383ae24746
       size: 22
   train_three_extra:
     cmd: python pipe/train_three_extra.py
