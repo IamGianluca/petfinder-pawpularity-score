@@ -51,6 +51,8 @@ def get_image_paths_and_targets(
         ].tolist()
     elif target_format == "regression":
         pass
+    elif target_format == "under_20":
+        targets = [[1] if t <= 20 else [0] for t in targets]
     else:
         raise ValueError(f"target_format {target_format} not supported yet.")
 

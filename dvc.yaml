@@ -315,6 +315,29 @@ stages:
     metrics:
     - metrics/model_four_extra2.json:
         cache: false
+  train_five:
+    cmd: python pipe/train_five.py
+    params:
+    - train_one_extra2
+    deps:
+    - pipe/train_five.py
+    - data/train
+    - ckpts/model_one_extra2_fold0.ckpt
+    - ckpts/model_one_extra2_fold1.ckpt
+    - ckpts/model_one_extra2_fold2.ckpt
+    - ckpts/model_one_extra2_fold3.ckpt
+    - ckpts/model_one_extra2_fold4.ckpt
+    - data/train_folds.csv
+    outs:
+    - ckpts/model_five_fold0.ckpt
+    - ckpts/model_five_fold1.ckpt
+    - ckpts/model_five_fold2.ckpt
+    - ckpts/model_five_fold3.ckpt
+    - ckpts/model_five_fold4.ckpt
+    - preds/model_five_oof.npy
+    metrics:
+    - metrics/model_five.json:
+        cache: false
   ensemble_final:
     cmd: python pipe/ensemble_final.py
     params:
@@ -326,6 +349,7 @@ stages:
     - preds/model_two_extra2_oof.npy
     - preds/model_three_extra2_oof.npy
     - preds/model_four_extra2_oof.npy
+    - preds/model_five_oof.npy
     outs:
     - ckpts/model_ensemble_final.joblib
     metrics:
