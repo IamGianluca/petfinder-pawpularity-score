@@ -169,11 +169,13 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     val_metric = mean_squared_error(val_targets, preds, squared=False)
     print_metrics(cfg.metric, train_metric, val_metric)
 
+    preds_list = (preds * 100).tolist()
+    targets_list = df_val.loc[:, "Pawpularity"].values.tolist()
     return (
         train_metric,
         val_metric,
-        [t[0] for t in val_targets],
-        preds.tolist(),
+        targets_list,
+        preds_list,
     )
 
 
