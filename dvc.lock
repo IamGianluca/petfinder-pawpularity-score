@@ -901,7 +901,7 @@ stages:
       md5: 1d92fa9e850d9ab5a281a0fd0f58847e
       size: 3278
     - path: preds/model_five_oof.npy
-      md5: b2b109ae2a96b3eb694d372b80920ffa
+      md5: 6bc67e7e0bfa64f0a022792cc6f60baf
       size: 79128
     - path: preds/model_four_extra2_oof.npy
       md5: 6f6e516b4149d750c16cd930f4b812f4
@@ -928,10 +928,10 @@ stages:
           - four_extra2
     outs:
     - path: ckpts/model_ensemble_final.joblib
-      md5: a1c4726f2aa0315f2780ebca4bf6255f
+      md5: a21905a19e407843f66ea0f5bc4d0df8
       size: 84984
     - path: metrics/model_ensemble_final.json
-      md5: a30b43aaa108a39dc50e4afeacca1788
+      md5: a4e3e3bc55ee28dcb1ee3e5df252f555
       size: 22
   train_three_extra:
     cmd: python pipe/train_three_extra.py
@@ -1574,8 +1574,8 @@ stages:
       md5: 3ee868075576e4eb85f749f25cf7e346
       size: 728579
     - path: pipe/train_five.py
-      md5: 55dea567c7efb5cc2f856513e9a4796d
-      size: 6044
+      md5: 7ddc343b57f1b5fa2f3f00bfc0ffdf06
+      size: 5982
     params:
       params.yaml:
         train_one_extra2:
@@ -1613,23 +1613,23 @@ stages:
           mom: 0.9
     outs:
     - path: ckpts/model_five_fold0.ckpt
-      md5: 4ce88efc74bb34488d76884466643538
-      size: 29491489
+      md5: 8a0ef8d9a79ba33042280565a620b369
+      size: 29503797
     - path: ckpts/model_five_fold1.ckpt
-      md5: f9439c015fd4bcd4049c40edb77d9b14
-      size: 29393025
+      md5: 80ff1f68756588ad2079f3ef3aa6c90d
+      size: 29306869
     - path: ckpts/model_five_fold2.ckpt
-      md5: 39b40c07c6778fc380bc37399bbe32d9
-      size: 30673057
+      md5: 99b7a3ea37f778f0357989c95caeae23
+      size: 30685365
     - path: ckpts/model_five_fold3.ckpt
-      md5: 768448d174c22a9ca80368ca90cb0e19
-      size: 29577645
+      md5: 4628c949ed648ad4be9baff12590f191
+      size: 29417641
     - path: ckpts/model_five_fold4.ckpt
-      md5: 46d1096c0de8a36deb8d175423602e66
-      size: 29811497
+      md5: 96fef0c53ca4bc785f8a753e0805ede2
+      size: 29897653
     - path: metrics/model_five.json
-      md5: d5dbbc27fe14839bcf08c98767e3d4a3
+      md5: 7ff8efd3c7d196befb492b6d1065d518
       size: 61
     - path: preds/model_five_oof.npy
-      md5: b2b109ae2a96b3eb694d372b80920ffa
+      md5: 6bc67e7e0bfa64f0a022792cc6f60baf
       size: 79128

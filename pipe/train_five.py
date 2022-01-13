@@ -6,6 +6,7 @@ import joblib
 import numpy as np
 import omegaconf
 import pandas as pd
+import pytorch_lightning as pl
 import torch
 from ml import learner
 from ml.params import load_cfg
@@ -20,6 +21,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from timm.data import transforms_factory
+from torch import nn
 from torchmetrics import MeanSquaredError
 
 import constants
@@ -108,20 +110,6 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
         is_training=False,
     )
 
-    # create datamodule
-    dm = data.ImageDataModule(
-        task="classification",
-        batch_size=int(cfg.bs / 2),
-        # train
-        train_image_paths=train_image_paths,
-        train_targets=train_targets,
-        train_augmentations=val_aug,
-        # test
-        test_image_paths=val_image_paths,
-        test_augmentations=val_aug,
-    )
-    dm.setup()
-
     model = learner.ImageClassifier(
         in_channels=3,
         num_classes=1,
@@ -134,22 +122,27 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
     ckpt = torch.load(ckpt_fpath)
     model.load_state_dict(ckpt["state_dict"])
 
-    model.backbone.to("cuda")
-    model.backbone.eval()
-    model.head.to("cuda")
-    model.head.eval()
+    # swap model's head as we are interested in extracting the embeddings
+    model.head = nn.Identity()
 
-    train_emb = []
-    train_emb = []
-    tar = []
-    for batch in dm.train_dataloader():
-        out = model.backbone(batch[0].to("cuda")).detach().cpu().numpy()
-        train_emb.extend(out)
-        tar.extend(batch[1].detach().cpu().numpy())
+    trainer = pl.Trainer(
+        gpus=1,
+        precision=cfg.precision,
+    )
 
+    # create datamodule
+    dm = data.ImageDataModule(
+        task="classification",
+        batch_size=int(cfg.bs),
+        # test
+        test_image_paths=train_image_paths,
+        test_augmentations=val_aug,
+    )
+    dm.setup()
+
+    train_emb = trainer.predict(model, dm.test_dataloader())
     train_emb = np.vstack(train_emb)
-    print(f"Embedding layer shape: {train_emb.shape}")
-    tar = np.vstack(tar)
+    tar = np.array(train_targets)
 
     lr = make_pipeline(StandardScaler(), SVR(C=0.05))
     lr.fit(X=train_emb, y=tar.ravel())
@@ -159,10 +152,18 @@ def train_one_fold(cfg: omegaconf.DictConfig, logger) -> Tuple:
 
     train_metric = mean_squared_error(tar, preds, squared=False)
 
-    test_emb = []
-    for batch in dm.test_dataloader():
-        out = model.backbone(batch.to("cuda")).detach().cpu().numpy()
-        test_emb.extend(out)
+    # create datamodule
+    dm = data.ImageDataModule(
+        task="classification",
+        batch_size=int(cfg.bs),
+        # test
+        test_image_paths=val_image_paths,
+        test_augmentations=val_aug,
+    )
+    dm.setup()
+
+    test_emb = trainer.predict(model, dm.test_dataloader())
+    test_emb = np.vstack(test_emb)
 
     preds = np.clip(lr.predict(X=test_emb), a_min=0, a_max=1)
 
