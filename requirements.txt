@@ -20,7 +20,7 @@ pytest
 lightning-bolts==0.4.0
 pytorch-lightning==1.5.4
 scikit-learn
-git+git://github.com/rwightman/pytorch-image-models.git@master#egg=timm
+git+git://github.com/rwightman/pytorch-image-models.git@b669f4a5881d17fe3875656ec40138c1ef50c4c9#egg=timm
 torchmetrics==0.5.1
 transformers==4.12.3
 wandb

@@ -1,8 +1,33 @@
 ## Introduction
 
-This repository contains my solution to the ["PetFinder.my - Pawpularity Contest"](https://www.kaggle.com/c/petfinder-pawpularity-score/overview) challenge, hosted in Kaggle.
+This repository contains my solution to the ["PetFinder.my - Pawpularity Contest"](https://www.kaggle.com/c/petfinder-pawpularity-score/overview) challenge, hosted in Kaggle. My final position in the Private Leaderboard was 47th/3545 (Top 2%).
 
-In this competition, we’ll analyze raw images and metadata to predict the “Pawpularity” of pet photos. 
+[!Private Leaderboard](https://i.ibb.co/vzrVqZs/Screenshot-from-2022-01-16-16-43-22.png)
+
+The organizers asked us to analyze images and metadata to predict the “Pawpularity” of pet photos. 
+
+## Description
+
+Our solution included training several models. A first Swin-L model was trained, and we used the OOF predictions to identify the top 5% hardest to classify samples. We dropped this as the intuition was that these samples might correspont to mislabeled data.
+
+We then trained 4 vision transformer models (L1) on the remaining 95% of the data. These models were then ensembled and used to label new data from the Dogs vs Cats dataset.
+
+We finally trained several L2 models on the expanded dataset. These models were able to improve on the L1 models' performance.
+
+#### Transformer vs CNN
+
+#### Cross-Entropy Loss
+
+#### Label Smoothing
+
+#### Pseudo Labeling
+
+#### SVR Head
+
+#### Drop 5% More Confusing Samples
+
+
+
 
 ## Installation
 
@@ -31,12 +56,13 @@ Reproduce the DVC pipeline.
 ## Contribute
 
 Here is a brief description of what each folder contains:
+* `ckpts`: model checkpoints
 * `data`: input and pre-processed data
 * `nbs`: notebooks for exploration analyses
-* `pipe`: Python scripts for each step in the DVC pipeline
-* `src`: source code for companion library
-* `ckpts`: model checkpoints
 * `outs`: model outputs
+* `pipe`: Python scripts for each step in the DVC pipeline
+* `preds`: predictions
+* `src`: source code for companion library
 
 Other important files are:
 * `dvc.yaml`:  list input, output, and parameters used by each DVC step

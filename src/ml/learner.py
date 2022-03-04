@@ -1,18 +1,13 @@
 from typing import Any, List, Optional
 
 import pytorch_lightning as pl
+import timm
 from omegaconf import OmegaConf
-from timm.models import create_model
 from torch import nn
 
 from .loss import loss_factory
 from .metrics import metric_factory
 from .optim import lr_scheduler_factory, optimizer_factory
-from .vision.augmentations import BatchRandAugment
-
-# ImageNet-1k dataset mean and std
-mean = [0.485, 0.456, 0.406]
-std = [0.229, 0.224, 0.225]
 
 
 class ImageClassifier(pl.LightningModule):
@@ -26,7 +21,7 @@ class ImageClassifier(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters(cfg)
 
-        self.backbone = create_model(
+        self.backbone = timm.create_model(
             model_name=self.hparams.arch,
             pretrained=pretrained,
             num_classes=0,
@@ -40,8 +35,8 @@ class ImageClassifier(pl.LightningModule):
             nn.Linear(64, num_classes),
         )
 
-        self.train_metric = metric_factory(name=cfg.metric)
-        self.val_metric = metric_factory(name=cfg.metric)
+        self.train_metric = metric_factory(cfg=cfg)
+        self.val_metric = metric_factory(cfg=cfg)
         self.best_train_metric = None
         self.best_val_metric = None
 
@@ -56,8 +51,6 @@ class ImageClassifier(pl.LightningModule):
         computation.
         """
         x, target = batch
-        self._check_input(x, target)
-
         loss, target, preds = self._step(x, target)
 
         if target.shape[1] == 3:  # if using MixUp, compute target
@@ -74,9 +67,8 @@ class ImageClassifier(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, target = batch
-        self._check_input(x, target)
-
         loss, target, preds = self._step(x, target)
+
         self.log("val_loss", loss, on_step=True, on_epoch=False)
         self.val_metric.update(preds=preds, target=target)
         return loss
@@ -128,14 +120,6 @@ class ImageClassifier(pl.LightningModule):
                 "name": "lr",
             },
         }
-
-    def _check_input(self, x, target):
-        pass
-        # if x.min() < 0 or x.max() > 1:
-        #     raise ValueError(
-        #         "images should have values between 0 and 1."
-        #         f" Found min={x.min()} and max={x.max()}"
-        #     )
 
     def _compute_loss(self, preds, target):
         if self.hparams.label_smoothing > 0.0:

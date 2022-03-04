@@ -9,12 +9,13 @@ from torchmetrics.functional.regression.mean_squared_error import (
 from torchmetrics.metric import Metric
 
 
-def metric_factory(name):
-    if name == "auc":
-        return torchmetrics.AUROC(pos_label=1)
-    elif name == "mse":
+def metric_factory(cfg):
+    if cfg.metric == "auc":
+        # return torchmetrics.AUROC(pos_label=1)
+        return torchmetrics.AUROC(pos_label=1, num_classes=cfg.num_classes)
+    elif cfg.metric == "mse":
         return torchmetrics.MeanSquaredError(squared=True)
-    elif name == "rmse":
+    elif cfg.metric == "rmse":
         return RootMeanSquaredError()
     else:
         raise ValueError("Metric not supported yet.")
